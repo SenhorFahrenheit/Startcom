@@ -46,19 +46,19 @@ Key features:
     @FrontEnd:
         @UI/UX:
             - [] Initial UI login for desktop (must be responsive).
-            - [] Initial UI login for mobile.
         @Screens:
             - [] Create desktop layout. 
-            - [] Create desktop mobile layout.
         @Interactions:
             - [] Implement frontend logic (behaviour) in desktop.
+        - [] Integration with backend.
+    @Mobile:
+        @UI/UX:
+            - [] Initial UI login for mobile.
+        @Screens:
+            - [] Create desktop mobile layout.
+        @Interactions:
             - [] Implement frontend logic (behaviour) in mobile.
         - [] Integration with backend.
-
-
-        
-
-
 
 @FinancesModule
 
