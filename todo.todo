@@ -9,6 +9,8 @@ Key features:
     [] - Config the files schema (Also the nodeJS export files).
     @FrontEnd:
         - [] Config ReactJS.
+            - [x] Create React Setup.
+            - [] Define React Structure
             - [] Define the main libraries.
     @BackEnd:
         - [] Config NodeJS.
@@ -18,9 +20,9 @@ Key features:
 
 @Auth:
     @Database:
-        - [] Create database.
-        - [] Create `user_collection`.
-            - [] Define the `json schema`.
+        - [x] Create database.
+        - [x] Create `user`.
+            - [x] Define the `json schema`.
         !important:
             - [] Config Atlas
             - [] Config database backups (in Atlas or not).
