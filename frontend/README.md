@@ -1,12 +1,40 @@
-# React + Vite
+# Frontend - Plataforma de Gerenciamento de PMEs
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este é o **frontend** da aplicação, desenvolvido em **React.js** com **Vite**.  
+Aqui está a interface web que os usuários utilizarão para acessar e gerenciar as funcionalidades do sistema.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Como rodar o projeto
 
-## Expanding the ESLint configuration
+### 1. Pré-requisitos
+Antes de iniciar, instale na sua máquina:
+- [Node.js (LTS)](https://nodejs.org/)  
+- [Git](https://git-scm.com/)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+### 2. Instalação
+No terminal, execute:
+
+```bash
+# Clonar pasta do projeto
+git clone https://github.com/SenhorFahrenheit/Starcom
+
+# Entrar na pasta do projeto
+cd Starcom
+
+# Entrar na pasta do frontend
+cd frontend
+
+# Instalar dependências
+npm install
+```
+
+### 3. Execução
+No terminal dentro da pasta frontend, execute:
+
+```bash
+# Executar o código frontend
+npm run dev
+```
