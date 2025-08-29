@@ -26,7 +26,7 @@ app.use(
     },
     store: mongoStore.create({
       client: mongoose.connection.getClient(),
-      collectionName: 'sessao',
+      collectionName: 'sessao', 
       ttl: (60 * 60 * 24 * 30),
       autoRemove: 'native',
     }),
