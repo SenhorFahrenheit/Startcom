@@ -1,28 +1,30 @@
-// Importando o Express
+// Importing dependencies
 const express = require("express");
 const config = require("dotenv").config();
+const connectDB = require("./config/db")
 
-// Criando a aplicação
+
+// Creating the application
 const app = express();
 
-// Middleware para permitir JSON no corpo das requisições
+// Middleware to allow JSON in request bodies
 app.use(express.json());
 
-// Porta do servidor
+// Server port
 const PORT = process.env.PORT || 3000;
 
-// Rota GET de exemplo
+// Connecting to database
+connectDB()
+
+const userRoutes = require("./routes/user/user_routes");
+app.use("/api/users", userRoutes);
+
+// Example GET route
 app.get("/", (req, res) => {
-  res.send("🚀 Servidor rodando com sucesso!");
-});
-// Rota POST de exemplo
-app.post("/dados", (req, res) => {
-  const body = req.body; // pega o que o cliente enviou no JSON
-  res.json({ message: "Dados recebidos!", body });
+  res.send("🚀 Server running successfully!");
 });
 
-// Subindo o servidor
+// Starting the server
 app.listen(PORT, () => {
-  console.log(`✅ Servidor rodando em http://localhost:${PORT}`);
+  console.log(`✅ Server running at http://localhost:${PORT}`);
 });
-
