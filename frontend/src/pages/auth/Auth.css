@@ -1,3 +1,7 @@
+body {
+  background-color: var(--secondary-color);
+}
+
 .page-wrapper {
   display: flex;
   justify-content: center;
@@ -17,8 +21,7 @@
   width: 620px !important;
   height: 480px;
   padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 10px;
+  border-radius: 0 25px 25px 0;
   background: white;
   transition: all 1s ease;
 }
@@ -41,8 +44,9 @@
   width: 250px !important;
   height: 480px;
   padding: 20px;
-  background: #f0f0f0;
-  border-radius: 10px;
+  background: var(--primary-color);
+  color: #FFFFFF;
+  border-radius: 25px 0 0 25px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -54,6 +58,7 @@
   left: 0;
   opacity: 1;
   pointer-events: auto;
+  border-radius: 25px 0 0 25px
 }
 
 .container.login-mode .cadastro {
@@ -63,4 +68,5 @@
 
 .container.login-mode .side-panel {
   left: 620px;
+  border-radius: 0 25px 25px 0;
 }
