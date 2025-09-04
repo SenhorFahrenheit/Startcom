@@ -1,3 +1,21 @@
+/* Fonts */
+@font-face {
+  font-family: 'Open Sans';
+  src: url('./assets/fonts/Open-Sans/OpenSans-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url('./assets/fonts/Open-Sans/OpenSans-Bold.ttf');
+  font-weight: 700;
+  font-style: normal;
+}
+
+/* Initial Configs */
+
 * {
   margin: 0;
   padding: 0;

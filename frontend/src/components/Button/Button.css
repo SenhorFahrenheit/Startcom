@@ -1,0 +1,24 @@
+.button {
+    background-color: var(--primary-color);
+    border: none;
+    color: #FFFFFF;
+    font-size: 14.3px;
+    font-weight: bold;
+    font-family: 'Open Sans';
+    width: 120px;
+    height: 35px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.button:hover {
+  
+}
+
+.button:disabled {
+  cursor: not-allowed;
+}
+
+.quaternary {
+    background-color: var(--quaternary-color);
+}
