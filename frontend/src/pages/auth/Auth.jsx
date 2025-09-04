@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import Button from "../../components/Button/Button";
 import "./Auth.css";
 
 const Auth = () => {
@@ -27,7 +28,7 @@ const Auth = () => {
             <button>Entrar com Google</button>
             <button>Entrar com Apple</button>
           </div>
-          <button type="submit">ENTRAR</button>
+          <Button label="ENTRAR" onClick={handleSubmit} type="submit"></Button>
         </div>
 
         <div className="form-container cadastro">
@@ -91,15 +92,13 @@ const Auth = () => {
                 <input type="password" placeholder="Confirmar senha" />
           </div>
 
-          <button>CADASTRAR</button>
+          <Button label="CADASTRAR" onClick={handleSubmit} type="submit"></Button>
         </div>
 
         <div className="side-panel">
           <h2>LOGO</h2>
           <p>Cadastre-se ou faça login para acessar todos os recursos!</p>
-          <button onClick={() => setIsLogin(!isLogin)}>
-            {isLogin ? "CRIAR CONTA" : "FAZER LOGIN"}
-          </button>
+          <Button label={isLogin ? "CRIAR CONTA" : "FAZER LOGIN"} onClick={() => setIsLogin(!isLogin)} type="button" variant="quaternary"></Button>
         </div>
 
       </form>
