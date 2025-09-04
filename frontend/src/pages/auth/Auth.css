@@ -7,14 +7,14 @@
 
 .container {
   position: relative;
-  width: 730px;
+  width: 700px;
   height: 300px;
 }
 
 .form-container {
   position: absolute;
   top: 0;
-  width: 400px !important;
+  width: 420px !important;
   height: 100%;
   padding: 20px;
   border: 1px solid #ccc;
@@ -24,13 +24,12 @@
 }
 
 .cadastro {
-  left: 290px;
+  left: 250px;
   opacity: 1;
   pointer-events: auto;
 }
 
 .login {
-
   opacity: 0;
   pointer-events: none;
 }
@@ -63,5 +62,5 @@
 }
 
 .container.login-mode .side-panel {
-  left: 442px;
+  left: 420px;
 }
