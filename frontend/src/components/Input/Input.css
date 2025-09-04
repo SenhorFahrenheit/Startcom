@@ -1,0 +1,45 @@
+.input-with-icon {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  border-radius: 5px;
+  margin: 10px 0;
+  height: 40px;
+  padding: 8px 12px;
+  background-color: var(--secondary-color);
+  width: 80%;
+}
+
+.input-with-icon.left {
+  flex-direction: row-reverse;
+}
+
+.input-with-icon.right {
+  flex-direction: row;
+}
+
+.input-with-icon input {
+  border: none;
+  outline: none;
+  flex: 1;
+  font-size: 14.3px;
+  font-family: 'Open Sans', sans-serif;
+  background-color: transparent;
+}
+
+.input-with-icon .icon {
+  font-size: 14.3px;
+  margin: 0 8px 0 0;
+  display: flex;
+  user-select: none;
+}
+
+.inputs-row {
+  display: flex;
+  gap: 5px;
+}
+
+.inputs-row > .input-with-icon {
+  flex: 1;
+  min-width: 0;
+}

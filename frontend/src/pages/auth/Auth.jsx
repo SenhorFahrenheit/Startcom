@@ -1,11 +1,26 @@
+// Hooks
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+
+// Components
 import Button from "../../components/Button/Button";
+import Input from "../../components/Input/Input";
+
+// Icons
+import { RiLockPasswordFill } from 'react-icons/ri';
+
+// CSS
 import "./Auth.css";
+
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [type, setType] = useState("cpf");
+
+  // Credentials
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState('');
+
   
   const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -19,8 +34,8 @@ const Auth = () => {
 
         <div className="form-container login">
           <h2>Login</h2>
-          <input placeholder="Email" />
-          <input placeholder="Senha" />
+          <Input placeholder="E-mail" value={email}/>
+          <Input placeholder="Senha" icon={<RiLockPasswordFill/>} iconPosition="left"  value={password}/>
 
           <p>Esqueceu a senha?</p>
 
@@ -28,7 +43,7 @@ const Auth = () => {
             <button>Entrar com Google</button>
             <button>Entrar com Apple</button>
           </div>
-          <Button label="ENTRAR" onClick={handleSubmit} type="submit"></Button>
+          <Button label="ENTRAR" onClick={handleSubmit} type="submit" />
         </div>
 
         <div className="form-container cadastro">
@@ -92,13 +107,13 @@ const Auth = () => {
                 <input type="password" placeholder="Confirmar senha" />
           </div>
 
-          <Button label="CADASTRAR" onClick={handleSubmit} type="submit"></Button>
+          <Button label="CADASTRAR" onClick={handleSubmit} type="submit"/>
         </div>
 
         <div className="side-panel">
           <h2>LOGO</h2>
           <p>Cadastre-se ou faça login para acessar todos os recursos!</p>
-          <Button label={isLogin ? "CRIAR CONTA" : "FAZER LOGIN"} onClick={() => setIsLogin(!isLogin)} type="button" variant="quaternary"></Button>
+          <Button label={isLogin ? "CRIAR CONTA" : "FAZER LOGIN"} onClick={() => setIsLogin(!isLogin)} type="button" variant="quaternary"/>
         </div>
 
       </form>
