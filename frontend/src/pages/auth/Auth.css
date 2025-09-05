@@ -75,3 +75,23 @@ body {
   left: 620px;
   border-radius: 0 25px 25px 0;
 }
+
+
+.auth-login {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.forgot-password {
+  width: 80%;
+  text-align: end;
+  font-size: 10.2px;
+  font-family: "Open Sans";
+  cursor: pointer;
+}
+
+.forgot-password:hover {
+  text-decoration-line: underline;
+}

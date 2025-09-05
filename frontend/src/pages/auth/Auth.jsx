@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 // Components
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
+import ForgotPasswordModal from "../../components/ForgotPassword/ForgotPasswordModal";
 
 // Icons
 import { RiLockPasswordFill } from 'react-icons/ri';
@@ -16,6 +17,7 @@ import "./Auth.css";
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [type, setType] = useState("cpf");
+  const [modalIsOpen, setModalIsOpen] = useState(false);
 
   // Credentials
   const [email, setEmail] = useState("");
@@ -36,8 +38,15 @@ const Auth = () => {
           <h2>Login</h2>
           <Input placeholder="E-mail" value={email}/>
           <Input placeholder="Senha" icon={<RiLockPasswordFill/>} iconPosition="left"  value={password}/>
+      
+          <div className="forgot-password">
+            <p onClick={() => setModalIsOpen(true)}>Esqueceu a senha?</p>
+          </div>  
 
-          <p>Esqueceu a senha?</p>
+          <ForgotPasswordModal
+            isOpen={modalIsOpen}
+            onClose={() => setModalIsOpen(false)}
+          />
 
           <div className="login-with">
             <button>Entrar com Google</button>
