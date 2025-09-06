@@ -1,24 +1,24 @@
+import React from 'react';
 import './Input.css';
 
-const Input = ({
+const Input = React.forwardRef(({
   placeholder = '',
   icon = null,
   iconPosition = 'right', // "left" or "right"
   type = 'text',
-  value,
-  onChange,
-}) => {
+  ...rest
+}, ref) => {
   return (
     <div className={`input-with-icon ${iconPosition}`}>
       <input
         type={type}
         placeholder={placeholder}
-        value={value}
-        onChange={onChange}
+        ref={ref}
+        {...rest}
       />
       {icon && <span className="icon">{icon}</span>}
     </div>
   );
-};
+});
 
 export default Input;

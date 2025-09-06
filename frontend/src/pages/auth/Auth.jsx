@@ -1,6 +1,9 @@
+// Libs
+import { toast } from "react-toastify";
+
 // Hooks
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 
 // Components
 import Button from "../../components/Button/Button";
@@ -24,24 +27,37 @@ const Auth = () => {
 
   // Credentials
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState("");
+  const [keepLogged, setKeepLogged] = useState(false);
 
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, control } = useForm();
 
-  const onSubmit = () => {
-    console.log("Essa função aqui vai fazer algo em algum momento, por enquanto tá só pra não dar erro no meu código.");
+  const onSubmit = (data) => {
+    console.log(data);
+    toast.success("Cadastro realizado com sucesso!", {
+      position: "top-center"
+    });
   };
 
+  const onError = (errors) => {
+    Object.values(errors).forEach(err => toast.error(err.message, {
+      theme: "light"
+    }));
+  };
+
+  const handleLogin = () => {
+    console.log("User is logging.")
+  }
   const handleLoginWGoogle = () => {
-    console.log("Fui clicado Google")
+    console.log("I was clicked - Google")
   }
 
   const handleLoginWApple = () => {
-    console.log("Fui clicado Apple")
+    console.log("I was clicked - Apple")
   }
   return (
     <div className="page-wrapper">
-      <form onSubmit={handleSubmit(onSubmit)} className={`container ${isLogin ? "login-mode" : ""}`}>
+      <form onSubmit={handleSubmit(onSubmit, onError)} className={`container ${isLogin ? "login-mode" : ""}`}>
 
         <div className="form-container login">
           <h2>Login</h2>
@@ -59,13 +75,13 @@ const Auth = () => {
             </div>
             <div className="maintain-logged">
               <label>
-                <input type="checkbox"/>
+                <input type="checkbox" onChange={(e) => setKeepLogged(e.target.value)}/>
                 Manter-me conectado por 30 dias
               </label>
             </div>
           </div>
 
-          <Button label="ENTRAR" onClick={handleSubmit} type="submit" />
+          <Button label="ENTRAR" onClick={() => handleLogin} type="submit" />
         </div>
 
         <ForgotPasswordModal
@@ -75,12 +91,23 @@ const Auth = () => {
 
         <div className="form-container cadastro">
           <h2>Cadastre-se</h2>
-          <Input type="text" placeholder="Nome"/>
-          
+          <Input {...register("name", { required: "Nome é obrigatório" })} type="text" placeholder="Nome"/>
           
           <div className="inputs-row">
-            <Input type="date" placeholder="Senha" iconPosition="left"/>
-            <Input type="tel" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" placeholder="Telefone"/>
+            <Input {...register("date", { required: "Data é obrigatória" })} type="date" placeholder="data" iconPosition="left"/>
+            <Controller
+              name="telefone"
+              control={control}
+              defaultValue=""
+              rules={{ required: "Telefone é obrigatório" }}
+              render={({ field }) => (
+                <>
+                  <Input
+                    placeholder="(00) 00000-0000"
+                    {...field} // value and onChange
+                  />
+                </>
+              )}/>
           </div>
 
           <div className="CPF-or-CNPJ">
@@ -94,21 +121,41 @@ const Auth = () => {
 
 
         {type === "cpf" && (
-            <>
-            <Input placeholder="000.000.000-00"/>
-            </>
+            <Controller
+              name="cpf"
+              control={control}
+              defaultValue=""
+              rules={{ required: "CPF é obrigatório" }}
+              render={({ field }) => (
+                <>
+                  <Input
+                    placeholder="000.000.000-00"
+                    {...field} // value and onChange
+                  />
+                </>
+              )}/>
         )}
 
         {type === "cnpj" && (
-          <>
-            <Input placeholder="00.000.000/0000-00"/>
-          </>
+          <Controller
+            name="cnpj"
+            control={control}
+            defaultValue=""
+            rules={{ required: "CNPJ é obrigatório" }}
+            render={({ field }) => (
+              <>
+                <Input
+                  placeholder="00.000.000/0000-00"
+                  {...field} // value and onChange
+                />
+              </>
+          )}/>
         )}
-            <Input type="email" placeholder="E-mail"/>
+            <Input {...register("email", {required: "Email é obrigatório"})} type="email" placeholder="E-mail"/>
 
             <div className="inputs-row">
-              <Input icon={<RiLockPasswordFill/>} type="password" placeholder="Senha" iconPosition="left"/>
-              <Input type="password" placeholder="Confirmar Senha"/>
+              <Input {...register("password", {required: "Senha é obrigatória"})} icon={<RiLockPasswordFill/>} type="password" placeholder="Senha" iconPosition="left"/>
+              <Input {...register("confirmPassword", {required: "Confirmar a senha é obrigatório"})}type="password" placeholder="Confirmar Senha"/>
             </div>
 
           <Button label="CADASTRAR" onClick={handleSubmit} type="submit"/>
