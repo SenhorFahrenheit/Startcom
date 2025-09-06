@@ -20,13 +20,14 @@
   opacity: 0;
 }
 
+/* Agora flexível para diferentes tamanhos */
 .modal-content {
   background: #ffffff;
   padding: 20px;
   border-radius: 10px;
-  max-width: 400px;
-  height: 500px;
-  width: 90%;
+  width: 90%;       /* pode ser sobrescrito via prop style do BaseModal */
+  max-width: 500px; /* valor genérico, modais pequenos e grandes entram aqui */
+  height: auto;     /* altura flexível, pode ser controlada via prop */
   opacity: 0;
   transform: translateY(-20px);
   transition: all 0.3s ease;

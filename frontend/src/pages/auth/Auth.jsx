@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
 import ButtonLogin from "../../components/ButtonLogin/ButtonLogin";
-import ForgotPasswordModal from "../../components/ForgotPassword/ForgotPasswordModal";
+import ForgotPasswordModal from "../../components/Modals/ForgotPasswordModal";
 
 // Icons
 import { RiLockPasswordFill } from 'react-icons/ri';
@@ -53,11 +53,6 @@ const Auth = () => {
               <p onClick={() => setModalIsOpen(true)}>Esqueceu a senha?</p>
             </div>  
 
-            <ForgotPasswordModal
-              isOpen={modalIsOpen}
-              onClose={() => setModalIsOpen(false)}
-            />
-
             <div className="buttons-row">
               <ButtonLogin onClick={handleLoginWGoogle} type="button" icon={<FcGoogle/>} iconPosition="right">Entrar com Google</ButtonLogin>
               <ButtonLogin onClick={handleLoginWApple} type="button" icon={<FaApple/>} iconPosition="right">Entrar com Apple</ButtonLogin>
@@ -66,6 +61,11 @@ const Auth = () => {
 
           <Button label="ENTRAR" onClick={handleSubmit} type="submit" />
         </div>
+
+        <ForgotPasswordModal
+          isOpen={modalIsOpen}
+          onClose={() => setModalIsOpen(false)}
+        />
 
         <div className="form-container cadastro">
           <h2>Cadastre-se</h2>
