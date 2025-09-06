@@ -57,6 +57,12 @@ const Auth = () => {
               <ButtonLogin onClick={handleLoginWGoogle} type="button" icon={<FcGoogle/>} iconPosition="right">Entrar com Google</ButtonLogin>
               <ButtonLogin onClick={handleLoginWApple} type="button" icon={<FaApple/>} iconPosition="right">Entrar com Apple</ButtonLogin>
             </div>
+            <div className="maintain-logged">
+              <label>
+                <input type="checkbox"/>
+                Manter-me conectado por 30 dias
+              </label>
+            </div>
           </div>
 
           <Button label="ENTRAR" onClick={handleSubmit} type="submit" />

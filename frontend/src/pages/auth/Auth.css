@@ -103,12 +103,26 @@ h2 {
   flex-direction: column;
 }
 
-.forgot-password {
+.forgot-password, .maintain-logged {
   width: 85%;
-  text-align: end;
   font-size: 10.2px;
   font-family: "Open Sans";
   cursor: pointer;
+  color: var(--quaternary-color);
+}
+
+.forgot-password {
+  text-align: end;
+}
+
+.maintain-logged {
+  text-align: start;
+}
+
+.maintain-logged > label {
+  display: flex;
+  gap: 5px;
+  text-align: center;
 }
 
 .forgot-password:hover {

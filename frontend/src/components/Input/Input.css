@@ -11,6 +11,10 @@
   width: 85%;
 }
 
+::-webkit-input-placeholder {
+  color: var(--quaternary-color);
+}
+
 .input-with-icon.left {
   flex-direction: row-reverse;
 
