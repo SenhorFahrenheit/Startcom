@@ -110,7 +110,7 @@ const Auth = () => {
 
         <div className="side-panel">
           <h2>LOGO</h2>
-          <p>Cadastre-se ou faça login para acessar todos os recursos!</p>
+          <p className="login-or-signin-text">Cadastre-se ou faça login para acessar todos os recursos!</p>
           <Button label={isLogin ? "CRIAR CONTA" : "FAZER LOGIN"} onClick={() => setIsLogin(!isLogin)} type="button" variant="quaternary"/>
         </div>
 

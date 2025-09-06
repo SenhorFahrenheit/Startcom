@@ -5,7 +5,7 @@ const BackButton = ({ onClick, label = "Voltar", icon = <MdOutlineArrowBackIosNe
   return (
     <button className={`back-button ${className}`} onClick={onClick}>
       {icon}
-      <span>{label}</span>
+      <span className="back-button-text">{label}</span>
     </button>
   );
 };
