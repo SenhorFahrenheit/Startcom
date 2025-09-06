@@ -1,4 +1,5 @@
 import Modal from "react-modal";
+import BackButton from "../BackButton/BackButton";
 import "./Modals.css";
 
 const BaseModal = ({
@@ -23,7 +24,7 @@ const BaseModal = ({
         content: { width, height, margin: "auto" },
       }}
     >
-      {showCloseButton && <button className="close-btn" onClick={onClose}>X</button>}
+      {showCloseButton && <BackButton onClick={onClose}/>}
       {children}
     </Modal>
   );
