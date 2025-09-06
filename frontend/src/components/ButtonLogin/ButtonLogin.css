@@ -1,0 +1,45 @@
+.button-with-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 5px;
+  margin: 10px 0;
+  height: 50px;
+  padding: 0 12px;
+  background-color: var(--secondary-color);
+  border: none;
+  cursor: pointer;
+  font-size: 15.3px;
+  font-family: 'Open Sans', sans-serif;
+}
+
+.button-with-icon.left {
+  flex-direction: row
+}
+
+.button-with-icon.right {
+  flex-direction: row-reverse;
+}
+
+.button-with-icon .icon {
+  font-size: 24.3px;
+  margin: 0 8px 0 0;
+  display: flex;
+  user-select: none;
+}
+
+.button-with-icon.left .icon {
+  margin: 0 0 0 8px;
+}
+
+.buttons-row {
+  display: flex;
+  width: 80%;
+  gap: 5px;
+}
+
+.buttons-row > .button-with-icon {
+  flex: 1;
+  min-width: 0; 
+}

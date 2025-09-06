@@ -5,10 +5,13 @@ import { useForm } from "react-hook-form";
 // Components
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
+import ButtonLogin from "../../components/ButtonLogin/ButtonLogin";
 import ForgotPasswordModal from "../../components/ForgotPassword/ForgotPasswordModal";
 
 // Icons
 import { RiLockPasswordFill } from 'react-icons/ri';
+import { FcGoogle } from "react-icons/fc";
+import { FaApple } from "react-icons/fa";
 
 // CSS
 import "./Auth.css";
@@ -30,6 +33,13 @@ const Auth = () => {
     console.log("Essa função aqui vai fazer algo em algum momento, por enquanto tá só pra não dar erro no meu código.");
   };
 
+  const handleLoginWGoogle = () => {
+    console.log("Fui clicado Google")
+  }
+
+  const handleLoginWApple = () => {
+    console.log("Fui clicado Apple")
+  }
   return (
     <div className="page-wrapper">
       <form onSubmit={handleSubmit(onSubmit)} className={`container ${isLogin ? "login-mode" : ""}`}>
@@ -37,7 +47,7 @@ const Auth = () => {
         <div className="form-container login">
           <h2>Login</h2>
           <Input placeholder="E-mail" value={email}/>
-          <Input placeholder="Senha" icon={<RiLockPasswordFill/>} iconPosition="left"  value={password}/>
+          <Input placeholder="Senha" icon={<RiLockPasswordFill/>} iconPosition="left" value={password}/>
       
           <div className="forgot-password">
             <p onClick={() => setModalIsOpen(true)}>Esqueceu a senha?</p>
@@ -48,10 +58,11 @@ const Auth = () => {
             onClose={() => setModalIsOpen(false)}
           />
 
-          <div className="login-with">
-            <button>Entrar com Google</button>
-            <button>Entrar com Apple</button>
+          <div className="buttons-row">
+            <ButtonLogin onClick={handleLoginWGoogle} type="button" icon={<FcGoogle/>} iconPosition="right">Entrar com Google</ButtonLogin>
+            <ButtonLogin onClick={handleLoginWApple} type="button" icon={<FaApple/>} iconPosition="right">Entrar com Apple</ButtonLogin>
           </div>
+
           <Button label="ENTRAR" onClick={handleSubmit} type="submit" />
         </div>
 
@@ -79,30 +90,28 @@ const Auth = () => {
 
         {type === "cpf" && (
             <div>
-                <input
-                    {...register("cpf", {
-                    pattern: {
-                        value: /^\d{3}\.\d{3}\.\d{3}\d{2}$/,
-                        message: "CPF inválido"
-                    }
-                    })}
-                    placeholder="000.000.000-00"/>
+              <input
+                {...register("cpf", {
+                pattern: {
+                  value: /^\d{3}\.\d{3}\.\d{3}\d{2}$/,
+                  message: "CPF inválido"
+                }
+                })}
+                placeholder="000.000.000-00"/>
                 {errors.cpf && <p>{errors.cpf.message}</p>}
             </div>
         )}
 
         {type === "cnpj" && (
-            <div>
-                <input
-                    {...register("cnpj", {
-                    pattern: {
-                        value: /^\d{2}\.\d{3}\.\d{3}\/\d{4}\d{2}$/,
-                        message: "CNPJ inválido"
-                    }
-                    })}
-                    placeholder="00.000.000/0000-00"
-                    
-                />
+          <div>
+            <input
+              {...register("cnpj", {
+              pattern: {
+                value: /^\d{2}\.\d{3}\.\d{3}\/\d{4}\d{2}$/,
+                message: "CNPJ inválido"
+              }
+              })}
+              placeholder="00.000.000/0000-00"/>
                 {errors.cnpj && <p>{errors.cnpj.message}</p>}
             </div>
         )}

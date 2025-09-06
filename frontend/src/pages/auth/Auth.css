@@ -95,3 +95,8 @@ body {
 .forgot-password:hover {
   text-decoration-line: underline;
 }
+
+.login-with {
+  display: flex;
+  gap: 20px;
+}
