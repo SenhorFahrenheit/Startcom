@@ -19,10 +19,10 @@ No terminal, execute:
 
 ```bash
 # Clonar pasta do projeto
-git clone https://github.com/SenhorFahrenheit/Starcom
+git clone https://github.com/SenhorFahrenheit/Startcom
 
 # Entrar na pasta do projeto
-cd Starcom
+cd Startcom
 
 # Entrar na pasta do frontend
 cd frontend
