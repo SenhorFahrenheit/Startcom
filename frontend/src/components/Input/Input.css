@@ -2,6 +2,7 @@
   display: flex;
   align-items: center;
   text-align: center;
+  justify-content: center;
   border-radius: 5px;
   margin: 10px 0;
   height: 40px;
@@ -36,6 +37,7 @@
 
 .inputs-row {
   display: flex;
+  width: 80%;
   gap: 5px;
 }
 

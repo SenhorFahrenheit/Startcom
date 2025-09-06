@@ -26,7 +26,6 @@ const Auth = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState('');
 
-  
   const { register, handleSubmit, formState: { errors } } = useForm();
 
   const onSubmit = () => {
@@ -68,62 +67,41 @@ const Auth = () => {
 
         <div className="form-container cadastro">
           <h2>Cadastre-se</h2>
-          <input placeholder="Nome" />
+          <Input type="text" placeholder="Nome"/>
           
-          <div>
-            <div className="date-input-wrapper">
-                <input type="date" id="birthdate" />
-                <label htmlFor="birthdate">Nascimento</label>
-                <span className="calendar-icon">📅</span>
-            </div>
-
-            <div className="input-with-icon">
-                <input type="tel" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" placeholder="Telefone"/>
-                <span className="icon"></span>
-            </div>
+          
+          <div className="inputs-row">
+            <Input type="date" placeholder="Senha" iconPosition="right"/>
+            <Input type="tel" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" placeholder="Telefone"/>
           </div>
 
-            <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-            <button type="button" onClick={() => setType("cpf")}>CPF</button>
-            <button type="button" onClick={() => setType("cnpj")}>CNPJ</button>
-        </div>
+          <div className="CPF-or-CNPJ">
+            <button className={`CPF ${type === "cpf" ? "active" : ""}`} type="button" onClick={() => setType("cpf")}>
+              CPF
+            </button>
+            <button className={`CNPJ ${type === "cnpj" ? "active" : ""}`} type="button" onClick={() => setType("cnpj")}>
+              CNPJ
+            </button>
+          </div>
+
 
         {type === "cpf" && (
-            <div>
-              <input
-                {...register("cpf", {
-                pattern: {
-                  value: /^\d{3}\.\d{3}\.\d{3}\d{2}$/,
-                  message: "CPF inválido"
-                }
-                })}
-                placeholder="000.000.000-00"/>
-                {errors.cpf && <p>{errors.cpf.message}</p>}
-            </div>
+            <>
+            <Input placeholder="000.000.000-00"/>
+            </>
         )}
 
         {type === "cnpj" && (
-          <div>
-            <input
-              {...register("cnpj", {
-              pattern: {
-                value: /^\d{2}\.\d{3}\.\d{3}\/\d{4}\d{2}$/,
-                message: "CNPJ inválido"
-              }
-              })}
-              placeholder="00.000.000/0000-00"/>
-                {errors.cnpj && <p>{errors.cnpj.message}</p>}
-            </div>
+          <>
+            <Input placeholder="00.000.000/0000-00"/>
+          </>
         )}
-            <input type="email" placeholder="E-mail" />
+            <Input type="email" placeholder="E-mail"/>
 
-            <div>
-                <div className="input-with-icon">
-                    <input type="text" placeholder="Usuário" />
-                    <span className="icon">👤</span>
-                </div>
-                <input type="password" placeholder="Confirmar senha" />
-          </div>
+            <div className="inputs-row">
+              <Input icon={<RiLockPasswordFill/>} type="password" placeholder="Senha" iconPosition="left"/>
+              <Input type="password" placeholder="Confirmar Senha"/>
+            </div>
 
           <Button label="CADASTRAR" onClick={handleSubmit} type="submit"/>
         </div>
