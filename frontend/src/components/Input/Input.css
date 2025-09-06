@@ -5,14 +5,15 @@
   justify-content: center;
   border-radius: 5px;
   margin: 10px 0;
-  height: 40px;
+  height: 45px;
   padding: 8px 12px;
   background-color: var(--secondary-color);
-  width: 80%;
+  width: 85%;
 }
 
 .input-with-icon.left {
   flex-direction: row-reverse;
+
 }
 
 .input-with-icon.right {
@@ -37,11 +38,19 @@
 
 .inputs-row {
   display: flex;
-  width: 80%;
+  width: 85%;
   gap: 5px;
 }
 
 .inputs-row > .input-with-icon {
   flex: 1;
   min-width: 0;
+}
+
+.inputs-row .input-with-icon .icon {
+  padding-left: 40px;
+}
+
+.inputs-row .input-with-icon.right {
+  padding-left: 24px !important;
 }

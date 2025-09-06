@@ -5,7 +5,7 @@
   text-align: center;
   border-radius: 5px;
   margin: 10px 0;
-  height: 50px;
+  height: 45px;
   padding: 0 12px;
   background-color: var(--secondary-color);
   border: none;
@@ -23,7 +23,7 @@
 }
 
 .button-with-icon .icon {
-  font-size: 24.3px;
+  font-size: 18.3px;
   margin: 0 8px 0 0;
   display: flex;
   user-select: none;
@@ -35,7 +35,7 @@
 
 .buttons-row {
   display: flex;
-  width: 80%;
+  width: 85%;
   gap: 5px;
 }
 

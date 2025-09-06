@@ -45,21 +45,23 @@ const Auth = () => {
 
         <div className="form-container login">
           <h2>Login</h2>
-          <Input placeholder="E-mail" value={email}/>
-          <Input placeholder="Senha" icon={<RiLockPasswordFill/>} iconPosition="left" value={password}/>
-      
-          <div className="forgot-password">
-            <p onClick={() => setModalIsOpen(true)}>Esqueceu a senha?</p>
-          </div>  
+          <div className="items-block">
+            <Input onChange={(e) => setEmail(e.target.value)} type="email" placeholder="E-mail" value={email}/>
+            <Input onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Senha" icon={<RiLockPasswordFill/>} iconPosition="left" value={password}/>
 
-          <ForgotPasswordModal
-            isOpen={modalIsOpen}
-            onClose={() => setModalIsOpen(false)}
-          />
+            <div className="forgot-password">
+              <p onClick={() => setModalIsOpen(true)}>Esqueceu a senha?</p>
+            </div>  
 
-          <div className="buttons-row">
-            <ButtonLogin onClick={handleLoginWGoogle} type="button" icon={<FcGoogle/>} iconPosition="right">Entrar com Google</ButtonLogin>
-            <ButtonLogin onClick={handleLoginWApple} type="button" icon={<FaApple/>} iconPosition="right">Entrar com Apple</ButtonLogin>
+            <ForgotPasswordModal
+              isOpen={modalIsOpen}
+              onClose={() => setModalIsOpen(false)}
+            />
+
+            <div className="buttons-row">
+              <ButtonLogin onClick={handleLoginWGoogle} type="button" icon={<FcGoogle/>} iconPosition="right">Entrar com Google</ButtonLogin>
+              <ButtonLogin onClick={handleLoginWApple} type="button" icon={<FaApple/>} iconPosition="right">Entrar com Apple</ButtonLogin>
+            </div>
           </div>
 
           <Button label="ENTRAR" onClick={handleSubmit} type="submit" />
@@ -71,7 +73,7 @@ const Auth = () => {
           
           
           <div className="inputs-row">
-            <Input type="date" placeholder="Senha" iconPosition="right"/>
+            <Input type="date" placeholder="Senha" iconPosition="left"/>
             <Input type="tel" pattern="[0-9]{3}-[0-9]{2}-[0-9]{3}" placeholder="Telefone"/>
           </div>
 

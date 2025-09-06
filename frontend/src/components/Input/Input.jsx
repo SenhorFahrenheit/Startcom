@@ -3,7 +3,7 @@ import './Input.css';
 const Input = ({
   placeholder = '',
   icon = null,
-  iconPosition = 'right', // "left" ou "right"
+  iconPosition = 'right', // "left" or "right"
   type = 'text',
   value,
   onChange,

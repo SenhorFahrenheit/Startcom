@@ -11,14 +11,14 @@ body {
 
 .container {
   position: relative;
-  width: 880px;
-  height: 70vh;
+  width: 730px;
+  height: 75%;
 }
 
 .form-container {
   position: absolute;
   top: 0;
-  width: 620px !important;
+  width: 480px !important;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -26,7 +26,7 @@ body {
   height: 480px;
   padding: 20px;
   border-radius: 0 25px 25px 0;
-  background: white;
+  background: #FFFFFF;
   transition: all 1s ease;
 }
 
@@ -38,6 +38,7 @@ body {
 
 .login {
   opacity: 0;
+  justify-content: space-around;
   pointer-events: none;
 }
 
@@ -72,7 +73,7 @@ body {
 }
 
 .container.login-mode .side-panel {
-  left: 620px;
+  left: 480px;
   border-radius: 0 25px 25px 0;
 }
 
@@ -88,9 +89,16 @@ h2 {
   font-size: 30.3px;
 }
 
+.items-block {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
 
 .forgot-password {
-  width: 80%;
+  width: 85%;
   text-align: end;
   font-size: 10.2px;
   font-family: "Open Sans";
@@ -108,7 +116,7 @@ h2 {
 
 .CPF-or-CNPJ {
   display: flex;
-  width: 80%;
+  width: 85%;
   justify-content: center;
   align-items: center;
   background-color: var(--secondary-color);
@@ -117,7 +125,7 @@ h2 {
 
 .CPF, .CNPJ {
   width: 100%;
-  height: 40px;
+  height: 45px;
   background-color: var(--secondary-color);
   border: none;
   border-radius: 5px;
