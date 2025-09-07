@@ -37,9 +37,10 @@ const ForgotPasswordModal = ({ isOpen, onClose, onSuccess }) => {
       <h2 className="auth-modal-title">Redefinição de senha</h2>
       <p className="auth-description">Informe um e-mail e enviaremos um código para recuperação de sua senha.</p>
 
-      <label className="input-label" htmlFor="email">E-mail</label>
       <form onSubmit={sendEmail} className="center-block">
+        <label className="input-label" htmlFor="email">E-mail</label>
         <Input id="email" value={email} onChange={(e) => setEmail(e.target.value)} type="email"/>
+        
         <Button type="submit" label={"ENVIAR"}/>
       </form>
     </BaseModal>

@@ -1,9 +1,10 @@
 import { useState, useRef } from "react";
+// import axios from "axios"
 import { toast } from "react-toastify";
 import Button from "../Button/Button";
 import BaseModal from "./BaseModal";
 
-const CodeVerificationModal = ({ isOpen, onClose }) => {
+const CodeVerificationModal = ({ isOpen, onClose, /*email*/ onSuccess }) => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const inputsRef = useRef([]);
 
@@ -28,7 +29,7 @@ const CodeVerificationModal = ({ isOpen, onClose }) => {
   };
 
   // Verify all numbers typed by user and groups into a single value
-  const verifyCode = (e) => {
+  const verifyCode = async (e) => {
     e.preventDefault();
     const joinedCode = code.join("");
 
@@ -36,10 +37,27 @@ const CodeVerificationModal = ({ isOpen, onClose }) => {
       toast.error("Digite o código completo!", { position: "top-center", theme: "light", containerId: "toast-root" });
       return;
     }
+/*
+    try {
+        const response = await axios.post("/api/verify-code", {
+        email,
+        code: joinedCode
+        });
+
+        if (response.data.success) {
+            toast.success("Código correto!", { position: "top-center", containerId: "toast-root" });
+            onSuccess();
+        } else {
+        toast.error("Código incorreto!", { position: "top-center", containerId: "toast-root" });
+        }
+    } catch {
+        toast.error("Erro ao verificar código!", { position: "top-center", containerId: "toast-root" });
+    }
+*/
 
     console.log("Sended code:", joinedCode);
     toast.success("Código verificado com sucesso!", { position: "top-center", containerId: "toast-root" });
-    // Backend validation here
+    onSuccess() // While there's no backend
   };
 
   return (

@@ -19,6 +19,7 @@ import { FaApple } from "react-icons/fa";
 // CSS
 import "./Auth.css";
 import CodeVerificationModal from "../../components/Modals/CodeVerificationModal";
+import ChangePasswordModal from "../../components/Modals/ChangePasswordModal";
 
 
 const Auth = () => {
@@ -28,6 +29,7 @@ const Auth = () => {
   // Modals
   const [isForgotOpen, setIsForgotOpen] = useState(false);
   const [isCodeOpen, setIsCodeOpen] = useState(false);
+  const [isPasswordOpen, setIsPasswordOpen] = useState(false);
 
   // Credentials
   const [email, setEmail] = useState("");
@@ -184,6 +186,17 @@ const Auth = () => {
       <CodeVerificationModal
         isOpen={isCodeOpen}
         onClose={() => setIsCodeOpen(false)}
+        email={email}
+        onSuccess={() => {
+          setIsCodeOpen(false);
+          setIsPasswordOpen(true);
+        }}
+      />
+
+
+      <ChangePasswordModal
+        isOpen={isPasswordOpen}
+        onClose={() => setIsPasswordOpen(false)}
       />
     </div>
   );
