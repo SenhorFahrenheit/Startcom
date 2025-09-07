@@ -30,7 +30,14 @@ body {
   transition: all 1s ease;
 }
 
-.cadastro {
+.form-register {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.register {
   left: 250px;
   opacity: 1;
   pointer-events: auto;
@@ -67,7 +74,7 @@ body {
   border-radius: 25px 0 0 25px
 }
 
-.container.login-mode .cadastro {
+.container.login-mode .register {
   opacity: 0;
   pointer-events: none;
 }
@@ -113,10 +120,12 @@ h2 {
 
 .forgot-password {
   text-align: end;
+  margin-bottom: 10px;
 }
 
 .maintain-logged {
   text-align: start;
+  margin-bottom: 40px;
 }
 
 .maintain-logged > label {
@@ -138,6 +147,7 @@ h2 {
   display: flex;
   width: 85%;
   justify-content: center;
+  margin: 7.5px 0;
   align-items: center;
   background-color: var(--secondary-color);
   border-radius: 5px;
