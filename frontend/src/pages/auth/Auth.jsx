@@ -23,7 +23,9 @@ import "./Auth.css";
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [type, setType] = useState("cpf");
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  // Modals
+  const [isForgotOpen, setIsForgotOpen] = useState(false);
 
   // Credentials
   const [email, setEmail] = useState("");
@@ -66,7 +68,7 @@ const Auth = () => {
             <Input onChange={(e) => setPassword(e.target.value)} type="password" placeholder="Senha" icon={<RiLockPasswordFill/>} iconPosition="left" value={password}/>
 
             <div className="forgot-password">
-              <p onClick={() => setModalIsOpen(true)}>Esqueceu a senha?</p>
+              <p onClick={() => setIsForgotOpen(true)}>Esqueceu a senha?</p>
             </div>  
 
             <div className="buttons-row">
@@ -83,11 +85,6 @@ const Auth = () => {
 
           <Button label="ENTRAR" onClick={() => handleLogin} type="submit" />
         </div>
-
-        <ForgotPasswordModal
-          isOpen={modalIsOpen}
-          onClose={() => setModalIsOpen(false)}
-        />
 
         <div className="form-container cadastro">
           <h2>Cadastre-se</h2>
@@ -166,8 +163,12 @@ const Auth = () => {
           <p className="login-or-signin-text">Cadastre-se ou faça login para acessar todos os recursos!</p>
           <Button label={isLogin ? "CRIAR CONTA" : "FAZER LOGIN"} onClick={() => setIsLogin(!isLogin)} type="button" variant="quaternary"/>
         </div>
-
       </form>
+
+      <ForgotPasswordModal
+        isOpen={isForgotOpen}
+        onClose={() => setIsForgotOpen(false)}
+      />
     </div>
   );
 };

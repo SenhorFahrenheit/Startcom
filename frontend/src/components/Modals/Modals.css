@@ -1,3 +1,4 @@
+/* General Modal Settings */
 .modal-overlay {
   background-color: rgba(0, 0, 0, 0.6);
   position: fixed;
@@ -22,7 +23,7 @@
 
 .modal-content {
   background: #ffffff;
-  padding: 20px;
+  padding: 25px;
   border-radius: 10px;
   width: 90%;
   max-width: 500px;
@@ -43,5 +44,36 @@
 }
 
 :focus-visible {
-    outline: none;
+  outline: none;
+}
+
+/* ForgotPasswordModal Settings */
+.auth-modal-title {
+  font-size: 28.4px;
+  margin: 25px 0 25px 0;
+  color: var(--quaternary-color);
+}
+
+.auth-description {
+  color: var(--primary-color);
+  font-family: "Open Sans";
+  font-size: 12.2px;
+  margin-bottom: 40px;
+}
+
+.center-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.center-block > .input-with-icon {
+  width: 100%;
+}
+
+.input-label {
+  font-size: 14.3px;
+  font-family: "Open Sans";
+  color: var(--quaternary-color);
 }
