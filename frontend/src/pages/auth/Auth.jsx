@@ -18,6 +18,7 @@ import { FaApple } from "react-icons/fa";
 
 // CSS
 import "./Auth.css";
+import CodeVerificationModal from "../../components/Modals/CodeVerificationModal";
 
 
 const Auth = () => {
@@ -26,24 +27,33 @@ const Auth = () => {
 
   // Modals
   const [isForgotOpen, setIsForgotOpen] = useState(false);
+  const [isCodeOpen, setIsCodeOpen] = useState(false);
 
   // Credentials
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [keepLogged, setKeepLogged] = useState(false);
-
   const { register, handleSubmit, control } = useForm();
 
+  // Action Functions
   const onSubmit = (data) => {
     console.log(data);
     toast.success("Cadastro realizado com sucesso!", {
-      position: "top-center"
+      position: "top-center",
+      containerId: "toast-root"
     });
+  };
+
+  const handleForgotSubmit = (email) => {
+    console.log("Email sended:", email);
+    setIsForgotOpen(false);
+    setIsCodeOpen(true);
   };
 
   const onError = (errors) => {
     Object.values(errors).forEach(err => toast.error(err.message, {
-      theme: "light"
+      theme: "light",
+      containerId: "toast-root"
     }));
   };
 
@@ -168,6 +178,12 @@ const Auth = () => {
       <ForgotPasswordModal
         isOpen={isForgotOpen}
         onClose={() => setIsForgotOpen(false)}
+        onSuccess={handleForgotSubmit}
+      />
+
+      <CodeVerificationModal
+        isOpen={isCodeOpen}
+        onClose={() => setIsCodeOpen(false)}
       />
     </div>
   );

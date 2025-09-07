@@ -10,6 +10,7 @@ function App() {
     <>
       <Auth/>
       <ToastContainer
+        containerId="toast-root"
         position="top-right"
         autoClose={5000}
         hideProgressBar={false}
@@ -18,6 +19,7 @@ function App() {
         pauseOnHover
         draggable
         theme="colored"
+        autoFocus={false}
       />
     </>
   )

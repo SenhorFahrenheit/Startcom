@@ -5,7 +5,7 @@ import BaseModal from "./BaseModal";
 import Input from "../Input/Input";
 import Button from "../Button/Button";
 
-const ForgotPasswordModal = ({ isOpen, onClose }) => {
+const ForgotPasswordModal = ({ isOpen, onClose, onSuccess }) => {
   const [email, setEmail] = useState("");
 
   const sendEmail = (e) => {
@@ -14,20 +14,22 @@ const ForgotPasswordModal = ({ isOpen, onClose }) => {
     if (!email.trim()) {
       toast.error("O campo de e-mail não pode estar vazio!", {
         position: "top-center",
-        theme: "light"
+        theme: "light",
+        containerId: "toast-root"
       });
       return;
     }
 
     // Requisition to backend here
-
     console.log("Email to backend:", email);
 
-    toast.success("Se este e-mail existir, você receberá um link de recuperação.", {
+    toast.success("Se este e-mail existir, você receberá um número de recuperação.", {
       position: "top-center",
+      containerId: "toast-root"
     });
 
     setEmail("");
+    onSuccess(email);
   }
 
   return (
