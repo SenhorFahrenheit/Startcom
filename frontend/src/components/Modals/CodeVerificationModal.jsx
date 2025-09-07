@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 // import axios from "axios"
 import { toast } from "react-toastify";
 import Button from "../Button/Button";
@@ -7,6 +7,12 @@ import BaseModal from "./BaseModal";
 const CodeVerificationModal = ({ isOpen, onClose, /*email*/ onSuccess }) => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const inputsRef = useRef([]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setCode(["", "", "", "", "", ""]);
+    }
+  }, [isOpen]);
 
   // Update the input value and focus on the next one
   const handleChange = (index, value) => {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 
 import BaseModal from "./BaseModal";
@@ -7,6 +7,12 @@ import Button from "../Button/Button";
 
 const ForgotPasswordModal = ({ isOpen, onClose, onSuccess }) => {
   const [email, setEmail] = useState("");
+
+    useEffect(() => {
+      if (!isOpen) {
+        setEmail("");
+      }
+    }, [isOpen]);
 
   const sendEmail = (e) => {
     e.preventDefault();
