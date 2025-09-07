@@ -12,6 +12,7 @@ import ButtonLogin from "../../components/ButtonLogin/ButtonLogin";
 import ForgotPasswordModal from "../../components/Modals/ForgotPasswordModal";
 import CodeVerificationModal from "../../components/Modals/CodeVerificationModal";
 import ChangePasswordModal from "../../components/Modals/ChangePasswordModal";
+import AuthenticatorModal from "../../components/Modals/AuthenticatorModal";
 
 // Icons
 import { RiLockPasswordFill } from "react-icons/ri";
@@ -26,6 +27,7 @@ const Auth = () => {
   const [type, setType] = useState("cpf");
 
   // Modals
+  const [isAuthenticatorOpen, setIsAuthenticatorOpen] = useState(false);
   const [isForgotOpen, setIsForgotOpen] = useState(false);
   const [isCodeOpen, setIsCodeOpen] = useState(false);
   const [isPasswordOpen, setIsPasswordOpen] = useState(false);
@@ -39,6 +41,7 @@ const Auth = () => {
 
   const onSubmit = (data) => {
     console.log("Register:", data);
+    
     toast.success("Cadastro realizado com sucesso!", { position: "top-center", containerId: "toast-root", });
   };
 
@@ -198,7 +201,7 @@ const Auth = () => {
               />
             </div>
 
-            <Button label="CADASTRAR" type="submit" />
+            <Button  label="CADASTRAR" type="submit"/>
           </form>
         </div>
 
@@ -217,6 +220,11 @@ const Auth = () => {
       </div>
 
       {/* Modals */}
+      <AuthenticatorModal
+        isOpen={isAuthenticatorOpen}
+        onClose={() => setIsAuthenticatorOpen(false)}
+      />
+
       <ForgotPasswordModal
         isOpen={isForgotOpen}
         onClose={() => setIsForgotOpen(false)}
@@ -231,6 +239,7 @@ const Auth = () => {
           setIsPasswordOpen(true);
         }}
       />
+      
       <ChangePasswordModal 
         isOpen={isPasswordOpen} 
         onClose={() => setIsPasswordOpen(false)}
