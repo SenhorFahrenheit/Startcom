@@ -41,8 +41,7 @@ const Auth = () => {
 
   const onSubmit = (data) => {
     console.log("Register:", data);
-    
-    toast.success("Cadastro realizado com sucesso!", { position: "top-center", containerId: "toast-root", });
+    setIsAuthenticatorOpen(true);
   };
 
   const onError = (errors) => {
@@ -201,7 +200,7 @@ const Auth = () => {
               />
             </div>
 
-            <Button  label="CADASTRAR" type="submit"/>
+            <Button label="CADASTRAR" type="submit"/>
           </form>
         </div>
 
