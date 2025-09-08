@@ -22,6 +22,15 @@ import { FaApple } from "react-icons/fa";
 // CSS
 import "./Auth.css";
 
+// Aux Functions
+import { validateCNPJ } from "../../utils/validations";
+import { validateCPF } from "../../utils/validations";
+import { validatePhone } from "../../utils/validations";
+
+import { formatCNPJ } from "../../utils/format";
+import { formatCPF } from "../../utils/format";
+import { formatPhone } from "../../utils/format";
+
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(false);
   const [type, setType] = useState("cpf");
@@ -129,9 +138,23 @@ const Auth = () => {
                 name="telefone"
                 control={control}
                 defaultValue=""
-                rules={{ required: "Telefone é obrigatório" }}
-                render={({ field }) => (
-                  <Input placeholder="(00) 00000-0000" {...field} />
+                rules={{ 
+                  required: "Telefone é obrigatório",
+                  validate: (value) => {
+                    if (!validatePhone(value)) {
+                      return "Telefone inválido. Use formato: (00) 00000-0000";
+                    }
+                    return true;
+                  }
+                 }}
+                render={({ field: { onChange, value, ...field } }) => (
+                  <Input 
+                    placeholder="(00) 00000-0000" 
+                    maxLength={15}
+                    value={formatPhone(value || "")}
+                    onChange={(e) => onChange(e.target.value)}
+                    {...field} 
+                  />
                 )}
               />
             </div>
@@ -158,9 +181,23 @@ const Auth = () => {
                 name="cpf"
                 control={control}
                 defaultValue=""
-                rules={{ required: "CPF é obrigatório" }}
-                render={({ field }) => (
-                  <Input placeholder="000.000.000-00" {...field} />
+                rules={{ 
+                  required: "CPF é obrigatório",
+                  validate: (value) => {
+                    if (!validateCPF(value)) {
+                      return "CPF inválido. Verifique os dígitos informados.";
+                    }
+                    return true;
+                  }
+                }}
+                render={({ field: { onChange, value, ...field } }) => (
+                  <Input 
+                    placeholder="000.000.000-00" 
+                    value={formatCPF(value || "")}
+                    maxLength={14}
+                    onChange={(e) => onChange(e.target.value)}
+                    {...field} 
+                  />
                 )}
               />
             )}
@@ -170,22 +207,44 @@ const Auth = () => {
                 name="cnpj"
                 control={control}
                 defaultValue=""
-                rules={{ required: "CNPJ é obrigatório" }}
-                render={({ field }) => (
-                  <Input placeholder="00.000.000/0000-00" {...field} />
+                rules={{ 
+                  required: "CNPJ é obrigatório",
+                  validate: (value) => {
+                    if (!validateCNPJ(value)) {
+                      return "CNPJ inválido. Verifique os dígitos informados.";
+                    }
+                    return true;
+                  }
+                }}
+                render={({ field: { onChange, value, ...field } }) => (
+                  <Input 
+                    placeholder="00.000.000/0000-00" 
+                    value={formatCNPJ(value || "")}
+                    maxLength={18}
+                    onChange={(e) => onChange(e.target.value)}
+                    {...field} 
+                  />
                 )}
               />
             )}
 
             <Input
-              {...register("email", { required: "Email é obrigatório" })}
+              {...register("email", { 
+                required: "Email é obrigatório",
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: "Email inválido"
+                }
+              })}
               type="email"
               placeholder="E-mail"
             />
 
             <div className="inputs-row">
               <Input
-                {...register("password", { required: "Senha é obrigatória" })}
+                {...register("password", { 
+                  required: "Senha é obrigatória"
+                })}
                 icon={<RiLockPasswordFill />}
                 type="password"
                 placeholder="Senha"
@@ -194,6 +253,12 @@ const Auth = () => {
               <Input
                 {...register("confirmPassword", {
                   required: "Confirmar a senha é obrigatório",
+                  validate: (value, { password }) => {
+                    if (value !== password) {
+                      return "Senhas não coincidem";
+                    }
+                    return true;
+                  }
                 })}
                 type="password"
                 placeholder="Confirmar Senha"

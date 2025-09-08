@@ -5,6 +5,7 @@ const Input = React.forwardRef(({
   placeholder = '',
   icon = null,
   iconPosition = 'right', // "left" or "right"
+  maxLength,
   type = 'text',
   ...rest
 }, ref) => {
@@ -13,6 +14,7 @@ const Input = React.forwardRef(({
       <input
         type={type}
         placeholder={placeholder}
+        maxLength={maxLength}
         ref={ref}
         {...rest}
       />
