@@ -35,4 +35,7 @@
     --quaternary-color: #373f51;
     --quinary-color: #a9bcd0;
     --senary-color: #282828;
+
+    --font-base: "Open Sans", sans-serif;
+    --font-heading: "Arial MT Pro", sans-serif;
 }

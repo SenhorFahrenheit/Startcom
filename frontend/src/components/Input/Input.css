@@ -29,7 +29,7 @@
   outline: none;
   flex: 1;
   font-size: 14.3px;
-  font-family: 'Open Sans', sans-serif;
+  font-family: var(--font-base);
   background-color: transparent;
 }
 

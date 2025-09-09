@@ -57,7 +57,7 @@
 
 .auth-description {
   color: var(--primary-color);
-  font-family: "Open Sans";
+  font-family: var(--font-base);
   font-size: 12.2px;
   margin-bottom: 40px;
 }
@@ -80,7 +80,7 @@
 
 .input-label {
   font-size: 14.3px;
-  font-family: "Open Sans";
+  font-family: var(--font-base);
   color: var(--quaternary-color);
 }
 
@@ -102,7 +102,7 @@
   color: #ff6931;
   border-radius: 5px;
   font-size: 12.8px;
-  font-family: "Open Sans";
+  font-family: var(--font-base);
   display: flex;
   justify-content: center;
   align-items: center;

@@ -6,13 +6,13 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .container {
   position: relative;
   width: 730px;
-  height: 75%;
+  height: 480px;
 }
 
 .form-container {
@@ -85,7 +85,7 @@ body {
 }
 
 .login-or-signin-text {
-  font-family: "Open Sans";
+  font-family: var(--font-base);
   font-size: 14.6px;
   margin: 15px 0;
 }
@@ -98,7 +98,7 @@ body {
 }
 
 h2 {
-  font-family: "Arial MT Pro";
+  font-family: var(--font-heading);
   font-size: 30.3px;
 }
 
@@ -113,7 +113,7 @@ h2 {
 .forgot-password, .maintain-logged {
   width: 85%;
   font-size: 10.2px;
-  font-family: "Open Sans";
+  font-family: var(--font-base);
   cursor: pointer;
   color: var(--quaternary-color);
 }

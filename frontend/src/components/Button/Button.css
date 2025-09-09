@@ -4,7 +4,7 @@
     color: #FFFFFF;
     font-size: 14.3px;
     font-weight: bold;
-    font-family: 'Open Sans';
+    font-family: var(--font-base);
     width: 120px;
     height: 45px;
     border-radius: 5px;
