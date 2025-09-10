@@ -1,0 +1,41 @@
+/* Fonts */
+@font-face {
+  font-family: 'Open Sans';
+  src: url('./assets/fonts/Open-Sans/OpenSans-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Open Sans';
+  src: url('./assets/fonts/Open-Sans/OpenSans-Bold.ttf');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Arial MT Pro";
+  src: url('./assets/fonts/Arial-MT-Pro/ArialMTPro.otf');
+  font-style: normal;
+}
+
+/* Initial Configs */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #58a4b0;
+    --secondary-color: #e4e8ef;
+    --tertiary-color: #487281;
+    --quaternary-color: #373f51;
+    --quinary-color: #a9bcd0;
+    --senary-color: #282828;
+
+    --font-base: "Open Sans", sans-serif;
+    --font-heading: "Arial MT Pro", sans-serif;
+}
