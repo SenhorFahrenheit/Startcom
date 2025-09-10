@@ -1,5 +1,9 @@
 from motor.motor_asyncio import AsyncIOMotorClient  # Import the asynchronous MongoDB client from Motor
 import asyncio  # Import asyncio to run asynchronous code
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 
 class MongoDB:
     def __init__(self, uri: str, db_name: str):
@@ -13,10 +17,14 @@ class MongoDB:
         return self.db[collection_name]
 
 
+# Read MongoDB URI and database name from environment variables
+mongo_uri = os.getenv("MONGO_URI")
+mongo_db_name = os.getenv("MONGO_DB")
+
 # Create a global instance of the MongoDB class
 mongo = MongoDB(
-    "mongodb+srv://db_developer:8EUR4H0fpaQY@starcomdb.uktxcfh.mongodb.net/?retryWrites=true&w=majority",
-    "Startcom_Database"
+    mongo_uri, 
+    mongo_db_name
 )
 
 # Define an asynchronous function to test MongoDB operations
