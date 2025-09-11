@@ -36,5 +36,7 @@ async def test_mongo():
     # Print the retrieved documents
     print(documents)
 
-# Run the asynchronous test function
-asyncio.run(test_mongo())
+# Run test
+if __name__ == "__main__":
+    import asyncio
+    asyncio.run(test_mongo())
