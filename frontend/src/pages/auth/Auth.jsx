@@ -79,8 +79,9 @@ const Auth = () => {
     });
   };
 
-  const handleLoginWGoogle = () => {
+  const handleLoginWGoogle = async () => {
     console.log("Login with Google clicked");
+    window.location.href = `${import.meta.env.VITE_BACKEND_URL}auth/google/auth`;
   };
 
   const handleLoginWApple = () => {
