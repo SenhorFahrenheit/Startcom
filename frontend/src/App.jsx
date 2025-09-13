@@ -1,5 +1,5 @@
 import './App.css'
-import Auth from './pages/auth/Auth'
+import AppRoutes from './routes/AppRoutes';
 
 // Libs
 import { ToastContainer } from "react-toastify";
@@ -8,7 +8,7 @@ import "react-toastify/dist/ReactToastify.css";
 function App() {
   return (
     <>
-      <Auth/>
+      <AppRoutes />
       <ToastContainer
         containerId="toast-root"
         position="top-right"
