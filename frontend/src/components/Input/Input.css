@@ -52,9 +52,27 @@
 }
 
 .inputs-row .input-with-icon .icon {
-  padding-left: 40px;
+  padding-left: 30px;
 }
 
 .inputs-row .input-with-icon.right {
   padding-left: 24px !important;
+}
+
+
+/* Remove the show password button on Chrome, Edge and Safari */
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none; /* IE/Edge */
+}
+
+input[type="password"]::-webkit-password-toggle-button,
+input[type="password"]::-webkit-outer-spin-button,
+input[type="password"]::-webkit-inner-spin-button {
+  display: none; /* Chrome, Safari */
+}
+
+input[type="password"]::-webkit-search-decoration,
+input[type="password"]::-webkit-search-cancel-button {
+  display: none;
 }

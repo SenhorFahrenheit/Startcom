@@ -9,10 +9,12 @@ import { useForm, Controller } from "react-hook-form"; // Form management
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
 import ButtonLogin from "../../components/ButtonLogin/ButtonLogin";
-import ForgotPasswordModal from "../../components/Modals/ForgotPasswordModal";
-import CodeVerificationModal from "../../components/Modals/CodeVerificationModal";
-import ChangePasswordModal from "../../components/Modals/ChangePasswordModal";
-import AuthenticatorModal from "../../components/Modals/AuthenticatorModal";
+
+import { useAuthModals } from "../../hooks/useAuthModals";
+import ForgotPasswordModal from "../../components/Modals/ForgotPasswordModal"
+import AuthenticatorModal from "../../components/Modals/AuthenticatorModal"
+import ChangePasswordModal from "../../components/Modals/ChangePasswordModal"
+import CodeVerificationModal from "../../components/Modals/CodeVerificationModal"
 
 // Icons
 import { RiLockPasswordFill } from "react-icons/ri";
@@ -27,17 +29,20 @@ import { validateCNPJ, validateCPF, validatePhone } from "../../utils/validation
 import { formatCNPJ, formatCPF, formatPhone } from "../../utils/format";
 
 const Auth = () => {
+  const {
+    activeModal,
+    openAuthenticator,
+    openForgot,
+    openCode,
+    openPassword,
+    closeModal,
+  } = useAuthModals();
+
   // State to toggle between login and register mode
   const [isLogin, setIsLogin] = useState(false);
 
   // State to control which document type is selected: CPF or CNPJ
   const [type, setType] = useState("cpf");
-
-  // Modals control
-  const [isAuthenticatorOpen, setIsAuthenticatorOpen] = useState(false);
-  const [isForgotOpen, setIsForgotOpen] = useState(false);
-  const [isCodeOpen, setIsCodeOpen] = useState(false);
-  const [isPasswordOpen, setIsPasswordOpen] = useState(false);
 
   // Login state
   const [loginEmail, setLoginEmail] = useState("");
@@ -50,7 +55,7 @@ const Auth = () => {
   // Handle registration submit
   const onSubmit = (data) => {
     console.log("Register:", data);
-    setIsAuthenticatorOpen(true); // Open 2FA modal after registration
+    openAuthenticator(); // Open 2FA modal after registration
   };
 
   // Handle validation errors in registration
@@ -87,13 +92,6 @@ const Auth = () => {
     console.log("Login with Apple clicked");
   };
 
-  // Handle forgot password flow
-  const handleForgotSubmit = (email) => {
-    console.log("Email sent:", email);
-    setIsForgotOpen(false);
-    setIsCodeOpen(true); // Open verification code modal
-  };
-
   return (
     <div className="page-wrapper">
       <div className={`container ${isLogin ? "login-mode" : ""}`}>
@@ -120,7 +118,7 @@ const Auth = () => {
             />
 
             <div className="forgot-password">
-              <p onClick={() => setIsForgotOpen(true)}>Esqueceu a senha?</p>
+              <p onClick={openForgot}>Esqueceu a senha?</p>
             </div>
 
             {/* Social login buttons */}
@@ -343,29 +341,29 @@ const Auth = () => {
           Modals (Forgot password, Authenticator, etc.)
       ========================= */}
       <AuthenticatorModal
-        isOpen={isAuthenticatorOpen}
-        onClose={() => setIsAuthenticatorOpen(false)}
+        isOpen={activeModal === "authenticator"}
+        onClose={closeModal}
       />
-
       <ForgotPasswordModal
-        isOpen={isForgotOpen}
-        onClose={() => setIsForgotOpen(false)}
-        onSuccess={handleForgotSubmit}
-      />
-
-      <CodeVerificationModal
-        isOpen={isCodeOpen}
-        onClose={() => setIsCodeOpen(false)}
-        email={loginEmail}
+        isOpen={activeModal === "forgot"}
+        onClose={closeModal}
         onSuccess={() => {
-          setIsCodeOpen(false);
-          setIsPasswordOpen(true);
+          closeModal();
+          setTimeout(() => openCode(), 350); // espera modal fechar antes de abrir o próximo
         }}
       />
-      
-      <ChangePasswordModal 
-        isOpen={isPasswordOpen} 
-        onClose={() => setIsPasswordOpen(false)}
+      <CodeVerificationModal
+        isOpen={activeModal === "code"}
+        onClose={closeModal}
+        email={loginEmail}
+        onSuccess={() => {
+          closeModal();
+          setTimeout(() => openPassword(), 350);
+        }}
+      />
+      <ChangePasswordModal
+        isOpen={activeModal === "password"}
+        onClose={closeModal}
       />
     </div>
   );
