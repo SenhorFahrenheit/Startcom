@@ -1,32 +1,26 @@
 // Libraries
-import { toast } from "react-toastify"; // Toast notifications
-
-// React Hooks
 import { useState } from "react";
-import { useForm, Controller } from "react-hook-form"; // Form management
-
-// Custom Components
-import Button from "../../components/Button/Button";
-import Input from "../../components/Input/Input";
-import ButtonLogin from "../../components/ButtonLogin/ButtonLogin";
-
-import { useAuthModals } from "../../hooks/useAuthModals";
-import ForgotPasswordModal from "../../components/Modals/ForgotPasswordModal"
-import AuthenticatorModal from "../../components/Modals/AuthenticatorModal"
-import ChangePasswordModal from "../../components/Modals/ChangePasswordModal"
-import CodeVerificationModal from "../../components/Modals/CodeVerificationModal"
-
-// Icons
 import { RiLockPasswordFill } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
 
+// Components
+import Button from "../../components/Button/Button";
+import Input from "../../components/Input/Input";
+import ButtonLogin from "../../components/ButtonLogin/ButtonLogin";
+import ForgotPasswordModal from "../../components/Modals/ForgotPasswordModal";
+import AuthenticatorModal from "../../components/Modals/AuthenticatorModal";
+import ChangePasswordModal from "../../components/Modals/ChangePasswordModal";
+import CodeVerificationModal from "../../components/Modals/CodeVerificationModal";
+
+// Hooks
+import { useAuthModals } from "../../hooks/useAuthModals";
+import { useLoginForm } from "../../hooks/useLoginForm";
+import { useRegisterForm } from "../../hooks/useRegisterForm";
+import { Controller } from "react-hook-form";
+
 // Styles
 import "./Auth.css";
-
-// Utility functions
-import { validateCNPJ, validateCPF, validatePhone } from "../../utils/validations";
-import { formatCNPJ, formatCPF, formatPhone } from "../../utils/format";
 
 const Auth = () => {
   const {
@@ -38,64 +32,41 @@ const Auth = () => {
     closeModal,
   } = useAuthModals();
 
-  // State to toggle between login and register mode
   const [isLogin, setIsLogin] = useState(false);
-
-  // State to control which document type is selected: CPF or CNPJ
   const [type, setType] = useState("cpf");
 
-  // Login state
-  const [loginEmail, setLoginEmail] = useState("");
-  const [loginPassword, setLoginPassword] = useState("");
-  const [keepLogged, setKeepLogged] = useState(false); // "Stay logged in" option
+  // Login hook
+  const {
+    loginEmail,
+    setLoginEmail,
+    loginPassword,
+    setLoginPassword,
+    keepLogged,
+    setKeepLogged,
+    handleLogin,
+  } = useLoginForm();
 
-  // React Hook Form setup
-  const { register, handleSubmit, control } = useForm();
+  // Register hook
+  const {
+    register,
+    handleSubmit,
+    control,
+    onSubmit,
+    onError,
+    validateCNPJ,
+    validateCPF,
+    validatePhone,
+    formatCNPJ,
+    formatCPF,
+    formatPhone,
+  } = useRegisterForm(openAuthenticator);
 
-  // Handle registration submit
-  const onSubmit = (data) => {
-    console.log("Register:", data);
-    openAuthenticator(); // Open 2FA modal after registration
-  };
-
-  // Handle validation errors in registration
-  const onError = (errors) => {
-    Object.values(errors).forEach((err) =>
-      toast.error(err.message, { theme: "light", containerId: "toast-root" })
-    );
-  };
-
-  // Login logic
-  const handleLogin = (e) => {
-    e.preventDefault();
-
-    if (!loginEmail.trim() || !loginPassword.trim()) {
-      toast.error("Preencha e-mail e senha para entrar.", {
-        position: "top-center",
-        containerId: "toast-root",
-      });
-      return;
-    }
-
-    console.log("Login:", { loginEmail, loginPassword, keepLogged });
-    toast.success("Login realizado!", {
-      position: "top-center",
-      containerId: "toast-root",
-    });
-  };
-
-  const handleLoginWGoogle = () => {
-    console.log("Login with Google clicked");
-  };
-
-  const handleLoginWApple = () => {
-    console.log("Login with Apple clicked");
-  };
+  const handleLoginWGoogle = () => console.log("Login with Google clicked");
+  const handleLoginWApple = () => console.log("Login with Apple clicked");
 
   return (
     <div className="page-wrapper">
       <div className={`container ${isLogin ? "login-mode" : ""}`}>
-        
         {/* =========================
             Login form
         ========================= */}
@@ -187,12 +158,9 @@ const Auth = () => {
                 defaultValue=""
                 rules={{
                   required: "Telefone é obrigatório",
-                  validate: (value) => {
-                    if (!validatePhone(value)) {
-                      return "Telefone inválido. Use formato: (00) 00000-0000";
-                    }
-                    return true;
-                  },
+                  validate: (value) =>
+                    validatePhone(value) ||
+                    "Telefone inválido. Use formato: (00) 00000-0000",
                 }}
                 render={({ field: { onChange, value, ...field } }) => (
                   <Input
@@ -232,12 +200,9 @@ const Auth = () => {
                 defaultValue=""
                 rules={{
                   required: "CPF é obrigatório",
-                  validate: (value) => {
-                    if (!validateCPF(value)) {
-                      return "CPF inválido. Verifique os dígitos informados.";
-                    }
-                    return true;
-                  },
+                  validate: (value) =>
+                    validateCPF(value) ||
+                    "CPF inválido. Verifique os dígitos informados.",
                 }}
                 render={({ field: { onChange, value, ...field } }) => (
                   <Input
@@ -258,12 +223,9 @@ const Auth = () => {
                 defaultValue=""
                 rules={{
                   required: "CNPJ é obrigatório",
-                  validate: (value) => {
-                    if (!validateCNPJ(value)) {
-                      return "CNPJ inválido. Verifique os dígitos informados.";
-                    }
-                    return true;
-                  },
+                  validate: (value) =>
+                    validateCNPJ(value) ||
+                    "CNPJ inválido. Verifique os dígitos informados.",
                 }}
                 render={({ field: { onChange, value, ...field } }) => (
                   <Input
@@ -349,7 +311,7 @@ const Auth = () => {
         onClose={closeModal}
         onSuccess={() => {
           closeModal();
-          setTimeout(() => openCode(), 350); // espera modal fechar antes de abrir o próximo
+          setTimeout(() => openCode(), 350);
         }}
       />
       <CodeVerificationModal
