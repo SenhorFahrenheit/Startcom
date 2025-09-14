@@ -43,13 +43,20 @@ const Home = () => {
         </div>
 
         <div className='third-container'>
-            <h2 className='subtitle-page'>O que nossos clientes dizem</h2>
-            <p className='subtitle-description-page'>Histórias reais de empreendedores que transformaram seus negócios</p>
+          <h2 className='subtitle-page'>O que nossos clientes dizem</h2>
+          <p className='subtitle-description-page'>Histórias reais de empreendedores que transformaram seus negócios</p>
           <div className='review-cards'>
             <ReviewCard rating={5} name={"Maria Silva"} business={"Loja de Roupas Femininas"} comment={"Com a StartCom, consegui aumentar minhas vendas em 40% no primeiro trimestre!"}/>
             <ReviewCard rating={5} name={"João Santos"} business={"Mercadinho do Bairro"} comment={"Finalmente tenho controle total do meu estoque. Não perco mais vendas por falta de produtos."}/>
             <ReviewCard rating={4} name={"Ana Costa"} business={"Doceria Artesanal"} comment={"Os relatórios me ajudaram a identificar meus produtos mais vendidos. Recomendo!"}/>
           </div>
+        </div>
+
+        <div className='fourth-container'>
+            <h2 className='subtitle-page last white'>Pronto para transformar seu negócio?</h2>
+            <p className='subtitle-description-page white'>Junte-se a milhares de empreendedores que já estão usando a StartCom para crescer mais rápido.</p>
+        
+            <button className='access-button'>Acessar minha conta <FaArrowRight size={14}/></button>
         </div>
     </>
   )

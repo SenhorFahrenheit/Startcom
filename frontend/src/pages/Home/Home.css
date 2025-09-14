@@ -46,12 +46,16 @@
 }
 
 .about-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border: 2px solid var(--primary-color);
     border-radius: 5px;
     background-color: #FFFFFF;
     color: var(--primary-color);
     width: 160px;
     height: 44px;
+    padding: 16px 32px;
     font-family: var(--font-base);
     font-size: 1rem;
     font-weight: 600;
@@ -64,9 +68,25 @@
     box-shadow: 0 5px 25px var(--shadow-color);
 }
 
-/* Second and third container style */
-.second-container {
+/* Second,third and fourth container style */
+
+.first-container > h2, .fourth-container > h2 {
+    margin-bottom: 24px !important;
+}
+
+.second-container > h2, .third-container > h2 {
+    margin-bottom: 16px !important;
+}
+
+.first-container > p, .fourth-container > p {
+    margin-bottom: 32px;
+}
+
+.second-container, .third-container, .fourth-container {
     width: 100%;
+}
+
+.second-container {
     background-color: #FFFFFF;
     height: auto;
     padding: 80px;
@@ -77,13 +97,22 @@
 }
 
 .third-container {
-    width: 100%;
     background-color: #C9D1D9;
     height: auto;
     padding: 80px;
     display: flex;
     flex-direction: column;
     text-align: center;
+}
+
+.fourth-container {
+    height: auto;
+    padding: 80px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    background: linear-gradient(135deg, rgb(88, 164, 176) 0%, rgb(55, 63, 81) 100%);
 }
 
 .subtitle-page {
@@ -114,6 +143,36 @@
     gap: 35px;
 }
 
+.white {
+    color: #FFFFFF;
+    width: 38rem;
+}
+
+.access-button {
+    width: 280px;
+    height: 45px;
+    border-radius: 5px;
+    background-color: #FFFFFF;
+    color: var(--primary-color);
+    font-size: 1rem;
+    font-family: var(--font-base);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+    padding: 16px 32px;
+    font-weight: 600;
+    transition: 200ms;
+}
+
+.access-button:hover {
+    transform: scale(1.05);
+    background-color: var(--senary-color);
+}
+
 @media (max-width: 1024px) {
     html {
         font-size: 18px;
@@ -121,7 +180,7 @@
 
     .title-page {
         font-size: 2rem;
-        margin: 30px;
+        margin: 24px;
     }
 
     .subtitle-page {
@@ -152,7 +211,7 @@
         font-size: 18px;
     }
 
-    .second-container, .third-container {
+    .second-container, .third-container, .fourth-container {
         padding: 40px;
     }
 
@@ -176,6 +235,10 @@
 
     .about-button {
         width: 95%;
+    }
+
+    .white {
+        width: 100%;
     }
 }
 
