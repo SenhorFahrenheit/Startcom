@@ -17,10 +17,12 @@ const Button = ({
     onClick, 
     type = "button", 
     disabled = false, 
-    variant
+    variant,
+    height,
+    width
 }) => {
   return (
-    <button
+    <button style={{height, width}}
       className={`button ${variant}`} // Apply base and variant-specific styles
       onClick={onClick}
       type={type}

@@ -1,8 +1,10 @@
-import React from 'react'
+import Header from '../../layouts/Header/Header'
 
 const Home = () => {
   return (
-    <div>Home</div>
+    <div>
+        <Header/>
+    </div>
   )
 }
 

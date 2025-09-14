@@ -1,0 +1,22 @@
+header {
+    display: flex;
+    align-items: center;
+    background-color: #FFFFFF;
+    height: 64px;
+    justify-content: space-between;
+    padding: 0 80px;
+}
+ 
+header > nav {
+    display: flex;
+    align-items: center;
+}
+ 
+header > nav > a {
+    color: var(--quaternary-color);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0 16px;
+    font-family: var(--font-base);
+}
