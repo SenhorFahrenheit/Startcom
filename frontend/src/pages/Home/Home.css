@@ -68,8 +68,9 @@
 .second-container {
     width: 100%;
     background-color: #FFFFFF;
-    min-height: 890px;
+    height: auto;
     padding: 80px;
+    gap: 10px;
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -103,9 +104,17 @@
         margin: 30px;
     }
 
+    .subtitle-page {
+        font-size: 1.667rem;
+    }
+
     .description-page {
         font-size: 1.112rem;
         width: 40rem;
+    }
+
+    .subtitle-description-page {
+        font-size: 1.111rem;
     }
 
     .two-buttons > button {
@@ -117,6 +126,10 @@
 
     html {
         font-size: 18px;
+    }
+
+    .second-container {
+        padding: 40px;
     }
 
     .title-page {
