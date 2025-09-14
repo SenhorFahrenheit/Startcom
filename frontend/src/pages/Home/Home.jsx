@@ -1,5 +1,6 @@
 // Layouts
 import Header from '../../layouts/Header/Header'
+import Footer from '../../layouts/Footer/Footer';
 
 // Components
 import Button from '../../components/Button/Button'
@@ -58,6 +59,8 @@ const Home = () => {
         
             <button className='access-button'>Acessar minha conta <FaArrowRight size={14}/></button>
         </div>
+
+        <Footer/>
     </>
   )
 }
