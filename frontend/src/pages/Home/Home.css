@@ -42,7 +42,7 @@
 
 .two-buttons > button:first-child:hover {
     transform: scale(1.075);
-    box-shadow: 0 7.5px 25px #adadad;
+    box-shadow: 0 7.5px 25px var(--shadow-color);
 }
 
 .about-button {
@@ -61,16 +61,26 @@
 
 .about-button:hover {
     background-color: #e8e8e8;
-    box-shadow: 0 5px 25px #adadad;
+    box-shadow: 0 5px 25px var(--shadow-color);
 }
 
-/* Second container style */
+/* Second and third container style */
 .second-container {
     width: 100%;
     background-color: #FFFFFF;
     height: auto;
     padding: 80px;
     gap: 10px;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+}
+
+.third-container {
+    width: 100%;
+    background-color: #C9D1D9;
+    height: auto;
+    padding: 80px;
     display: flex;
     flex-direction: column;
     text-align: center;
@@ -94,6 +104,16 @@
     margin: 30px 0;
     flex-wrap: wrap;
 }
+
+.review-cards {
+    width: 100%;
+    align-items: center;
+    display: flex;
+    text-align: start;
+    margin: 60px 0;
+    gap: 35px;
+}
+
 @media (max-width: 1024px) {
     html {
         font-size: 18px;
@@ -120,6 +140,10 @@
     .two-buttons > button {
         font-size: 1rem !important;
     }
+
+    .review-cards {
+        flex-direction: column;
+    }
 }
 
 @media (max-width: 650px) {
@@ -128,7 +152,7 @@
         font-size: 18px;
     }
 
-    .second-container {
+    .second-container, .third-container {
         padding: 40px;
     }
 

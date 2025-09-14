@@ -1,10 +1,13 @@
-import Button from '../../components/Button/Button'
+// Layouts
 import Header from '../../layouts/Header/Header'
+
+// Components
+import Button from '../../components/Button/Button'
 import ResourceCard from '../../components/ResourceCard/ResourceCard';
+import ReviewCard from '../../components/ReviewCard/ReviewCard';
 
 // Icons
 import { FaArrowRight } from "react-icons/fa";
-
 import { GoPeople } from 'react-icons/go';
 import { FiShoppingCart } from 'react-icons/fi';
 import { BsBoxSeam } from 'react-icons/bs';
@@ -36,6 +39,16 @@ const Home = () => {
             <ResourceCard icon={<GoPeople/>} title={"Cadastro de Clientes"} description={"Mantenha todos os dados dos seus clientes organizados e sempre acessíveis."}/>
             <ResourceCard icon={<BsBoxSeam/>} title={"Gestão de Estoque"} description={"Controle seu estoque com precisão e receba alertas de produtos em baixa."}/>
             <ResourceCard icon={<FaRegChartBar/>} title={"Relatórios Inteligentes"} description={"Visualize o desempenho do seu negócio com gráficos e métricas detalhadas."}/>
+          </div>
+        </div>
+
+        <div className='third-container'>
+            <h2 className='subtitle-page'>O que nossos clientes dizem</h2>
+            <p className='subtitle-description-page'>Histórias reais de empreendedores que transformaram seus negócios</p>
+          <div className='review-cards'>
+            <ReviewCard rating={5} name={"Maria Silva"} business={"Loja de Roupas Femininas"} comment={"Com a StartCom, consegui aumentar minhas vendas em 40% no primeiro trimestre!"}/>
+            <ReviewCard rating={5} name={"João Santos"} business={"Mercadinho do Bairro"} comment={"Finalmente tenho controle total do meu estoque. Não perco mais vendas por falta de produtos."}/>
+            <ReviewCard rating={4} name={"Ana Costa"} business={"Doceria Artesanal"} comment={"Os relatórios me ajudaram a identificar meus produtos mais vendidos. Recomendo!"}/>
           </div>
         </div>
     </>
