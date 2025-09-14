@@ -1,0 +1,61 @@
+.card {
+    width: 25%;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-radius: 10px;
+    align-items: center;
+    gap: 20px;
+    padding: 32px;
+    transition: ease all 350ms;
+}
+
+.card:hover {
+    box-shadow: 0 15px 15px #e8e8e8;
+    transform: translateY(-15px);
+}
+
+.card:hover > .icon-circle {
+    transform: scale(1.1);
+}
+
+.icon-circle {
+    border-radius: 100%;
+    background-color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    transition: ease all 300ms;
+}
+
+.icon-circle > svg {
+    width: 32px;
+    height: 32px;
+    color: #FFFFFF;
+}
+
+.title-card {
+    font-family: var(--font-heading);
+    font-size: 1.25rem;
+}
+
+.description-card {
+    font-family: var(--font-base);
+    font-size: 1rem;
+}
+
+@media (max-width: 1024px) {
+
+    .card {
+        width: 50%;
+    }
+}
+
+@media (max-width: 768px) {
+    .card {
+        width: 100%;
+    }
+}
