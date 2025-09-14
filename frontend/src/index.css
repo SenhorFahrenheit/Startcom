@@ -28,6 +28,10 @@
   box-sizing: border-box;
 }
 
+html {
+  font-size: 16px;
+}
+
 :root {
     --primary-color: #58a4b0;
     --secondary-color: #e4e8ef;

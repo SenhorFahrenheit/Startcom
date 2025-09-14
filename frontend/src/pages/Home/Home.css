@@ -1,0 +1,119 @@
+.first-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #C9D1D9;
+    text-align: center;
+    min-height: 480px;
+    height: auto;
+    width: 100%;
+}
+
+.first-container div {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.title-page {
+    font-size: 4rem;
+    font-weight: bold;
+    font-family: var(--font-heading);
+}
+
+.title-page > span {
+    color: var(--primary-color);
+}
+
+.description-page {
+    font-family: var(--font-base);
+    font-size: 1.5rem;
+    color: var(--quaternary-color);
+    line-height: 1.625;
+    width: 48rem;
+    text-wrap: wrap;
+}
+
+.two-buttons {
+    margin: 25px 0;
+}
+
+.two-buttons > button:first-child:hover {
+    transform: scale(1.075);
+    box-shadow: 0 7.5px 25px #adadad;
+}
+
+.about-button {
+    border: 2px solid var(--primary-color);
+    border-radius: 5px;
+    background-color: #FFFFFF;
+    color: var(--primary-color);
+    width: 160px;
+    height: 44px;
+    font-family: var(--font-base);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all ease 200ms;
+}
+
+.about-button:hover {
+    background-color: #e8e8e8;
+    box-shadow: 0 5px 25px #adadad;
+}
+
+@media (max-width: 1024px) {
+    html {
+        font-size: 18px;
+    }
+
+    .title-page {
+        font-size: 2rem;
+        margin: 30px;
+    }
+
+    .description-page {
+        font-size: 1.112rem;
+        width: 40rem;
+    }
+
+    .two-buttons > button {
+        font-size: 1rem !important;
+    }
+}
+
+@media (max-width: 650px) {
+
+    html {
+        font-size: 18px;
+    }
+
+    .title-page {
+        font-size: 2rem;
+    }
+
+    .description-page {
+        width: 30rem;
+    }
+
+    .two-buttons {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .two-buttons > button {
+        font-size: 1rem !important;
+    }
+
+    .about-button {
+        width: 95%;
+    }
+}
+
+@media (max-width: 548px) {
+    .description-page {
+        width: 100%;
+    }
+}
