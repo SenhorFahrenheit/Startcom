@@ -4,9 +4,9 @@ import "./Header.css"
 const Header = () => {
   return (
     <header>
-        <img src="" alt="" />
+        <h2>StartCom</h2>
  
-        <nav>
+        <nav className="navigation">
             <a href="">Recursos</a>
             <a href="">Depoimentos</a>
             <a href="">Contato</a>

@@ -20,3 +20,9 @@ header > nav > a {
     margin: 0 16px;
     font-family: var(--font-base);
 }
+
+@media (max-width: 768px){
+    .navigation {
+        display: none;
+    }
+}

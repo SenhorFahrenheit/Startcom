@@ -59,7 +59,7 @@ const Home = () => {
         
             <button className='access-button'>Acessar minha conta <FaArrowRight size={14}/></button>
         </div>
-
+        
         <Footer/>
     </>
   )
