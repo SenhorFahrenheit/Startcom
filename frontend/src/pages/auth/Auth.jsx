@@ -61,8 +61,14 @@ const Auth = () => {
     formatPhone,
   } = useRegisterForm(openAuthenticator);
 
-  const handleLoginWGoogle = () => console.log("Login with Google clicked");
-  const handleLoginWApple = () => console.log("Login with Apple clicked");
+  const handleLoginWGoogle = () => {
+    console.log("Login with Google clicked");
+    window.location.href = `${import.meta.env.VITE_BACKEND_URL}auth/google/auth`;
+  };
+  const handleLoginWApple = () => {
+    console.log("Login with Apple clicked");
+    window.location.href = `${import.meta.env.VITE_BACKEND_URL}auth/apple/auth`;
+  };
 
   return (
     <div className="page-wrapper">
