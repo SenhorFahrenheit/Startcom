@@ -10,6 +10,6 @@ app = FastAPI()
 setup_cors(app)
 
 # HTTP routes
-app.include_router(google_router, prefix="/auth")
-app.include_router(apple_router, prefix="/auth")
+app.include_router(google_router, prefix="/Auth")
+app.include_router(apple_router, prefix="/Auth")
 app.include_router(user_router, prefix="/User")

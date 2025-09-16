@@ -5,31 +5,34 @@ import hashlib
 
 class UserService:
     def __init__(self):
+        # Access the "user" collection from MongoDB
         self.collection = mongo.get_collection("user")
 
     async def create_user(self, user_data: UserCreate) -> dict:
         """
-        Cria um usuário no banco de dados.
+        Creates a new user in the database.
         """
-        # Hash da senha (simples, só exemplo; para produção use bcrypt)
+        # Hash the password (simple hashing example; in production use bcrypt or argon2)
         hashed_password = hashlib.sha256(user_data.password.encode()).hexdigest()
         
-        # Cria o documento que será salvo
+        # Create the document to be stored in MongoDB
         user_document = {
             "name": user_data.name,
             "email": user_data.email,
             "passwordHash": hashed_password
         }
 
-        # Insere no MongoDB
+        # Insert the document into the MongoDB collection
         result = await self.collection.insert_one(user_document)
 
-        # Busca o usuário criado para retornar
+        # Fetch the newly created user from the database
         user_created = await self.collection.find_one({"_id": result.inserted_id})
 
-        # Converte ObjectId para string
+        # Convert ObjectId to string for easier handling
         user_created["id"] = str(user_created["_id"])
+        
+        # Remove fields that should not be exposed to the client
         del user_created["_id"]
-        del user_created["passwordHash"]  # nunca retorne senha
+        del user_created["passwordHash"]  # Never return a password or its hash
 
         return user_created
