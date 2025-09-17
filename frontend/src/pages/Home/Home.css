@@ -45,26 +45,13 @@
     box-shadow: 0 7.5px 25px var(--shadow-color);
 }
 
-.about-button {
+.link-to-dashboard {
+    text-decoration-line: none;
+    color: #FFFFFF;
     display: flex;
-    align-items: center;
     justify-content: center;
-    border: 2px solid var(--primary-color);
-    border-radius: 5px;
-    background-color: #FFFFFF;
-    color: var(--primary-color);
-    width: 160px;
-    height: 44px;
-    font-family: var(--font-base);
-    font-size: 1rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all ease 200ms;
-}
-
-.about-button:hover {
-    background-color: #e8e8e8;
-    box-shadow: 0 5px 25px var(--shadow-color);
+    align-items: center;
+    gap: 10px;
 }
 
 /* Second,third and fourth container style */
@@ -230,10 +217,6 @@
 
     .two-buttons > button {
         font-size: 1rem !important;
-    }
-
-    .about-button {
-        width: 95%;
     }
 
     .white {

@@ -14,6 +14,8 @@ import { FiShoppingCart } from 'react-icons/fi';
 import { BsBoxSeam } from 'react-icons/bs';
 import { FaRegChartBar } from 'react-icons/fa';
 
+import { NavLink } from 'react-router-dom';
+
 import "./Home.css"
 
 const Home = () => {
@@ -26,8 +28,7 @@ const Home = () => {
           <p className='description-page'>A plataforma completa para pequenos e médios empreendedores gerenciarem vendas, clientes, estoque e muito mais em um só lugar.</p>
         
           <div className='two-buttons'>
-            <Button fontSize={"1.05rem"} width={"250px"} height={"44px"} label={<>Acessar Dashboard <FaArrowRight /></>}/>
-            <button className='about-button'>Saiba Mais</button>
+            <Button fontSize={"1.05rem"} width={"250px"} height={"44px"} label={<NavLink className="link-to-dashboard" to="/dashboard">Acessar Dashboard <FaArrowRight /></NavLink>}/>      
           </div>
         </div>
 

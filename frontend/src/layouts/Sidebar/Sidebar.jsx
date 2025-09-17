@@ -20,36 +20,36 @@ const Sidebar = () => {
 
         <nav className="nav-sidebar">
             <NavLink to="/" className={({ isActive }) => isActive ? "active" : ""}>
-                <BiHomeAlt /> Início
+                <BiHomeAlt size={22} /> Início
             </NavLink>
 
             <NavLink to="/dashboard" className={({ isActive }) => isActive ? "active" : ""}>
-                <FaChartColumn /> Dashboard
+                <FaChartColumn size={20} /> Dashboard
             </NavLink>
 
             <NavLink to="/vendas" className={({ isActive }) => isActive ? "active" : ""}>
-                <FiShoppingCart /> Vendas
+                <FiShoppingCart size={20} /> Vendas
             </NavLink>
 
             <NavLink to="/clientes" className={({ isActive }) => isActive ? "active" : ""}>
-                <GoPeople /> Clientes
+                <GoPeople size={20} /> Clientes
             </NavLink>
 
             <NavLink to="/estoque" className={({ isActive }) => isActive ? "active" : ""}>
-                <BsBoxSeam /> Estoque
+                <BsBoxSeam size={20} /> Estoque
             </NavLink>
-            
+
             <NavLink to="/relatorios" className={({ isActive }) => isActive ? "active" : ""}>
-                <FaRegClipboard /> Relatórios
+                <FaRegClipboard size={20} /> Relatórios
             </NavLink>
         </nav>
 
-        <div>
-            <div>
-                <div></div>
-                <div>
-                    <p>Usuário</p>
-                    <p>usuario@gmail.com</p>
+        <div className="account-block">
+            <div className="account-view">
+                <div className="circle-img">U</div>
+                <div className="user-info">
+                    <p className="user-name-sidebar">Usuário</p>
+                    <p className="email-sidebar">usuario@gmail.com</p>
                 </div>
             </div>
             <button><LuLogOut/> Sair</button>

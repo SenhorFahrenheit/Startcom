@@ -1,3 +1,5 @@
+import { NavLink } from "react-router-dom"
+
 import Button from "../../components/Button/Button"
 import "./Header.css"
  
@@ -12,7 +14,7 @@ const Header = () => {
             <a href="">Contato</a>
         </nav>
  
-        <Button height={"40px"} width={"100px"} label='Dashboard' type='button' />
+        <Button height={"40px"} width={"100px"} label={<NavLink className="link-inside-button" to="/login">Cadastrar</NavLink>} type='button' />
     </header>
   )
 }

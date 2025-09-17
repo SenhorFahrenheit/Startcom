@@ -21,6 +21,11 @@ header > nav > a {
     font-family: var(--font-base);
 }
 
+.link-inside-button {
+    color: #FFFFFF;
+    text-decoration-line: none;
+}
+
 @media (max-width: 768px){
     .navigation {
         display: none;
