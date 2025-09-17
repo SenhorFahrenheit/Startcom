@@ -17,6 +17,7 @@ import CodeVerificationModal from "../../components/Modals/CodeVerificationModal
 import { useAuthModals } from "../../hooks/useAuthModals";
 import { useLoginForm } from "../../hooks/useLoginForm";
 import { useRegisterForm } from "../../hooks/useRegisterForm";
+
 import { Controller } from "react-hook-form";
 
 // Styles

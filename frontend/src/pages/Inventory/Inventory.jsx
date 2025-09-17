@@ -1,7 +1,7 @@
-import "./Clients.css"
+import "./Inventory.css"
 import Sidebar from "../../layouts/Sidebar/Sidebar"
 
-const Clients = () => {
+const Inventory = () => {
   return (
     <div>
         <Sidebar/>
@@ -9,4 +9,4 @@ const Clients = () => {
   )
 }
 
-export default Clients
+export default Inventory

@@ -1,7 +1,11 @@
 import './Reports.css'
+import Sidebar from '../../layouts/Sidebar/Sidebar'
+
 const Reports = () => {
   return (
-    <div>Reports</div>
+    <div>
+        <Sidebar/>
+    </div>
   )
 }
 

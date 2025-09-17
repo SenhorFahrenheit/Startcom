@@ -1,9 +1,13 @@
 import "./Sales.css"
 
+import Sidebar from "../../layouts/Sidebar/Sidebar"
+
 
 const Sales = () => {
   return (
-    <div>Sales</div>
+    <div>
+        <Sidebar/>
+    </div>
   )
 }
 
