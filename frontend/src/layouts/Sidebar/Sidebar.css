@@ -1,10 +1,10 @@
 aside {
     width: 256px;
-    height: 100%;
+    height: 100dvh;
     background-color: var(--senary-color);
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -13,6 +13,7 @@ aside {
     display: flex;
     align-items: center;
     justify-content: center;
+    color: #FFFFFF;
     width: 100%;
     height: 64px;
 }
@@ -29,7 +30,7 @@ aside {
     align-items: center;
     text-decoration: none;
     color: #D1D5D8;
-    font-family: var(--font-base);
+    font-family: var(--font-heading);
     font-size: 1rem;
     gap: 10px;
     width: 224px;
@@ -54,6 +55,7 @@ aside {
     justify-content: center;
     align-items: center;
     width: 100%;
+    padding: 16px 12px;
     border-top: 1px solid #424242;
 }
 
@@ -62,7 +64,7 @@ aside {
     width: 100%;
     align-items: center;
     color: #FFFFFF;
-    padding: 16px 12px;
+    margin-bottom: 20px;
     font-family: var(--font-base);
     gap: 10px;
 }
@@ -85,4 +87,38 @@ aside {
 .email-sidebar {
     color: #a4a4a4;
     font-size: 0.8rem;
+}
+
+.logout-button {
+    width: 100%;
+    height: 36px;
+    background-color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    border-style: none;
+}
+
+.logout-button:hover {
+    background-color: var(--quaternary-color);
+    color: #FFFFFF;
+}
+
+@media (max-width: 1024px) {
+    .nav-sidebar > a {
+        font-size: 0.889rem;
+    }
+
+    .user-name-sidebar {
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .email-sidebar {
+        color: #a4a4a4;
+        font-size: 0.7rem;
+    }
 }
