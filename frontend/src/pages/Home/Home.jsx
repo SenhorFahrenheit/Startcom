@@ -28,7 +28,7 @@ const Home = () => {
           <p className='description-page'>A plataforma completa para pequenos e médios empreendedores gerenciarem vendas, clientes, estoque e muito mais em um só lugar.</p>
         
           <div className='two-buttons'>
-            <Button fontSize={"1.05rem"} width={"250px"} height={"44px"} label={<NavLink className="link-to-dashboard" to="/dashboard">Acessar Dashboard <FaArrowRight /></NavLink>}/>      
+            <NavLink className="link-to-dashboard" to="/dashboard"><Button fontSize={"1.05rem"} width={"250px"} height={"44px"} label={<>Acessar Dashboard <FaArrowRight /></>}/>   </NavLink>   
           </div>
         </div>
 
@@ -58,7 +58,7 @@ const Home = () => {
             <h2 className='subtitle-page last white'>Pronto para transformar seu negócio?</h2>
             <p className='subtitle-description-page white'>Junte-se a milhares de empreendedores que já estão usando a StartCom para crescer mais rápido.</p>
         
-            <button className='access-button'>Acessar minha conta <FaArrowRight size={14}/></button>
+            <NavLink className="link-to-dashboard" to="/login"><button className='access-button'>Acessar minha conta <FaArrowRight size={14}/></button></NavLink>
         </div>
         
         <Footer/>
