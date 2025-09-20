@@ -24,7 +24,7 @@ const Sidebar = () => {
                     <BiHomeAlt size={22} /> Início
                 </NavLink>
 
-                <NavLink to="/dashboard" className={({ isActive }) => isActive ? "active" : ""}>
+                <NavLink to="/painel" className={({ isActive }) => isActive ? "active" : ""}>
                     <FaChartColumn size={20} /> Dashboard
                 </NavLink>
 
