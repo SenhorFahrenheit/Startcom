@@ -1,9 +1,28 @@
+.body-section {
+    display: flex;
+    min-height: 100vh;  
+}
 
+.content-page-section {
+  flex: 1;
+  background-color: #FFFFFF;
+  padding: 32px;
+}
 
 .title-page-section {
-
+    font-family: var(--font-heading);
+    font-size: 1.875rem;
+    margin-bottom: 8px;
 }
 
 .description-page-section {
+    font-size: 0.96rem;
+    font-family: var(--font-base);
+}
 
+.align-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 16px;
 }
