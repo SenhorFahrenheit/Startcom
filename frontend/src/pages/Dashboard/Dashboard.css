@@ -1,9 +1,22 @@
-.body-dashboard {
-    display: flex;
-    min-height: 100vh;  
+.metricCards {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  gap: 20px;
+  margin-top: 30px;
+  height: auto;
+  flex-wrap: wrap;
 }
 
-.content-dashboard {
-  flex: 1;
-  padding: 32px;
+.chart-section {
+  display: flex;
+}
+
+.chart-dashboard {
+  padding: 24px 24px;
+  border-radius: 10px;
+  height: 360px;
+  box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+  width: 70%;
+  margin-top: 20px;
 }

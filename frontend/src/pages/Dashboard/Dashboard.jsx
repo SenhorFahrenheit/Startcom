@@ -5,6 +5,14 @@ import "../commonStyle.css"
 
 import Sidebar from "../../layouts/Sidebar/Sidebar"
 import FilterDateButton from "../../components/filterDateButton/filterDateButton"
+import MetricCard from "../../components/MetricCard/MetricCard"
+
+// Icons
+import { LuDollarSign } from 'react-icons/lu';
+import { LuTrendingUp } from 'react-icons/lu';
+import { LuUsers } from 'react-icons/lu';
+import { LuPackage } from 'react-icons/lu';
+import SalesChart from "../../components/SalesChart/SalesChart"
 
 const Dashboard = () => {
   return (
@@ -22,6 +30,26 @@ const Dashboard = () => {
               onSelect={(val) => console.log("Período escolhido:", val)}
               />
           </div>
+
+          <section className="metricCards">
+            <MetricCard icon={<LuDollarSign size={24}/>} state="good" description="Vendas Hoje" value="R$ 2.847.50" data="+12.5%" />
+            <MetricCard icon={<LuTrendingUp size={24}/>} state="good" description="Faturamento Mensal" value="R$ 24.580,30" data="+8.2%" />
+            <MetricCard icon={<LuUsers size={24}/>} state="good" description="Total de Clientes" value="156" data="+5 novos" />
+            <MetricCard icon={<LuPackage size={24}/>} state="notgood" description="Itens em Baixa" value="8" data="Atenção necessária" />
+          </section>
+
+          <section className="chart-section">
+
+            <div className="chart-dashboard">
+              <SalesChart/>
+            </div>
+            
+            <div>
+              <h1>Ações Rápidas</h1>
+            
+            
+            </div>
+          </section>
         </div>
     </section>
   )
