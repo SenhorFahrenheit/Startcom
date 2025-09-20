@@ -28,7 +28,7 @@ const Home = () => {
           <p className='description-page'>A plataforma completa para pequenos e médios empreendedores gerenciarem vendas, clientes, estoque e muito mais em um só lugar.</p>
         
           <div className='two-buttons'>
-            <NavLink className="link-to-dashboard" to="/dashboard"><Button fontSize={"1.05rem"} width={"250px"} height={"44px"} label={<>Acessar Dashboard <FaArrowRight /></>}/>   </NavLink>   
+            <NavLink className="link-to-dashboard" to="/painel"><Button fontSize={"1.05rem"} width={"250px"} height={"44px"} label={<>Acessar Dashboard <FaArrowRight /></>}/>   </NavLink>   
           </div>
         </div>
 

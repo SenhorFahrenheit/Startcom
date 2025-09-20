@@ -17,14 +17,14 @@ const AppRoutes = () => {
       <Routes>
         <Route path="/" element={<Home/>}/>
         <Route path="/login" element={<Auth/>}/>
-        <Route path="/dashboard" element={<Dashboard/>}/>
+        <Route path="/painel" element={<Dashboard/>}/>
         <Route path="/vendas" element={<Sales/>}/>
         <Route path="/clientes" element={<Clients/>}/>
         <Route path="/estoque" element={<Inventory/>}/>
         <Route path="/relatorios" element={<Reports/>}/>
         {/*
         <Route
-          path="/dashboard"
+          path="/painel"
           element={
             <PrivateRoute>
               <DashboardPage />
