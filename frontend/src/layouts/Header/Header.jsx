@@ -14,7 +14,7 @@ const Header = () => {
             <a href="">Contato</a>
         </nav>
  
-        <Button height={"40px"} width={"100px"} label={<NavLink className="link-inside-button" to="/login">Cadastrar</NavLink>} type='button' />
+        <Button height={"40px"} width={"170px"} label={<NavLink className="link-inside-button" to="/painel">Acessar Dashboard</NavLink>} type='button' />
     </header>
   )
 }

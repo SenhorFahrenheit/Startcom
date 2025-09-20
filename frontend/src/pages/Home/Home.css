@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #C9D1D9;
+    background: linear-gradient(180deg,var(--primary-color), 95%, #FFFFFF);
     text-align: center;
     min-height: 480px;
     height: auto;
@@ -19,18 +19,18 @@
 .title-page {
     font-size: 3.75rem;
     font-weight: bold;
-    color: #1b1b1b;
+    color: #FFFFFF;
     font-family: var(--font-heading);
 }
 
 .title-page > span {
-    color: var(--primary-color);
+    color: #373F51;
 }
 
 .description-page {
     font-family: var(--font-base);
     font-size: 1.5rem;
-    color: var(--quaternary-color);
+    color: #FFFFFF;
     line-height: 1.625;
     width: 48rem;
     text-wrap: wrap;
@@ -65,7 +65,7 @@
 }
 
 .first-container > p, .fourth-container > p {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 }
 
 .second-container, .third-container, .fourth-container {
@@ -135,7 +135,7 @@
 }
 
 .access-button {
-    width: 280px;
+    width: 270px;
     height: 45px;
     border-radius: 5px;
     background-color: #FFFFFF;
@@ -156,7 +156,17 @@
 
 .access-button:hover {
     transform: scale(1.05);
-    background-color: var(--senary-color);
+    background-color: var(--primary-color);
+    color: #FFFFFF;
+}
+
+.variant-hover {
+    width: 250px;
+}
+
+.variant-hover:hover {
+    color: var(--primary-color);
+    background-color: #f4f4f4;
 }
 
 @media (max-width: 1024px) {
@@ -188,6 +198,10 @@
 
     .review-cards {
         flex-direction: column;
+    }
+
+    .access-button, .variant-hover {
+        font-size: 0.9rem;
     }
 }
 

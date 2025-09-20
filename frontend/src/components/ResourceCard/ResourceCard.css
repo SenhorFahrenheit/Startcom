@@ -8,6 +8,7 @@
     align-items: center;
     gap: 20px;
     padding: 32px;
+    border-bottom: 1px solid #e8e8e8;
     transition: ease all 350ms;
 }
 

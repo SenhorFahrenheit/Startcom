@@ -26,8 +26,23 @@ header > nav > a {
     text-decoration-line: none;
 }
 
+.button {
+    min-width: 150px;
+}
+
 @media (max-width: 768px){
     .navigation {
         display: none;
+    }
+}
+
+@media (max-width: 650px) {
+    header {
+        justify-content: center;
+        gap: 30px;
+    }
+    
+    .button {
+        font-size: 0.7rem;
     }
 }
