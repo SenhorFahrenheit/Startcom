@@ -10,6 +10,7 @@
 
 .chart-section {
   display: flex;
+  justify-content: space-between;
 }
 
 .chart-dashboard {
@@ -19,4 +20,34 @@
   box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
   width: 65%;
   margin-top: 20px;
+}
+
+.chart-section-side {
+  width: 32%;
+  box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+  margin-top: 20px;
+  display: flex;
+  border-radius: 10px;
+  flex-direction: column;
+}
+
+.quickActions-title {
+  display: flex;
+  padding: 24px;
+  align-items: center;
+  font-size: 1rem;
+  gap: 5px;
+  font-family: var(--font-heading);
+}
+
+.quickActions {
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px 24px 24px;
+  gap: 10px;
+}
+
+.quickActions a {
+  text-decoration: none;
+  color: inherit;
 }

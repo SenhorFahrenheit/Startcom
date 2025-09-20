@@ -1,18 +1,25 @@
 import formattedDate from "../../utils/formattedDate"
-
 import "./Dashboard.css"
 import "../commonStyle.css"
 
+import { NavLink } from "react-router-dom"
+
+// Components
+import MetricCard from "../../components/MetricCard/MetricCard"
+import SalesChart from "../../components/SalesChart/SalesChart"
+import QuickActions from "../../components/QuickActions/QuickActions"
+
 import Sidebar from "../../layouts/Sidebar/Sidebar"
 import FilterDateButton from "../../components/filterDateButton/filterDateButton"
-import MetricCard from "../../components/MetricCard/MetricCard"
 
 // Icons
 import { LuDollarSign } from 'react-icons/lu';
 import { LuTrendingUp } from 'react-icons/lu';
 import { LuUsers } from 'react-icons/lu';
 import { LuPackage } from 'react-icons/lu';
-import SalesChart from "../../components/SalesChart/SalesChart"
+import { LuPlus } from 'react-icons/lu';
+import { LuFileText } from 'react-icons/lu';
+import { LuShoppingCart } from 'react-icons/lu';
 
 const Dashboard = () => {
   return (
@@ -39,15 +46,22 @@ const Dashboard = () => {
           </section>
 
           <section className="chart-section">
-
             <div className="chart-dashboard">
               <SalesChart/>
             </div>
             
-            <div>
-              <h1>Ações Rápidas</h1>
-            
-            
+            <div className="chart-section-side">
+              <div className="quickActions-title">
+                <LuPlus color="var(--primary-color)" size={24}/>
+                <h3>Ações Rápidas</h3>
+              </div>
+
+              <div className="quickActions">
+                <NavLink to="/vendas"><QuickActions icon={<LuShoppingCart/>} name="Nova Venda" description="Registrar uma nova venda"/></NavLink>
+                <NavLink to="/clientes"><QuickActions icon={<LuUsers/>} name="Cadastrar Cliente" description="Adicionar novo cliente"/></NavLink>
+                <NavLink to="/estoque"><QuickActions icon={<LuPackage/>} name="Adicionar Produto" description="Cadastrar produto no estoque"/></NavLink>
+                <NavLink to="/relatorios"><QuickActions icon={<LuFileText/>} name="Gerar Relatório" description="Criar novo relatório"/></NavLink>
+              </div>
             </div>
           </section>
         </div>
