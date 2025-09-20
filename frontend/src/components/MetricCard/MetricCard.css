@@ -1,0 +1,70 @@
+.metricCard {
+    min-width: 200px;
+    width: 23%;
+    padding: 24px;
+    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    border-radius: 10px;
+    transition: all ease 250ms;
+}
+
+.metricCard:hover {
+    box-shadow: 2px 15px 20px 2px rgba(171, 171, 171, 0.2);
+}
+
+.icons-part {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.icon-metricCard {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.good {
+    background-color: rgba(88, 164, 176, 0.125);
+    color: rgb(88, 164, 176);
+}
+
+.notgood {
+    background-color: rgba(245, 158, 11, 0.125);
+    color: rgb(245, 158, 11);
+}
+
+.noBackground {
+    background-color: transparent;
+}
+
+.texts-part {
+    font-family: var(--font-base);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.description {
+    font-size: 0.875rem;
+    color: rgb(55, 63, 81);
+}
+
+.important-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.data {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+@media (max-width: 1200px) {
+    .metricCard {
+        width: 45%;
+    }
+}
