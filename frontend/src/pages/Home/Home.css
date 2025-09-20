@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(180deg,var(--primary-color), 97%, #FFFFFF);
+    background: linear-gradient(180deg,var(--primary-color), 95%, #FFFFFF);
     text-align: center;
     min-height: 480px;
     height: auto;
@@ -65,7 +65,7 @@
 }
 
 .first-container > p, .fourth-container > p {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
 }
 
 .second-container, .third-container, .fourth-container {
