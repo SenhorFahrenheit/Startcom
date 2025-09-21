@@ -107,3 +107,39 @@
   justify-content: center;
   align-items: center;
 }
+
+/* Dashboard Modals */
+.form-dashboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 10px;
+}
+
+.align-dashboard-form {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.dashboard-modal-title {
+  font-size: 1.10rem;
+  font-weight: 600;
+}
+
+.input-dashboard-block {
+  width: 100%;
+}
+
+.input-dashboard-block > label {
+  width: 80px;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2a2a2a;
+}

@@ -17,6 +17,7 @@ export function useAuthModals() {
   const openForgot = () => setActiveModal("forgot");
   const openCode = () => setActiveModal("code");
   const openPassword = () => setActiveModal("password");
+  const openSale = () => setActiveModal("sale");
 
   const closeModal = () => setActiveModal(null);
 
@@ -27,5 +28,6 @@ export function useAuthModals() {
     openCode,
     openPassword,
     closeModal,
+    openSale,
   };
 }
