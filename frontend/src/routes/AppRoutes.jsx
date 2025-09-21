@@ -1,7 +1,6 @@
 // src/routes/AppRoutes.jsx
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-
 import Auth from "../pages/auth/Auth";
 import Home from "../pages/Home/Home";
 import Dashboard from "../pages/Dashboard/Dashboard";
@@ -9,6 +8,7 @@ import Sales from "../pages/Sales/Sales";
 import Clients from "../pages/Clients/Clients";
 import Inventory from "../pages/Inventory/Inventory"
 import Reports from "../pages/Reports/Reports";
+import Settings from "../pages/Settings/Settings";
 //import PrivateRoute from "./PrivateRoute";
 
 const AppRoutes = () => {
@@ -22,6 +22,7 @@ const AppRoutes = () => {
         <Route path="/clientes" element={<Clients/>}/>
         <Route path="/estoque" element={<Inventory/>}/>
         <Route path="/relatorios" element={<Reports/>}/>
+        <Route path="/configuracoes" element={<Settings/>}/>
         {/*
         <Route
           path="/painel"
