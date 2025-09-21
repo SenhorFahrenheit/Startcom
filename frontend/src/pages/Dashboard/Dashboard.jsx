@@ -8,6 +8,7 @@ import { NavLink } from "react-router-dom"
 import MetricCard from "../../components/MetricCard/MetricCard"
 import SalesChart from "../../components/SalesChart/SalesChart"
 import QuickActions from "../../components/QuickActions/QuickActions"
+import HighlightCard from "../../components/HighlightCard/HighlightCard"
 
 import Sidebar from "../../layouts/Sidebar/Sidebar"
 import FilterDateButton from "../../components/filterDateButton/filterDateButton"
@@ -20,6 +21,9 @@ import { LuPackage } from 'react-icons/lu';
 import { LuPlus } from 'react-icons/lu';
 import { LuFileText } from 'react-icons/lu';
 import { LuShoppingCart } from 'react-icons/lu';
+import { LuClock4 } from 'react-icons/lu';
+import { LuStar } from 'react-icons/lu';
+import RecentActivities from "../../components/RecentActivities/RecentActivities"
 
 const Dashboard = () => {
   return (
@@ -63,6 +67,95 @@ const Dashboard = () => {
                 <NavLink to="/relatorios"><QuickActions icon={<LuFileText/>} name="Gerar Relatório" description="Criar novo relatório"/></NavLink>
               </div>
             </div>
+          </section>
+
+          <section className="recent-section">
+              <div className="recent-activities">
+                <div className="recentActivities-title">
+                  <LuClock4 size={20} color="var(--primary-color)"/>
+                  <h3>Atividades Recentes</h3>
+                </div>
+
+                <RecentActivities 
+                  icon={<LuShoppingCart/>} 
+                  color="green" transparentColor="transparent-green" 
+                  type="Venda" time="há 2 minutos" 
+                  action="Nova venda realizada" 
+                  entity="Cliente Maria Silva"
+                  extra="R$ 156,80"
+                />
+
+                <RecentActivities 
+                  icon={<LuUsers/>} 
+                  color="green" transparentColor="transparent-green"
+                  type="Cliente" 
+                  time="há 15 minutos" 
+                  action="Novo cliente cadastrado" 
+                  entity="João Santos"
+                />
+                <RecentActivities 
+                  icon={<LuPackage/>} 
+                  color="orange" transparentColor="transparent-orange" 
+                  type="Estoque" 
+                  time="há 1 hora" 
+                  action="Estoque baixo" 
+                  entity="Camiseta Básica (apenas 3 unidades)"
+                />
+
+                <RecentActivities 
+                  icon={<LuFileText/>} 
+                  color="gray" transparentColor="transparent-gray" 
+                  type="Relatório" 
+                  time="há 2 horas" 
+                  action="Relatório mensal de vendas gerado"
+                />
+              </div>
+
+              <div className="recent-activities-side">
+                <div className="recentActivities-title">
+                  <LuStar size={20} color="var(--primary-color)"/>
+                  <h3>Destaques do Mês</h3>
+                </div>
+
+                <HighlightCard 
+                  title="Produto Mais Vendido" 
+                  highlight="Camiseta Premium"
+                  value="47 vendas"
+                />
+
+                <HighlightCard 
+                  title="Cliente Top" 
+                  highlight="Ana Oliveira"
+                  value="R$ 1.240"
+                />
+
+                <HighlightCard 
+                  title="Ticket Médio" 
+                  highlight="Último mês"
+                  value="R$ 89,50"
+                  extra="+15% vs anterior"
+                />
+
+                <HighlightCard 
+                  title="Meta vs Realizado" 
+                  highlight="Meta: R$ 45.000"
+                  value="R$ 48.750"
+                  extra="+8,3%"
+                />
+
+                <HighlightCard 
+                  title="Maior Compra Individual" 
+                  highlight="João Lima"
+                  value="R$ 980"
+                />
+
+                <HighlightCard 
+                  title="Novos Clientes" 
+                  highlight="Último mês"
+                  value="+42"
+                  extra="+12% vs anterior"
+                />
+              </div>
           </section>
         </div>
     </section>

@@ -1,0 +1,31 @@
+.HighlightCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+    height: 70px;
+    width: 100%;
+    margin: 20px 0;
+    font-family: var(--font-heading);
+    background-color: #D8DBE2;
+    padding: 0 12px;
+}
+
+.highlight-title {
+    font-weight: 600;
+}
+
+.highlight-name {
+    font-size: 0.875rem;
+}
+
+.highlight-value {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-align: end;
+}
+
+.highlight-extra {
+    font-size: 0.725rem;
+    text-align: center;
+}

@@ -51,3 +51,35 @@
   text-decoration: none;
   color: inherit;
 }
+
+.recent-section {
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+}
+
+.recent-activities {
+  display: flex;
+  width: 65%;
+  padding: 24px;
+  flex-direction: column;
+  box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+  border-radius: 10px;
+  gap: 20px;
+}
+
+.recent-activities-side {
+  width: 32%;
+  padding: 24px;
+  border-radius: 10px;
+  box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+}
+
+.recentActivities-title {
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  gap: 10px;
+  font-family: var(--font-heading);
+  font-size: 1rem;
+}
