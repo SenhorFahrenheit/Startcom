@@ -4,11 +4,11 @@ const SalesCard = ({icon, description, value, information}) => {
   return (
     <div className="SalesCard">
         <div className="sales-card-block">
-            <p>{description}</p>
-            <p>{value}</p>
-            <p>{information}</p>
+            <p className="sales-description">{description}</p>
+            <p className="sales-value">{value}</p>
+            <p className="sales-information">{information}</p>
         </div>
-        <div>{icon}</div>
+        <div className="sales-card-icon">{icon}</div>
     </div>
   )
 }

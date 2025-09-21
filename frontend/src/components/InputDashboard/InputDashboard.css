@@ -10,7 +10,6 @@
   transition: all ease 100ms;
 }
 
-
 .InputDashboard:focus {
     border: 3px solid var(--primary-color);
 }
