@@ -33,8 +33,7 @@
 
 .button-shadown:hover > button {
     background: var(--tertiary-color);
-    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
-    transform: scale(1.05);
+    transform: scale(1.025);
 }
 
 .input-dashboard-block {

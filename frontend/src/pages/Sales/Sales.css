@@ -18,6 +18,21 @@
   gap: 10px;
 }
 
+.recent-sells {
+    margin-top: 20px;
+    padding: 24px;
+    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+}
+
+.recentSells-title {
+    display: flex;
+    margin-bottom: 20px;
+    align-items: center;
+    font-size: 1rem;
+    gap: 5px;
+    font-family: var(--font-heading);
+}
+
 @media (max-width: 1024px) {
     .filter-search {
         flex-direction: column;

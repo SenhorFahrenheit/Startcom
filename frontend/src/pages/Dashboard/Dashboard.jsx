@@ -13,7 +13,7 @@ import HighlightCard from "../../components/HighlightCard/HighlightCard"
 
 import Sidebar from "../../layouts/Sidebar/Sidebar"
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile"
-import FilterDateButton from "../../components/filterDateButton/filterDateButton"
+import FilterDateButton from "../../components/FilterDateButton/filterDateButton"
 
 // Icons
 import { LuDollarSign } from 'react-icons/lu';
