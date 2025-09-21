@@ -3,3 +3,35 @@
     justify-content: space-between;
     margin-top: 20px;
 }
+
+.filter-search {
+    padding: 24px;
+    margin-top: 20px;
+    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    display: flex;
+    gap: 10px;
+}
+
+.filters-block {
+  display: flex;
+  flex: 1;
+  gap: 10px;
+}
+
+@media (max-width: 1024px) {
+    .filter-search {
+        flex-direction: column;
+    }
+
+    .filters-block {
+        justify-content: center;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 375px) {
+    .filters-block {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

@@ -8,7 +8,8 @@ import Sidebar from "../../layouts/Sidebar/Sidebar"
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile"
 import SalesCard from "../../components/SalesCard/SalesCard"
 import Button from "../../components/Button/Button"
-
+import FilterDateButton from "../../components/filterDateButton/filterDateButton"
+import FilterStatusButton from "../../components/FilterStatusButton/FilterStatusButton"
 
 import { LuPlus } from "react-icons/lu"
 import { LuDollarSign } from 'react-icons/lu';
@@ -49,7 +50,19 @@ const Sales = () => {
           </section>
 
           <div className="filter-search">
-            
+            <input style={{fontSize: 14, paddingLeft: 16}} className="InputDashboard" type="text" placeholder="Buscar Vendas por cliente, ID..." />
+            <div className="filters-block">
+              <FilterDateButton 
+                options={["Hoje", "Esta Semana", "Este Mês", "Este Ano"]}
+                defaultValue="Este Mês"
+                onSelect={(val) => console.log("Tempo escolhido:", val)}
+              />
+
+              <FilterStatusButton 
+                options={["Concluído", "Pendente", "Cancelada"]}
+                onSelect={(val) => console.log("Filtro escolhido:", val)}
+              />
+            </div>
           </div>
         </div>
 

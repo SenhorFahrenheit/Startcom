@@ -11,5 +11,5 @@
 }
 
 .InputDashboard:focus {
-    border: 3px solid var(--primary-color);
+    border: 3px solid #000000;
 }
