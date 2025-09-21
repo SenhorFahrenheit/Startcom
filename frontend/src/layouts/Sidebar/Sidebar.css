@@ -1,6 +1,10 @@
+html, body {
+    height: 100%;
+}
+
 aside {
     width: 256px;
-    height: 100dvh;
+    min-height: 100%;
     background-color: var(--senary-color);
     display: flex;
     flex-direction: column;
