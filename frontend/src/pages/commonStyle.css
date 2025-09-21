@@ -27,6 +27,22 @@
     padding-right: 16px;
 }
 
+.button-shadown {
+    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    transition: all ease 250ms;
+}
+
+.button-shadown:hover > button {
+    background: var(--tertiary-color);
+    transform: scale(1.05);
+}
+
+.input-dashboard-block {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
 @media (max-width: 768px) {
     .content-page-section {
         width: 100%;
