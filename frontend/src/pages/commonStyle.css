@@ -28,12 +28,12 @@
 }
 
 .button-shadown {
-    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
     transition: all ease 250ms;
 }
 
 .button-shadown:hover > button {
     background: var(--tertiary-color);
+    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
     transform: scale(1.05);
 }
 
@@ -46,6 +46,18 @@
 @media (max-width: 768px) {
     .content-page-section {
         width: 100%;
+    }
+
+    .align-heading {
+        padding: 0;
+    }
+
+    .button-shadown {
+        width: 100%;
+    }
+
+    .button-shadown > button {
+        width: 100% !important;
     }
 
     .title-page-section {

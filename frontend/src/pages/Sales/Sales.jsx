@@ -64,6 +64,10 @@ const Sales = () => {
               />
             </div>
           </div>
+
+          <div className="recent-sells">
+
+          </div>
         </div>
 
         <NewSaleModal
