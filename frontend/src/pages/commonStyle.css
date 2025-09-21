@@ -26,3 +26,19 @@
     align-items: center;
     padding-right: 16px;
 }
+
+@media (max-width: 768px) {
+    .content-page-section {
+        width: 100%;
+    }
+
+    .title-page-section {
+        margin-top: 64px;
+    }
+}
+
+@media (max-width: 425px) {
+    .content-page-section {
+        padding: 8px;
+    }
+}

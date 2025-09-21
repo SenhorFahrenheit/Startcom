@@ -14,7 +14,7 @@
 }
 
 .chart-dashboard {
-  padding: 24px 24px;
+  padding: 24px;
   border-radius: 10px;
   height: 400px;
   box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
@@ -82,4 +82,65 @@
   gap: 10px;
   font-family: var(--font-heading);
   font-size: 1rem;
+}
+
+@media (max-width: 1200px) {
+  .chart-section,
+  .recent-section {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .chart-dashboard,
+  .chart-section-side,
+  .recent-activities,
+  .recent-activities-side {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .align-heading {
+    flex-direction: column;
+    gap: 10px;
+    align-items: start !important;
+  }
+
+  .filter-date {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  .metricCards {
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .metricCards > * {
+    flex: 1 1 calc(50% - 15px);
+    min-width: 250px;
+  }
+}
+
+@media (max-width: 600px) {
+  .metricCards > * {
+    flex: 1 1 100%;
+  }
+
+  .quickActions {
+    gap: 15px;
+  }
+
+  .quickActions a {
+    font-size: 0.9rem;
+  }
+
+  .recentActivities-title h3,
+  .quickActions-title h3 {
+    font-size: 0.95rem;
+  }
 }

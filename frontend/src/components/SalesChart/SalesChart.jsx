@@ -9,7 +9,7 @@ import "./SalesChart.css"
 const SalesChart = () => {
   const [data, setData] = useState([]);
 
-  // Buscar dados do backend
+
   useEffect(() => {
   async function fetchData() {
     try {
@@ -35,7 +35,7 @@ const SalesChart = () => {
 
 
   return (
-    <div style={{ width: "100%", height: 350 }}>
+    <div className="chart">
       <h3 className="title-chart-dashboard">Desempenho de Vendas</h3>
       <ResponsiveContainer>
         <BarChart data={data} margin={{ top: 20, right: 20, left: 0, bottom: 0 }}>

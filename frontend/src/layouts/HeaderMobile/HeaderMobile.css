@@ -1,0 +1,33 @@
+.header {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFFFFF;
+    color: #000000;
+    height: 64px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+  }
+
+  .menu-button {
+    position: absolute;
+    left: 16px;
+    background: none;
+    border: none;
+    color: #000000;
+    cursor: pointer;
+  }
+
+  .header-logo {
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+  }
+}

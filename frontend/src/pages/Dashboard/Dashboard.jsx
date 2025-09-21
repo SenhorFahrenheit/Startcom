@@ -1,3 +1,4 @@
+import { useState } from "react"; // <- importar useState
 import formattedDate from "../../utils/formattedDate"
 import "./Dashboard.css"
 import "../commonStyle.css"
@@ -11,6 +12,7 @@ import QuickActions from "../../components/QuickActions/QuickActions"
 import HighlightCard from "../../components/HighlightCard/HighlightCard"
 
 import Sidebar from "../../layouts/Sidebar/Sidebar"
+import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile"
 import FilterDateButton from "../../components/filterDateButton/filterDateButton"
 
 // Icons
@@ -26,9 +28,17 @@ import { LuStar } from 'react-icons/lu';
 import RecentActivities from "../../components/RecentActivities/RecentActivities"
 
 const Dashboard = () => {
+
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setSidebarOpen(prev => !prev);
+  }
+
   return (
     <section className="body-section">
-        <Sidebar/>
+      <HeaderMobile onToggleSidebar={toggleSidebar} />
+      <Sidebar isOpen={sidebarOpen} onClose={toggleSidebar} />
 
         <div className="content-page-section">
           <div className="align-heading">
@@ -36,10 +46,12 @@ const Dashboard = () => {
               <h1 className="title-page-section">Dashboard</h1>
               <p className="description-page-section">Visão geral do seu negócio - {formattedDate()}</p>
             </div>
-            <FilterDateButton options={["Hoje", "7 dias", "30 dias", "1 ano", "Período completo"]}
-              defaultValue="30 dias"
-              onSelect={(val) => console.log("Período escolhido:", val)}
+            <div className="filter-date">
+              <FilterDateButton options={["Hoje", "7 dias", "30 dias", "1 ano", "Período completo"]}
+                defaultValue="30 dias"
+                onSelect={(val) => console.log("Período escolhido:", val)}
               />
+            </div>
           </div>
 
           <section className="metricCards">

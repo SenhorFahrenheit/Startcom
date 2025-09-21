@@ -28,4 +28,23 @@
 .highlight-extra {
     font-size: 0.725rem;
     text-align: center;
+    font-weight: 600;
+}
+
+@media (max-width: 320px) {
+    .highlight-title {
+        font-size: 0.875rem;
+    }
+
+    .highlight-name {
+        font-size: 0.775rem;
+    }
+
+    .highlight-value {
+        font-size: 0.9rem;
+    }
+
+    .highlight-extra {
+        font-size: 0.625rem;
+    }
 }
