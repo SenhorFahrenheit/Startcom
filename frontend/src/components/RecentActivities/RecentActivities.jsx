@@ -1,5 +1,5 @@
 
-import "./recentActivities.css"
+import "./RecentActivities.css"
 
 const RecentActivities = ({icon, color, transparentColor, type, time, action, entity, extra}) => {
   return (
