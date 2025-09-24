@@ -1,0 +1,63 @@
+.ClientCard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 15px;
+    font-family: var(--font-heading);
+    width: 23%;
+    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    border-radius: 10px;
+    padding: 24px;
+    margin-top: 20px;
+}
+
+.client-icon-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    width: 48px;
+    height: 48px;
+}
+
+.client-card-blue {
+    background-color: #58A4B020;
+    color: #58A4B0;
+}
+
+.client-card-purple {
+    background-color: #8B5CF620;
+    color: #9333EA;
+}
+
+.client-card-orange {
+    background-color: #f59e0b20;
+    color: #D97706;
+}
+
+.client-card-green {
+    background-color: #05966920;
+    color: #059669;
+}
+
+.client-value-card {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.client-description-card {
+    font-size: 0.9rem;
+}
+
+@media (max-width: 1024px) {
+    .ClientCard {
+        width: 49%;
+    }
+}
+
+@media (max-width: 876px) {
+    .ClientCard {
+        width: 100%;
+    }
+}

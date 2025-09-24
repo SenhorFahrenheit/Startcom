@@ -6,11 +6,13 @@ import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
 import Button from "../../components/Button/Button";
 
 import NewClientModal from "../../components/Modals/ClientModal";
+import ClientCard from "../../components/ClientCard/ClientCard";
+import FilterSelect from "../../components/FilterSelect/FilterSelect";
 
 import { useState } from "react";
 import { useAuthModals } from "../../hooks/useAuthModals"
 
-import { LuPlus } from "react-icons/lu";
+import { LuPlus, LuSmile, LuUsers, LuStar, LuCalendar } from "react-icons/lu";
 
 const Clients = () => {
   const { activeModal, openClient, closeModal } = useAuthModals();
@@ -41,6 +43,35 @@ const Clients = () => {
               />
             </div>
           </div>
+
+          <section className="clientCards">
+            <ClientCard icon={<LuUsers size={24}/>} value="156" description="Total de Clientes" color="blue"/>
+            <ClientCard icon={<LuStar size={24}/>} value="23" description="Clientes VIP" color="purple"/>
+            <ClientCard icon={<LuCalendar size={24}/>} value="12" description="Novos este mês" color="orange"/>
+            <ClientCard icon={<LuSmile size={24}/>} value="4.8" description="Satisfação Média" color="green"/>
+          </section>
+
+        <div className="filter-search">
+          <input 
+            style={{ fontSize: 14, paddingLeft: 16 }} 
+            className="InputDashboard" 
+            type="text" 
+            placeholder="Buscar por nome, email, telefone..." 
+          />
+          <div className="filters-block">
+            <FilterSelect
+              label="Filtrar por tipo"
+              options={[
+                { label: "Todos", value: "all" },
+                { label: "VIP", value: "vip" },
+                { label: "Premium", value: "premium" },
+                { label: "Regular", value: "regular" },
+              ]}
+              defaultValue="Todos"
+              onSelect={(val) => console.log("Tipo escolhido:", val)}
+            />
+          </div>
+        </div>
         </div>
 
       <NewClientModal
