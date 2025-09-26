@@ -1,0 +1,44 @@
+.clientCards {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.filter-search {
+    padding: 24px;
+    margin-top: 20px;
+    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    display: flex;
+    gap: 10px;
+    border-radius: 10px;
+}
+
+.filter-search > .InputDashboard {
+    width: 100% !important;
+}
+
+.filters-block {
+  display: flex;
+  flex: 1;
+  gap: 10px;
+}
+
+.clientInformationCards {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 1024px) {
+    .clientCards {
+        gap: 10px;
+    }
+}
+
+@media (max-width: 375px) {
+    .filters-block {
+        flex-direction: row;
+        justify-content: center !important;
+    }
+}

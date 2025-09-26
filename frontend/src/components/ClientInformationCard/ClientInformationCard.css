@@ -1,0 +1,123 @@
+.ClientInformationCard {
+    width: 32%;
+    background-color: #FFFFFF;
+    margin-top: 30px;
+    padding: 24px;
+    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    border-radius: 10px;
+    font-family: var(--font-heading);
+}
+
+.client-letters-icon {
+    width: 48px;
+    height: 48px;
+    background-color: var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 100%;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #FFFFFF;
+}
+
+.client-name-type-information {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+}
+
+.cliient-name-type {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.client-name-type-information > div > p {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.VIP, .Regular, .Premium {
+    height: 20px;
+    font-size: 0.8rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+}
+
+.VIP {
+    width: 40px;
+    color: #8B5CF6;
+    border: 1px solid #8B5CF630;
+    background-color: #8B5CF620;
+}
+
+.Regular {
+    width: 70px;
+    background-color: #6B728020;
+    border: 1px solid #6B728030;
+    color: #6B7280;
+}
+
+.Premium {
+    width: 80px;
+    background-color: #F59E0B20;
+    border: 1px solid #F59E0B30;
+    color: #F59E0B;
+}
+
+.client-information-part {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.client-information-part-item {
+    display: flex;
+    align-items: center;
+    font-size: 0.90rem;
+    gap: 10px;
+    color: #373F51;
+}
+
+.line-client-part {
+    width: 100%;
+    height: 1px;
+    margin: 20px 0;
+    background-color: rgb(223, 223, 223);
+}
+
+.total-spent {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--primary-color);
+}
+
+.total-spent > p {
+    font-size: 0.9rem;
+    color: #373F51;
+}
+
+.last-purchase {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    font-size: 0.9rem;
+}
+
+.last-purchase > p {
+    font-size: 0.85rem;
+    color: #373F51;
+}
+
+@media (max-width: 1024px) {
+    .ClientInformationCard {
+        width: 100%;
+        margin: 15px 0;
+    }
+}
