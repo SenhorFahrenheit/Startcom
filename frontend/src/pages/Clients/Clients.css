@@ -24,6 +24,12 @@
   gap: 10px;
 }
 
+.clientInformationCards {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
 @media (max-width: 1024px) {
     .clientCards {
         gap: 10px;

@@ -6,6 +6,7 @@ import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
 import Button from "../../components/Button/Button";
 
 import NewClientModal from "../../components/Modals/ClientModal";
+import ClientInformationCard from "../../components/ClientInformationCard/ClientInformationCard";
 import ClientCard from "../../components/ClientCard/ClientCard";
 import FilterSelect from "../../components/FilterSelect/FilterSelect";
 
@@ -51,27 +52,58 @@ const Clients = () => {
             <ClientCard icon={<LuSmile size={24}/>} value="4.8" description="Satisfação Média" color="green"/>
           </section>
 
-        <div className="filter-search">
-          <input 
-            style={{ fontSize: 14, paddingLeft: 16 }} 
-            className="InputDashboard" 
-            type="text" 
-            placeholder="Buscar por nome, email, telefone..." 
-          />
-          <div className="filters-block">
-            <FilterSelect
-              label="Filtrar por tipo"
-              options={[
-                { label: "Todos", value: "all" },
-                { label: "VIP", value: "vip" },
-                { label: "Premium", value: "premium" },
-                { label: "Regular", value: "regular" },
-              ]}
-              defaultValue="Todos"
-              onSelect={(val) => console.log("Tipo escolhido:", val)}
+          <div className="filter-search">
+            <input 
+              style={{ fontSize: 14, paddingLeft: 16 }} 
+              className="InputDashboard" 
+              type="text" 
+              placeholder="Buscar por nome, email, telefone..." 
+            />
+            <div className="filters-block">
+              <FilterSelect
+                label="Filtrar por tipo"
+                options={[
+                  { label: "Todos", value: "all" },
+                  { label: "VIP", value: "vip" },
+                  { label: "Premium", value: "premium" },
+                  { label: "Regular", value: "regular" },
+                ]}
+                defaultValue="Todos"
+                onSelect={(val) => console.log("Tipo escolhido:", val)}
+              />
+            </div>
+          </div>    
+
+          <div className="clientInformationCards">
+            <ClientInformationCard 
+              clientName="Carlos Soares" 
+              clientType="VIP"
+              email="carlos@email.com"
+              phoneNumber="(11) 99999-9999"
+              city="São Paulo"
+              totalSpent="R$ 1256.80"
+              lastPurchase="14/04/2025"
+            />
+            <ClientInformationCard 
+              clientName="João Santos" 
+              clientType="Regular"
+              email="joao@email.com"
+              phoneNumber="(11) 88888-8888"
+              city="Rio de Janeiro"
+              totalSpent="R$ 845.30"
+              lastPurchase="11/07/2025"
+            />
+            <ClientInformationCard 
+              clientName="Pedro Henrique" 
+              clientType="Premium"
+              email="pedro@email.com"
+              phoneNumber="(11) 77777-7777"
+              city="Belo Horizonte"
+              totalSpent="R$ 2340.50"
+              lastPurchase="09/09/2025"
             />
           </div>
-        </div>
+
         </div>
 
       <NewClientModal
