@@ -2,13 +2,14 @@
 import "./Settings.css"
 import "../commonStyle.css"
 import { useState } from "react"
-import { LuBuilding, LuSave } from "react-icons/lu"
+import { LuBuilding, LuSave, LuBell } from "react-icons/lu"
 
 // Layouts & Components
 import Sidebar from "../../layouts/Sidebar/Sidebar"
 import Button from "../../components/Button/Button"
 import InputDashboard from "../../components/InputDashboard/InputDashboard"
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile"
+import NotificationSetting from "../../components/NotificationSetting/NotificationSetting"
 import { useSettingForm } from "../../hooks/useSettingForm"
 
 import { Controller } from "react-hook-form";
@@ -22,14 +23,12 @@ const Settings = () => {
   handleSubmit,
   onSubmit,
   onError,
-  control,        // <- necessário para Controller
+  control,
   validatePhone,
   formatPhone,
   validateCNPJ,
   formatCNPJ,
 } = useSettingForm()
-
-
 
   return (
     <section className="body-section">
@@ -123,7 +122,6 @@ const Settings = () => {
             </div>
           </div>
 
-          {/* Endereço */}
           <div className="form-setting-gap-unique">
             <label htmlFor="address">Endereço</label>
             <InputDashboard
@@ -147,6 +145,39 @@ const Settings = () => {
             </div>
           </div>
         </form>
+
+        <div className="notification-settings">
+          <div className="settings-title">
+            <LuBell size={20} color="var(--primary-color)" />
+            <h3>Notificações</h3>
+          </div>
+          
+          <section className="notificationSettings">
+            <NotificationSetting 
+              title="Estoque Baixo" 
+              description="Receber alerta quando um produto atingir o estoque mínimo."
+              state="checked"
+            />
+
+            <NotificationSetting 
+              title="Novas Vendas"
+              description="Receber notificação a cada nova venda concluída."
+              state="checked"
+            />
+
+            <NotificationSetting 
+              title="Relatórios Semanais"
+              description="Receber um resumo do desempenho da semana por e-mail."
+            />
+
+            <NotificationSetting 
+              title="Lembretes de Tarefas"
+              description="Ser lembrado de tarefas pendentes e agendadas."
+              state="checked"
+            />    
+          </section>
+        </div>
+
       </div>
     </section>
   )
