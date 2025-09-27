@@ -9,13 +9,12 @@ import { NavLink } from "react-router-dom"
 import MetricCard from "../../components/MetricCard/MetricCard"
 import SalesChart from "../../components/SalesChart/SalesChart"
 import QuickActions from "../../components/QuickActions/QuickActions"
+import FilterDateButton from "../../components/filterDateButton/filterDateButton";
 import HighlightCard from "../../components/HighlightCard/HighlightCard"
 
 import Sidebar from "../../layouts/Sidebar/Sidebar"
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile"
 
-
-import FilterDateButton from "../../components/FilterDateButton/FilterDateButton";
 
 // Icons
 import { LuDollarSign } from 'react-icons/lu';
