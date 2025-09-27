@@ -7,8 +7,9 @@ import NewSaleModal from "../../components/Modals/NewSaleModal"
 import Sidebar from "../../layouts/Sidebar/Sidebar"
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile"
 import SalesCard from "../../components/SalesCard/SalesCard"
-import FilterDateButton from "../../components/FilterDateButton/FilterDateButton"
 import Button from "../../components/Button/Button"
+
+import FilterDateButton from "../../components/FilterDateButton/FilterDateButton"
 
 import FilterStatusButton from "../../components/FilterStatusButton/FilterStatusButton"
 import SalesTable from "../../components/SalesTable/SalesTable"

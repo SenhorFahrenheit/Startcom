@@ -15,7 +15,6 @@ import HighlightCard from "../../components/HighlightCard/HighlightCard"
 import Sidebar from "../../layouts/Sidebar/Sidebar"
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile"
 
-
 // Icons
 import { LuDollarSign } from 'react-icons/lu';
 import { LuTrendingUp } from 'react-icons/lu';
