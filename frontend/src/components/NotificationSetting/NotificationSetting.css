@@ -9,6 +9,11 @@
     border-radius: 8px;
     padding: 16px;
     color: #1b1b1e;
+    gap: 5px;
+}
+
+.NotificationSetting > div {
+    width: 85%;
 }
 
 .notification-title-description {
@@ -70,4 +75,30 @@
 
 .toggle-switch-checkbox:checked + .slider:before {
     transform: translateX(28px);
+}
+
+@media (max-width: 684px) {
+
+    .notification-title {
+        font-size: 0.85rem;
+    }
+
+    .notification-description {
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 425px) {
+
+    .NotificationSetting > div {
+        width: 75%;
+    }
+
+    .notification-title {
+        font-size: 0.75rem;
+    }
+
+    .notification-description {
+        font-size: 0.7rem;
+    }
 }

@@ -156,13 +156,13 @@ const Settings = () => {
             <NotificationSetting 
               title="Estoque Baixo" 
               description="Receber alerta quando um produto atingir o estoque mínimo."
-              state="checked"
+              state="defaultChecked"
             />
 
             <NotificationSetting 
               title="Novas Vendas"
               description="Receber notificação a cada nova venda concluída."
-              state="checked"
+              state="defaultChecked"
             />
 
             <NotificationSetting 
@@ -173,7 +173,7 @@ const Settings = () => {
             <NotificationSetting 
               title="Lembretes de Tarefas"
               description="Ser lembrado de tarefas pendentes e agendadas."
-              state="checked"
+              state="defaultChecked"
             />    
           </section>
         </div>

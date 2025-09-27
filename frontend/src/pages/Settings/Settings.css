@@ -10,7 +10,7 @@
 }
 
 .setting-page {
-    padding: 32px 100px !important;
+    padding: 32px 100px;
 }
 
 .settings-title {
@@ -62,4 +62,25 @@
 
 .notificationSettings {
     width: 100%;
+}
+
+@media (max-width: 1024px) {
+    .setting-page {
+        padding: 24px;
+    }
+}
+
+@media (max-width: 888px) {
+
+    .setting-page {
+        padding: 12px;
+    }
+
+    .form-setting-group {
+        flex-direction: column;
+    }
+
+    .form-setting-gap {
+        width: 100%;
+    }
 }

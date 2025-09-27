@@ -8,8 +8,8 @@ const NotificationSetting = ({title, description, state}) => {
             <p className="notification-description">{description}</p>
         </div>
 
-        <label class="toggle-switch">
-            <input type="checkbox" checked={state} className="toggle-switch-checkbox"/>
+        <label className="toggle-switch">
+            <input type="checkbox" defaultChecked={state} className="toggle-switch-checkbox"/>
             <span className="slider"></span>
         </label>
     </div>
