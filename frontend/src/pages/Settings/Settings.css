@@ -1,0 +1,61 @@
+.settings-container-form {
+    padding: 24px;
+    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    margin-top: 30px;
+    border-radius: 10px;
+    font-family: var(--font-heading);
+    color: #09090B;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.setting-page {
+    padding: 32px 100px !important;
+}
+
+.settings-title {
+    display: flex;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    gap: 10px;
+    line-height: 1.5rem;
+    color: #1b1b1e;
+}
+
+.form-setting-gap {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 49%;
+    margin-top: 20px;
+}
+
+.form-setting-gap > input, .form-setting-gap-unique > input {
+    font-size: 0.9rem;
+    padding-left: 12px;
+}
+
+.form-setting-gap-unique {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.form-setting-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.setting-save-changes {
+    display: flex;
+    justify-content: end;
+    margin: 24px 0 0;
+}
+
+.setting-save-changes > button {
+    padding: 0 12px;
+}
+
+.button-shadown {
+    width: 200px;
+}

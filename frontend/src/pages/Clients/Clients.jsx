@@ -40,7 +40,7 @@ const Clients = () => {
                 onClick={openClient} 
                 height={40} 
                 width={140} 
-                label={<><LuPlus size={16}/>Nova Cliente</>} 
+                label={<><LuPlus size={16}/>Novo Cliente</>} 
               />
             </div>
           </div>
