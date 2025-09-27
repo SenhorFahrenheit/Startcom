@@ -9,7 +9,7 @@ import { NavLink } from "react-router-dom"
 import MetricCard from "../../components/MetricCard/MetricCard"
 import SalesChart from "../../components/SalesChart/SalesChart"
 import QuickActions from "../../components/QuickActions/QuickActions"
-import FilterDateButton from "../../components/filterDateButton/filterDateButton";
+import FilterDateButton from "../../components/FilterDateButton/FilterDateButton";
 import HighlightCard from "../../components/HighlightCard/HighlightCard"
 
 import Sidebar from "../../layouts/Sidebar/Sidebar"
