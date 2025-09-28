@@ -62,12 +62,6 @@
     font-weight: 600;
 }
 
-.product-barcode-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
 .products-table th {
   font-weight: 600;
 }
@@ -103,4 +97,64 @@
   border: none;
   cursor: pointer;
   font-size: 16px;
+}
+
+
+.product-barcode-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.product-category-item > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    border: 1px solid #a9bcd0;
+    color: #373f51;
+    background-color: #a9bcd020;
+    height: 20px;
+    font-size: 0.75rem;
+}
+
+.product-quantity-item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.product-quantity-item > p:first-child {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.product-quantity-item > p:last-child {
+    font-size: 0.75rem;
+}
+
+.product-price-item {
+    color: var(--primary-color) !important;
+    font-weight: 600;
+}
+
+.product-status-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    height: 20px;
+    font-size: 0.75rem;
+    padding: 0 10px;
+    font-weight: 600;
+}
+
+.Normal { background-color: #f0fdf4; color: #059669; border: 1px solid #05966940; }
+.Baixo { background-color: #fffbeb; color: #f59e0b; border: 1px solid #f59e0b40; }
+.Crítico { background-color: #FEE2E2; color: #DC2626; border: 1px solid #e42b0140; }
+.Esgotado { background-color: #bfbfbf; color: #171410; border: 1px solid #1c120140; }
+
+.product-totalValue-item {
+    font-weight: 600;
+    font-size: 1.025rem;
 }

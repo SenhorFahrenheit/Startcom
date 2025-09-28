@@ -10,10 +10,10 @@ const ProductTable = ({ categoryFilter, statusFilter, search }) => {
     async function fetchData() {
       const res = {
         data: [
-          { id: 1, product: "Camiseta Premium", code: "CAM001", category: "Roupas", quantity: 45, price: 59.99, status: "Normal", totalValue: 2695.50},
-          { id: 2, product: "Tênis Esportivo", code: "TEN001", category: "Calçados", quantity: 8, price: 189.99, status: "Baixo", totalValue: 1519.20},
-          { id: 3, product: "Mochila Executiva", code: "MOC001", category: "Acessórios", quantity: 3, price: 129.99, status: "Baixo", totalValue: 389.70},
-          { id: 4, product: "Relógio Digital", code: "REL001", category: "Eletrônicos", quantity: 22, price: 299.99, status: "Normal", totalValue: 6597.80},
+          { id: 1, product: "Camiseta Premium", code: "CAM001", category: "Roupas", quantity: 45, min: 10, price: 59.99, status: "Normal", totalValue: 2695.59},
+          { id: 2, product: "Tênis Esportivo", code: "TEN001", category: "Calçados", quantity: 8, min: 15, price: 189.99, status: "Baixo", totalValue: 1519.29},
+          { id: 3, product: "Mochila Executiva", code: "MOC001", category: "Acessórios", quantity: 1, min: 5, price: 129.99, status: "Crítico", totalValue: 389.79},
+          { id: 4, product: "Relógio Digital", code: "REL001", category: "Eletrônicos", quantity: 0, min: 10, price: 299.99, status: "Esgotado", totalValue: 6597.89},
         ]
       };
       setProducts(res.data);
@@ -27,7 +27,7 @@ const ProductTable = ({ categoryFilter, statusFilter, search }) => {
     if (search.trim() !== "") {
       result = result.filter(product =>
         product.product.toLowerCase().includes(search.toLowerCase()) ||
-        String(product.id).includes(search)
+        String(product.code).toLowerCase().includes(search.toLowerCase())
       );
     }
 
@@ -66,11 +66,16 @@ const ProductTable = ({ categoryFilter, statusFilter, search }) => {
                 </div>
               </td>
               <td className="product-barcode-item"><LuBarcode/>{product.code}</td>
-              <td>{product.category}</td>
-              <td>{product.quantity}</td>
-              <td>R$ {product.price}</td>
-              <td>{product.status}</td>
-              <td>{product.totalValue}</td>
+              <td className="product-category-item"><div>{product.category}</div></td>
+              <td>
+                <div className="product-quantity-item">
+                    <p>{product.quantity}</p>
+                    <p>mín: {product.min}</p>
+                </div>
+              </td>
+              <td className="product-price-item">R$ {product.price}</td>
+              <td><p className={`product-status-item ${product.status}`}>{product.status}</p></td>
+              <td className="product-totalValue-item">R$ {product.totalValue}</td>
             </tr>
           ))}
           {filteredProducts.length === 0 && (
