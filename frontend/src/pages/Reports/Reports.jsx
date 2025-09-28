@@ -8,6 +8,7 @@ import Button from '../../components/Button/Button';
 
 import NewReportModal from "../../components/Modals/NewReportModal"
 import ReportCard from '../../components/ReportCard/ReportCard';
+import LineSalesChart from '../../components/LineSalesChart/LineSalesChart';
 
 import { LuChartColumn, LuDollarSign, LuTrendingUp, LuUsers, LuPackage } from 'react-icons/lu';
 import { useAuthModals } from "../../hooks/useAuthModals"
@@ -82,6 +83,17 @@ const Reports = () => {
               description="Ticket médio" 
               information="+5% vs mês anterior"
             /> 
+          </section>
+
+            
+          <section className="chart-section">
+            <div className="chart-wrapper">              
+                <LineSalesChart/>
+            </div>
+              
+            <div className="chart-wrapper">
+              {/*<CategoryPieChart/>*/}
+            </div>
           </section>
         </div>
 
