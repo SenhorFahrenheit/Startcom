@@ -6,6 +6,8 @@ import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile"
 import Button from "../../components/Button/Button"
 import NewProductModal from "../../components/Modals/NewProductModal"
 
+import FilterSelect from "../../components/FilterSelect/FilterSelect"
+
 import { LuPlus, LuBox, LuTrendingDown, LuTriangleAlert, LuPackage } from "react-icons/lu"
 
 import { useAuthModals } from "../../hooks/useAuthModals"
@@ -51,6 +53,42 @@ const Inventory = () => {
             <ProductCard title="Crítico" value="0" extra="Reposição urgente" color="alert" icon={<LuTriangleAlert size={20}/>}/>
             <ProductCard title="Valor Total" value="R$ 11202.20" color="normal" icon={<LuPackage size={20}/>}/>
           </div>
+
+          <div className="filter-search">
+          <input 
+            style={{ fontSize: 14, paddingLeft: 16 }} 
+            className="InputDashboard" 
+            type="text" 
+            placeholder="Buscar produtos por nome, código..." 
+          />
+          <div className="filters-block">
+            <FilterSelect
+                label="Categoria: "
+                options={[
+                  { label: "Todas", value: "all" },
+                  { label: "Roupas", value: "clothes" },
+                  { label: "Calçados", value: "footwear" },
+                  { label: "Acessórios", value: "accessories" },
+                ]}
+                defaultValue="Todas"
+                onSelect={(val) => console.log("Categoria escolhida:", val)}
+              />
+
+            <FilterSelect
+                label="Status: "
+                options={[
+                  { label: "Todos", value: "all" },
+                  { label: "Normal", value: "normal" },
+                  { label: "Baixo", value: "low" },
+                  { label: "Crítico", value: "critic" },
+                  { label: "Esgotado", value: "soldout" },
+                ]}
+                defaultValue="Todos"
+                onSelect={(val) => console.log("Status escolhido:", val)}
+              />
+          </div>
+        </div>
+
         </div>
 
         <NewProductModal

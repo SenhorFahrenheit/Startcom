@@ -15,3 +15,16 @@
         padding: 0;
     }
 }
+
+@media(max-width: 425px) {
+  .filter-search {
+    padding: 0px;
+    box-shadow: none !important;
+  }
+
+  .filter-block {
+    flex-wrap: wrap;
+  }
+
+
+}
