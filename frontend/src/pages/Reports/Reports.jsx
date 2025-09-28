@@ -9,6 +9,7 @@ import Button from '../../components/Button/Button';
 import NewReportModal from "../../components/Modals/NewReportModal"
 import ReportCard from '../../components/ReportCard/ReportCard';
 import LineSalesChart from '../../components/LineSalesChart/LineSalesChart';
+import CategoryPieChart from '../../components/CategoryPieChart/CategoryPieChart';
 
 import { LuChartColumn, LuDollarSign, LuTrendingUp, LuUsers, LuPackage } from 'react-icons/lu';
 import { useAuthModals } from "../../hooks/useAuthModals"
@@ -92,7 +93,7 @@ const Reports = () => {
             </div>
               
             <div className="chart-wrapper">
-              {/*<CategoryPieChart/>*/}
+                <CategoryPieChart/>
             </div>
           </section>
         </div>
