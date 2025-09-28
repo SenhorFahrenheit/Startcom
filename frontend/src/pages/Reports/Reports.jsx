@@ -7,7 +7,9 @@ import FilterDateButton from '../../components/FilterDateButton/FilterDateButton
 import Button from '../../components/Button/Button';
 
 import NewReportModal from "../../components/Modals/NewReportModal"
-import { LuChartColumn } from 'react-icons/lu';
+import ReportCard from '../../components/ReportCard/ReportCard';
+
+import { LuChartColumn, LuDollarSign, LuTrendingUp, LuUsers, LuPackage } from 'react-icons/lu';
 import { useAuthModals } from "../../hooks/useAuthModals"
 
 import { useState } from 'react';
@@ -49,9 +51,38 @@ const Reports = () => {
                     width={163} 
                     label={<><LuChartColumn size={16}/>Novo Relatório</>} 
                   />
+                </div>
               </div>
-            </div>
           </div>
+
+          <section className='reportCards'>
+            <ReportCard 
+              icon={<LuDollarSign size={24}/>} 
+              value="R$ 28.450"
+              description="Faturamento este mês" 
+              information="+15% vs mês anterior"
+            />
+
+            <ReportCard 
+              icon={<LuTrendingUp size={24}/>} 
+              value="145" 
+              description="Vendas realizadas" 
+              information="+8% vs mês anterior"
+            />
+
+            <ReportCard 
+              icon={<LuUsers size={24}/>} 
+              value="72" 
+              description="Clientes ativos" 
+              information="+12 novos clientes"
+             />
+            <ReportCard 
+              icon={<LuPackage size={24}/>} 
+              value="R$ 196" 
+              description="Ticket médio" 
+              information="+5% vs mês anterior"
+            /> 
+          </section>
         </div>
 
         <NewReportModal

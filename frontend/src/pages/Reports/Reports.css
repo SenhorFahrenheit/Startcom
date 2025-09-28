@@ -3,6 +3,11 @@
     gap: 15px;
 }
 
+.reportCards {
+    display: flex;
+    justify-content: space-between;
+}
+
 @media (max-width: 1024px) {
     .report-buttons {
         flex-direction: column;

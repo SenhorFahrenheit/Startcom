@@ -1,0 +1,42 @@
+.ReportCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 23%;
+    align-items: center;
+    margin-top: 35px;
+    padding: 24px;
+    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    gap: 10px;
+    font-family: var(--font-heading);
+    border-radius: 5px;
+}
+
+.report-icon-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    color: var(--primary-color);
+    background-color: #58a4b020;
+    border-radius: 100%;
+    margin-bottom: 5px;
+}
+
+.report-value-item {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.report-description-item {
+    color: #373f51;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.report-information-item {
+    font-size: 0.7rem;
+    color: #059669;
+    font-weight: 600;
+}
