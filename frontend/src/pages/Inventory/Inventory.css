@@ -1,0 +1,17 @@
+.productCards {
+    display: flex;
+    justify-content: space-between;
+    padding: 24px 0;
+}
+
+@media (max-width: 1300px) {
+    .productCards {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 900px) {
+    .productCards {
+        padding: 0;
+    }
+}
