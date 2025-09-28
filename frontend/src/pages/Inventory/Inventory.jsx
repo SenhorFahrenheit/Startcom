@@ -5,6 +5,7 @@ import Sidebar from "../../layouts/Sidebar/Sidebar"
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile"
 import Button from "../../components/Button/Button"
 import NewProductModal from "../../components/Modals/NewProductModal"
+import ProductTable from "../../components/ProductTable/ProductTable"
 
 import FilterSelect from "../../components/FilterSelect/FilterSelect"
 
@@ -16,6 +17,10 @@ import { useState } from "react"
 import ProductCard from "../../components/ProductCard/ProductCard"
 
 const Inventory = () => {
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [search, setSearch] = useState("");
+
 
   const { activeModal, openProduct, closeModal } = useAuthModals();
 
@@ -55,47 +60,61 @@ const Inventory = () => {
           </div>
 
           <div className="filter-search">
-          <input 
-            style={{ fontSize: 14, paddingLeft: 16 }} 
-            className="InputDashboard" 
-            type="text" 
-            placeholder="Buscar produtos por nome, código..." 
-          />
-          <div className="filters-block">
-            <FilterSelect
+            <input 
+              style={{ fontSize: 14, paddingLeft: 16 }} 
+              className="InputDashboard" 
+              type="text" 
+              placeholder="Buscar produtos por nome, código..." 
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+            <div className="filters-block">
+              <FilterSelect
                 label="Categoria: "
                 options={[
                   { label: "Todas", value: "all" },
-                  { label: "Roupas", value: "clothes" },
-                  { label: "Calçados", value: "footwear" },
-                  { label: "Acessórios", value: "accessories" },
+                  { label: "Roupas", value: "Roupas" },
+                  { label: "Calçados", value: "Calçados" },
+                  { label: "Acessórios", value: "Acessórios" },
                 ]}
                 defaultValue="Todas"
-                onSelect={(val) => console.log("Categoria escolhida:", val)}
+                onSelect={setCategoryFilter}
               />
 
-            <FilterSelect
+              <FilterSelect
                 label="Status: "
                 options={[
                   { label: "Todos", value: "all" },
-                  { label: "Normal", value: "normal" },
-                  { label: "Baixo", value: "low" },
-                  { label: "Crítico", value: "critic" },
-                  { label: "Esgotado", value: "soldout" },
+                  { label: "Normal", value: "Normal" },
+                  { label: "Baixo", value: "Baixo" },
+                  { label: "Crítico", value: "Crítico" },
+                  { label: "Esgotado", value: "Esgotado" },
                 ]}
                 defaultValue="Todos"
-                onSelect={(val) => console.log("Status escolhido:", val)}
+                onSelect={setStatusFilter}
               />
+            </div>
           </div>
-        </div>
 
-        </div>
+            <div className="recent-sells">
+              <div className="recentSells-title">
+                <h3>Vendas Recentes</h3>
+              </div>
 
-        <NewProductModal
-          isOpen={activeModal === "inventory"}
-          onClose={closeModal}
-        />
-    </section>
+              <ProductTable 
+                categoryFilter={categoryFilter} 
+                statusFilter={statusFilter} 
+                search={search}
+              />
+            </div>
+          </div>
+
+          <NewProductModal
+            isOpen={activeModal === "inventory"}
+            onClose={closeModal}
+          />
+      </section>
+      
   )
 }
 
