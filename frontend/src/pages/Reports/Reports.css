@@ -1,0 +1,16 @@
+.report-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+@media (max-width: 1024px) {
+    .report-buttons {
+        flex-direction: column;
+    }
+} 
+
+@media (max-width: 768px) {
+    .report-buttons {
+        width: 100%;
+    }
+}

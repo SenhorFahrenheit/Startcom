@@ -20,6 +20,7 @@ export function useAuthModals() {
   const openSale = () => setActiveModal("sale");
   const openClient = () => setActiveModal("client");
   const openProduct = () => setActiveModal("inventory");
+  const openReport = () => setActiveModal("report");
 
   const closeModal = () => setActiveModal(null);
 
@@ -32,6 +33,7 @@ export function useAuthModals() {
     openSale,
     openProduct,
     openClient,
+    openReport,
     closeModal,
   };
 }
