@@ -43,6 +43,10 @@
     .report-buttons {
         flex-direction: column;
     }
+
+    .reportCards {
+        flex-wrap: wrap;
+    }
 } 
 
 @media (max-width: 768px) {

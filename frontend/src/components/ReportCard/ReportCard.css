@@ -8,6 +8,7 @@
     padding: 24px;
     box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
     gap: 10px;
+    text-align: center;
     font-family: var(--font-heading);
     border-radius: 5px;
 }
@@ -39,4 +40,16 @@
     font-size: 0.7rem;
     color: #059669;
     font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+    .ReportCard {
+        width: 49%;
+    }
+}
+
+@media (max-width: 425px) {
+    .ReportCard {
+        width: 100%;
+    }
 }
