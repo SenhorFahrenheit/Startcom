@@ -6,7 +6,7 @@
     gap: 15px;
     font-family: var(--font-heading);
     width: 23%;
-    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    box-shadow: var(--primary-shadow-color);
     border-radius: 10px;
     padding: 24px;
     margin-top: 20px;

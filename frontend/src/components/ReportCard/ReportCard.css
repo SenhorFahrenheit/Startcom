@@ -6,7 +6,7 @@
     align-items: center;
     margin-top: 35px;
     padding: 24px;
-    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    box-shadow: var(--primary-shadow-color);
     gap: 10px;
     text-align: center;
     font-family: var(--font-heading);

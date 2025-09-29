@@ -5,7 +5,7 @@
     justify-content: space-between;
     gap: 30px;
     width: 32%;
-    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    box-shadow: var(--primary-shadow-color);
     border-radius: 10px;
 }
 

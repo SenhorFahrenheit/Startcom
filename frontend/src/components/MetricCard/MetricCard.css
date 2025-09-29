@@ -2,7 +2,7 @@
     min-width: 200px;
     width: 23%;
     padding: 24px;
-    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    box-shadow: var(--primary-shadow-color);
     border-radius: 10px;
     transition: all ease 250ms;
 }
