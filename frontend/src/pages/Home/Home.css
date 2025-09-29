@@ -24,7 +24,7 @@
 }
 
 .title-page > span {
-    color: var(--quaternary-color);
+    color: var(--primary-layout-background-color);
 }
 
 .description-page {
@@ -98,7 +98,7 @@
     flex-direction: column;
     text-align: center;
     align-items: center;
-    background: linear-gradient(135deg, var(--primary-color) 0%, rgb(55, 63, 81) 100%);
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-layout-background-color) 100%);
 }
 
 .subtitle-page {

@@ -25,6 +25,8 @@
     font-size: 0.725rem;
     text-align: center;
     font-weight: 600;
+    color: #059669;
+    text-align: end;
 }
 
 @media (max-width: 320px) {

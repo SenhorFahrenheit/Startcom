@@ -8,7 +8,7 @@
     align-items: center;
     justify-content: center;
     background-color: #FFFFFF;
-    color: #000000;
+    color: var(--primary-layout-background-color);
     height: 64px;
     position: fixed;
     top: 0;

@@ -28,7 +28,7 @@
 
 .client-card-blue {
     background-color: #58A4B020;
-    color: #58A4B0;
+    color: var(--primary-color);
 }
 
 .client-card-purple {

@@ -34,7 +34,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #D8DBE2;
+  background-color: #F8F8F8;
+  border: 1px solid var(--primary-color);
   border-radius: 8px;
   width: 40px;
   height: 40px;
