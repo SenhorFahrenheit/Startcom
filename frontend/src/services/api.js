@@ -7,4 +7,30 @@ const api = axios.create({
   }
 });
 
+export const registerAPI = async (data) => {
+  if (!data || typeof data !== 'object') {
+    throw new Error("Dados inválidos para registro");
+  }
+  try {
+    const response = await api.post("/cadastro/cadastrarUsuario", data);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao registrar usuário:", error);
+    throw error;
+  }
+};
+
+export const loginAPI = async (data) => {
+  if (!data || typeof data !== 'object') {
+    throw new Error("Dados inválidos para login");
+  }
+  try {
+    const response = await api.post("/login", data);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao realizar login:", error);
+    throw error;
+  }
+};
+
 export default api;
