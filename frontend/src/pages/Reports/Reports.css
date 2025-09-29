@@ -25,6 +25,19 @@
     border-radius: 10px;
 }
 
+.reports-section {
+    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    margin-top: 35px;
+    font-family: var(--font-heading);
+    padding: 24px;
+}
+
+.generated-reports {
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+    gap: 20px;
+}
 
 @media (max-width: 1024px) {
     .report-buttons {

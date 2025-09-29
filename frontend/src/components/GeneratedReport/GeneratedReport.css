@@ -1,0 +1,140 @@
+.GeneratedReport {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--secondary-color);
+    background-color: #fafafa;
+    border-radius: 10px;
+    padding: 18px;
+    font-family: var(--font-heading);
+}
+
+.generated-report-first-part {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.generated-report-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    color: var(--primary-color);
+    background-color: #58a4b020;
+    border-radius: 10px;
+}
+
+.generated-report-all-informations {
+    display: flex;
+    flex-direction: column;
+    color: var(--quaternary-color);
+    gap: 10px;
+}
+
+.generated-report-title {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #000000;
+}
+
+.generated-report-description {
+    font-size: 0.8rem;
+}
+
+.generated-report-informations {
+    display: flex;
+    gap: 10px;
+    font-size: 0.75rem;
+}
+
+.generated-report-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.generated-report-actions > button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    border: 1px solid var(--secondary-color);
+    background-color: #FFFFFF;
+    color: var(--quaternary-color);
+    cursor: pointer;
+    transition: all ease 250ms;
+}
+
+.generated-report-actions > button:hover {
+    background-color: var(--secondary-color);
+}
+
+.generated-report-state {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    padding: 4px 16px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.Pronto {
+    background-color: #f0fdf4;
+    color: #059669;
+    border: 1px solid #05966940;
+}
+
+.Processando {
+    background-color: #fffbeb;
+    color: #f59e0b;
+    border: 1px solid #f59e0b40;
+    max-height: 24px;
+}
+
+
+@media (max-width: 650px) {
+    .GeneratedReport {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .generated-report-first-part {
+        justify-content: space-between;
+    }
+
+    .generated-report-icon {
+        width: 64px;
+        height: 64px;
+    }
+}
+
+@media (max-width: 548px) {
+    .generated-report-icon {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        min-height: 48px;
+    }
+}
+
+@media (max-width: 425px) {
+
+    .GeneratedReport {
+        text-align: center;
+    }
+
+    .generated-report-first-part, .generated-report-informations {
+        flex-direction: column;
+    }
+
+    .generated-report-all-informations {
+        align-items: center;
+    }
+}

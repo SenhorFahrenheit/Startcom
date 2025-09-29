@@ -8,6 +8,7 @@ import Button from '../../components/Button/Button';
 
 import NewReportModal from "../../components/Modals/NewReportModal"
 import ReportCard from '../../components/ReportCard/ReportCard';
+import GeneratedReport from '../../components/GeneratedReport/GeneratedReport';
 import LineSalesChart from '../../components/LineSalesChart/LineSalesChart';
 import CategoryPieChart from '../../components/CategoryPieChart/CategoryPieChart';
 
@@ -89,11 +90,59 @@ const Reports = () => {
             
           <section className="chart-section">
             <div className="chart-wrapper">              
-                <LineSalesChart/>
+              <LineSalesChart/>
             </div>
               
             <div className="chart-wrapper">
-                <CategoryPieChart/>
+              <CategoryPieChart/>
+            </div>
+          </section>
+
+          <section className="reports-section">
+            <div>
+              <h3>Relatórios Gerados</h3>
+            </div>
+
+            <div className="generated-reports">
+              <GeneratedReport 
+                icon={<LuChartColumn size={24}/>}
+                title="Vendas Mensais"
+                description="Relatório completo das vendas do último mês"
+                type="PDF"
+                size="2.3 MB"
+                date="16/07/2025"
+                state="Pronto"
+              />
+
+              <GeneratedReport 
+                icon={<LuChartColumn size={24}/>}
+                title="Análise de Clientes"
+                description="Perfil e comportamento dos clientes"
+                type="Excel"
+                size="1.8 MB"
+                date="12/06/2025"
+                state="Pronto"
+              />
+
+              <GeneratedReport 
+                icon={<LuChartColumn size={24}/>}
+                title="Controle de Estoque"
+                description="Situação atual do inventário"
+                type="PDF"
+                size="3.1 MB"
+                date="30/09/2025"
+                state="Processando"
+              />
+
+              <GeneratedReport 
+                icon={<LuChartColumn size={24}/>}
+                title="Fluxo de Caixa"
+                description="Entradas e saídas financeiras"
+                type="Excel"
+                size="2.7 MB"
+                date="08/05/2025"
+                state="Pronto"
+              />
             </div>
           </section>
         </div>

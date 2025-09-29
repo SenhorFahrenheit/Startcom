@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 // import axios from "axios"
-import "./CategoryPieChart.css"
 
 const COLORS = ["var(--primary-color)", "#A9BCD0", "#2F4858", "#91dff7ff"];
 
