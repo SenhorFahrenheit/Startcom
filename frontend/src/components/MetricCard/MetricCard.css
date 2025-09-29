@@ -29,7 +29,7 @@
 
 .good {
     background-color: rgba(88, 164, 176, 0.125);
-    color: rgb(88, 164, 176);
+    color: var(--primary-color);
 }
 
 .notgood {

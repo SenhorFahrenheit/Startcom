@@ -35,7 +35,7 @@ html {
 :root {
     --title-heading-color: #1B1B1E;
 
-    --primary-color: #58a4b0;
+    --primary-color: #017688;
     --secondary-color: #e4e8ef;
     --tertiary-color: #487281;
     --quaternary-color: #373f51;
@@ -44,6 +44,8 @@ html {
 
     --primary-shadow-color: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
     --primary-shadow-hover-color: 2px 15px 20px 2px rgba(171, 171, 171, 0.2);
+
+    --component-background-color: #F1F1F1;
 
     --shadow-color: #adadad;
 

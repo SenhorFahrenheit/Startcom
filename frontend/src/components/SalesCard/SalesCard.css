@@ -23,7 +23,7 @@
 
 .sales-card-icon {
     background-color: rgba(88, 164, 176, 0.125);
-    color: rgb(88, 164, 176);
+    color: var(--primary-color);
     width: 48px;
     height: 48px;
     border-radius: 10px;

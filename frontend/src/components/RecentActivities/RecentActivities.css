@@ -1,6 +1,6 @@
 .recent-action-component {
     width: 100%;
-    background-color: #D8DBE2;
+    background-color: var(--component-background-color);
     border-radius: 10px;
     height: auto;
     padding: 24px;
@@ -39,7 +39,7 @@
 }
 
 .green {background-color: var(--primary-color);}
-.transparent-green {background-color: rgba(88, 164, 176, 0.125); color: rgb(88, 164, 176);}
+.transparent-green {background-color: rgba(88, 164, 176, 0.125); color: var(--primary-color);}
 
 .orange {background-color: #F59E0B;}
 .transparent-orange {background-color: rgba(245, 158, 11, 0.125); color: rgb(245, 158, 11);}

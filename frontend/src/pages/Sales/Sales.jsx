@@ -21,7 +21,6 @@ const Sales = () => {
   const { activeModal, openSale, closeModal } = useAuthModals();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  // estados de filtro
   const [dateFilter, setDateFilter] = useState("Este Mês");
   const [statusFilter, setStatusFilter] = useState({
     "Concluído": true,
