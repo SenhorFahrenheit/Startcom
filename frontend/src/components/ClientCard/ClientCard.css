@@ -29,21 +29,25 @@
 .client-card-blue {
     background-color: #58A4B020;
     color: var(--primary-color);
+    border: 1px solid var(--primary-color);
 }
 
 .client-card-purple {
     background-color: #8B5CF620;
     color: #9333EA;
+    border: 1px solid #9333EA;
 }
 
 .client-card-orange {
     background-color: #f59e0b20;
     color: #D97706;
+    border: 1px solid #D97706;
 }
 
 .client-card-green {
     background-color: #05966920;
     color: #059669;
+    border: 1px solid #059669;
 }
 
 .client-value-card {

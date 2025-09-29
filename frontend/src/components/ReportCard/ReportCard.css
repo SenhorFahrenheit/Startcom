@@ -28,6 +28,7 @@
     background-color: #58a4b020;
     border-radius: 100%;
     margin-bottom: 5px;
+    border: 1px solid var(--primary-color);
 }
 
 .report-value-item {

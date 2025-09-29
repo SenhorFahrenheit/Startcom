@@ -24,6 +24,7 @@
     font-size: 1.1rem;
     font-weight: 600;
     color: #FFFFFF;
+    border: 1px solid var(--quaternary-color);
 }
 
 .client-name-type-information {
