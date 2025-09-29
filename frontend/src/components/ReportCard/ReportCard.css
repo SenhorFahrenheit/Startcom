@@ -31,7 +31,7 @@
 }
 
 .report-description-item {
-    color: #373f51;
+    color: var(--quaternary-color);
     font-size: 0.8rem;
     font-weight: 600;
 }

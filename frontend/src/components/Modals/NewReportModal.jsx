@@ -2,7 +2,6 @@ import { toast } from "react-toastify";
 
 import BaseModal from "./BaseModal";
 import Button from "../Button/Button";
-import InputDashboard from "../InputDashboard/InputDashboard";
 
 const NewReportModal = ({ isOpen, onClose }) => {
   const newReport = (e) => {

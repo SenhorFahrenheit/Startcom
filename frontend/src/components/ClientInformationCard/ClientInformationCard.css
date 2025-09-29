@@ -80,7 +80,7 @@
     align-items: center;
     font-size: 0.90rem;
     gap: 10px;
-    color: #373F51;
+    color: var(--quaternary-color);
 }
 
 .line-client-part {
@@ -100,7 +100,7 @@
 
 .total-spent > p {
     font-size: 0.9rem;
-    color: #373F51;
+    color: var(--quaternary-color);
 }
 
 .last-purchase {
@@ -112,7 +112,7 @@
 
 .last-purchase > p {
     font-size: 0.85rem;
-    color: #373F51;
+    color: var(--quaternary-color);
 }
 
 @media (max-width: 1024px) {

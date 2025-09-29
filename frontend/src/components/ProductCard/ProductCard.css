@@ -16,7 +16,7 @@
 }
 
 .product-informations-card > .product-title-card {
-    color: #373f51;
+    color: var(--quaternary-color);
     font-size: 0.80rem;
     font-weight: 700;
 }

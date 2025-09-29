@@ -24,7 +24,7 @@
 }
 
 .title-page > span {
-    color: #373F51;
+    color: var(--quaternary-color);
 }
 
 .description-page {

@@ -44,7 +44,7 @@
 .orange {background-color: #F59E0B;}
 .transparent-orange {background-color: rgba(245, 158, 11, 0.125); color: rgb(245, 158, 11);}
 
-.gray {background-color: #373F51;}
+.gray {background-color: var(--quaternary-color);}
 .transparent-gray {background-color: rgba(55, 63, 81, 0.125); color: rgb(55, 63, 81);}
 
 .recent-action-text {

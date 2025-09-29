@@ -36,7 +36,6 @@ const SalesTable = ({ dateFilter, statusFilter }) => {
       return true;
     });
 
-    // filtro por tempo (exemplo simples)
     const today = new Date();
     result = result.filter(sale => {
       const [day, month, year] = sale.date.split("/");
