@@ -27,7 +27,7 @@ header > nav > a {
 }
 
 .button {
-    min-width: 150px;
+    min-width: 125px;
 }
 
 @media (max-width: 768px){
@@ -44,5 +44,11 @@ header > nav > a {
     
     .button {
         font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 425px) {
+    .button {
+        display: none;
     }
 }

@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom"
+import Logo from "../../assets/StartComLogo.svg"
 
 import Button from "../../components/Button/Button"
 import "./Header.css"
@@ -6,8 +7,10 @@ import "./Header.css"
 const Header = () => {
   return (
     <header>
-        <h2>StartCom</h2>
- 
+        <div className="logo">
+          <img src={Logo} alt="Logotipo da empresa StartCom"/>
+          <h2 className="logo-name">StartCom</h2>
+        </div>
         <nav className="navigation">
             <a href="">Recursos</a>
             <a href="">Depoimentos</a>
