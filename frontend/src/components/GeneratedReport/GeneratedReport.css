@@ -7,6 +7,12 @@
     border-radius: 10px;
     padding: 18px;
     font-family: var(--font-heading);
+    transition: all ease 250ms;
+}
+
+.GeneratedReport:hover {
+    box-shadow: var(--primary-shadow-hover-color);
+    transform: scale(1.025);
 }
 
 .generated-report-first-part {
@@ -22,6 +28,7 @@
     justify-content: center;
     width: 48px;
     height: 48px;
+    min-width: 48px;
     color: var(--primary-color);
     background-color: #58a4b020;
     border-radius: 10px;
@@ -119,7 +126,6 @@
     .generated-report-icon {
         width: 48px;
         height: 48px;
-        min-width: 48px;
         min-height: 48px;
     }
 }

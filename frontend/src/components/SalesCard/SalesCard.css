@@ -7,6 +7,11 @@
     width: 32%;
     box-shadow: var(--primary-shadow-color);
     border-radius: 10px;
+    transition: all ease 250ms;
+}
+
+.SalesCard:hover {
+    box-shadow: var(--primary-shadow-hover-color);
 }
 
 .sales-card-block {

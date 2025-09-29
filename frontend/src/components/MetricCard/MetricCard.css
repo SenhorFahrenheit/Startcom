@@ -8,7 +8,7 @@
 }
 
 .metricCard:hover {
-    box-shadow: 2px 15px 20px 2px rgba(171, 171, 171, 0.2);
+    box-shadow: var(--primary-shadow-hover-color);
 }
 
 .icons-part {

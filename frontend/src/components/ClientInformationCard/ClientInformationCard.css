@@ -6,6 +6,11 @@
     box-shadow: var(--primary-shadow-color);
     border-radius: 10px;
     font-family: var(--font-heading);
+    transition: all ease 250ms;
+}
+
+.ClientInformationCard:hover {
+    box-shadow: var(--primary-shadow-hover-color);
 }
 
 .client-letters-icon {
