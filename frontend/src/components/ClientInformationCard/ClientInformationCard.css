@@ -3,9 +3,14 @@
     background-color: #FFFFFF;
     margin-top: 30px;
     padding: 24px;
-    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    box-shadow: var(--primary-shadow-color);
     border-radius: 10px;
     font-family: var(--font-heading);
+    transition: all ease 250ms;
+}
+
+.ClientInformationCard:hover {
+    box-shadow: var(--primary-shadow-hover-color);
 }
 
 .client-letters-icon {
@@ -19,6 +24,7 @@
     font-size: 1.1rem;
     font-weight: 600;
     color: #FFFFFF;
+    border: 1px solid var(--quaternary-color);
 }
 
 .client-name-type-information {
@@ -80,7 +86,7 @@
     align-items: center;
     font-size: 0.90rem;
     gap: 10px;
-    color: #373F51;
+    color: var(--quaternary-color);
 }
 
 .line-client-part {
@@ -100,7 +106,7 @@
 
 .total-spent > p {
     font-size: 0.9rem;
-    color: #373F51;
+    color: var(--quaternary-color);
 }
 
 .last-purchase {
@@ -112,7 +118,7 @@
 
 .last-purchase > p {
     font-size: 0.85rem;
-    color: #373F51;
+    color: var(--quaternary-color);
 }
 
 @media (max-width: 1024px) {

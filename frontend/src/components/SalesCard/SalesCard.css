@@ -5,8 +5,13 @@
     justify-content: space-between;
     gap: 30px;
     width: 32%;
-    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    box-shadow: var(--primary-shadow-color);
     border-radius: 10px;
+    transition: all ease 250ms;
+}
+
+.SalesCard:hover {
+    box-shadow: var(--primary-shadow-hover-color);
 }
 
 .sales-card-block {
@@ -18,13 +23,14 @@
 
 .sales-card-icon {
     background-color: rgba(88, 164, 176, 0.125);
-    color: rgb(88, 164, 176);
+    color: var(--primary-color);
     width: 48px;
     height: 48px;
     border-radius: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
+    border: 1px solid var(--primary-color);
 }
 
 .sales-description {

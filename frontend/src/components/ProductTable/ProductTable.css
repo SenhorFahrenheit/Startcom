@@ -34,7 +34,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #D8DBE2;
+  background-color: #F8F8F8;
+  border: 1px solid var(--primary-color);
   border-radius: 8px;
   width: 40px;
   height: 40px;
@@ -44,7 +45,7 @@
 .products-table th,
 .products-table td {
   padding: 12px 16px;
-  color: #373f51;
+  color: var(--quaternary-color);
   text-align: center;
   border-bottom: 1px solid #ddd;
 }
@@ -112,7 +113,7 @@
     align-items: center;
     border-radius: 20px;
     border: 1px solid #a9bcd0;
-    color: #373f51;
+    color: var(--quaternary-color);
     background-color: #a9bcd020;
     height: 20px;
     font-size: 0.75rem;

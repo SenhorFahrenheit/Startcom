@@ -3,6 +3,27 @@
     min-height: 100vh;  
 }
 
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo > svg {
+    width: 48px;
+    height: 48px;
+}
+
+.logo > img {
+    width: 64px;
+    height: 64px;
+}
+
+.logo-name {
+    font-size: 1.35rem;
+}
+
+
 .content-page-section {
   flex: 1;
   background-color: #FFFFFF;

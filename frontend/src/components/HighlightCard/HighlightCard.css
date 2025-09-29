@@ -7,12 +7,8 @@
     width: 100%;
     margin: 20px 0;
     font-family: var(--font-heading);
-    background-color: #D8DBE2;
+    background-color: var(--component-background-color);
     padding: 0 12px;
-}
-
-.highlight-title {
-    font-weight: 600;
 }
 
 .highlight-name {
@@ -29,6 +25,8 @@
     font-size: 0.725rem;
     text-align: center;
     font-weight: 600;
+    color: #059669;
+    text-align: end;
 }
 
 @media (max-width: 320px) {

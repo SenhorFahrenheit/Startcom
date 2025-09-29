@@ -2,13 +2,13 @@
     min-width: 200px;
     width: 23%;
     padding: 24px;
-    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    box-shadow: var(--primary-shadow-color);
     border-radius: 10px;
     transition: all ease 250ms;
 }
 
 .metricCard:hover {
-    box-shadow: 2px 15px 20px 2px rgba(171, 171, 171, 0.2);
+    box-shadow: var(--primary-shadow-hover-color);
 }
 
 .icons-part {
@@ -27,14 +27,22 @@
     align-items: center;
 }
 
-.good {
+.good{
     background-color: rgba(88, 164, 176, 0.125);
-    color: rgb(88, 164, 176);
+    color: var(--primary-color);
+}
+
+.icon-metricCard.good {
+    border: 1px solid var(--primary-color);
 }
 
 .notgood {
     background-color: rgba(245, 158, 11, 0.125);
-    color: rgb(245, 158, 11);
+    color: #F59E0B;
+}
+
+.icon-metricCard.notgood {
+    border: 1px solid #F59E0B;
 }
 
 .noBackground {

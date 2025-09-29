@@ -2,7 +2,7 @@
   position: relative;
   display: inline-block;
   min-width: 150px;
-  flex-shrink: 0;
+  flex-shrink: 1;
 }
 
 .dropdown-btn {

@@ -1,6 +1,6 @@
 .recent-action-component {
     width: 100%;
-    background-color: #D8DBE2;
+    background-color: var(--component-background-color);
     border-radius: 10px;
     height: auto;
     padding: 24px;
@@ -35,17 +35,18 @@
 }
 
 .recent-action-time {
+    color: var(--quaternary-color);
     font-size: 0.8rem;
 }
 
 .green {background-color: var(--primary-color);}
-.transparent-green {background-color: rgba(88, 164, 176, 0.125); color: rgb(88, 164, 176);}
+.transparent-green {background-color: rgba(88, 164, 176, 0.125); color: var(--primary-color);}
 
 .orange {background-color: #F59E0B;}
 .transparent-orange {background-color: rgba(245, 158, 11, 0.125); color: rgb(245, 158, 11);}
 
-.gray {background-color: #373F51;}
-.transparent-gray {background-color: rgba(55, 63, 81, 0.125); color: rgb(55, 63, 81);}
+.gray {background-color: var(--quaternary-color);}
+.transparent-gray {background-color: rgba(55, 63, 81, 0.125); color: var(--quaternary-color);}
 
 .recent-action-text {
     font-family: var(--font-base);
@@ -60,4 +61,5 @@
     color: var(--primary-color);
     font-family: var(--font-base);
     font-size: 0.9rem;
+    font-weight: 600;
 }

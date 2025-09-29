@@ -5,7 +5,7 @@ html, body {
 aside {
     width: 256px;
     min-height: 100%;
-    background-color: var(--senary-color);
+    background-color: var(--primary-layout-background-color);
     display: flex;
     flex-direction: column;
     justify-content: space-between;

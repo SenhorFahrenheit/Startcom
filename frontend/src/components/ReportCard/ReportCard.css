@@ -6,11 +6,16 @@
     align-items: center;
     margin-top: 35px;
     padding: 24px;
-    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    box-shadow: var(--primary-shadow-color);
     gap: 10px;
     text-align: center;
     font-family: var(--font-heading);
     border-radius: 5px;
+    transition: all ease 250ms;
+}
+
+.ReportCard:hover {
+    box-shadow: var(--primary-shadow-hover-color);
 }
 
 .report-icon-item {
@@ -23,6 +28,7 @@
     background-color: #58a4b020;
     border-radius: 100%;
     margin-bottom: 5px;
+    border: 1px solid var(--primary-color);
 }
 
 .report-value-item {
@@ -31,7 +37,7 @@
 }
 
 .report-description-item {
-    color: #373f51;
+    color: var(--quaternary-color);
     font-size: 0.8rem;
     font-weight: 600;
 }

@@ -7,7 +7,7 @@
 .filter-search {
     padding: 24px;
     margin-top: 20px;
-    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    box-shadow: var(--primary-shadow-color);
     display: flex;
     gap: 10px;
 }
@@ -21,7 +21,7 @@
 .recent-sells {
     margin-top: 20px;
     padding: 24px;
-    box-shadow: 1px 10px 10px 1px rgba(171, 171, 171, 0.2);
+    box-shadow: var(--primary-shadow-color);
 }
 
 .recentSells-title {
