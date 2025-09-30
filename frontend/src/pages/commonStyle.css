@@ -66,6 +66,11 @@
     align-items: center;
 }
 
+.nothing-was-found {
+    font-family: var(--font-heading);
+    color: var(--quaternary-color);
+    font-weight: 600;
+}
 
 @media (max-width: 768px) {
     .content-page-section {

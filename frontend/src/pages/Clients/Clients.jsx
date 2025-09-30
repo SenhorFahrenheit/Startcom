@@ -18,6 +18,51 @@ import { LuPlus, LuSmile, LuUsers, LuStar, LuCalendar } from "react-icons/lu";
 const Clients = () => {
   const { activeModal, openClient, closeModal } = useAuthModals();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const [search, setSearch] = useState("");
+  const [typeFilter, setTypeFilter] = useState("all");
+
+  const clients = [
+    {
+      clientName: "Carlos Soares Silva",
+      clientType: "VIP",
+      email: "carlos@email.com",
+      phoneNumber: "(11) 99999-9999",
+      city: "São Paulo",
+      totalSpent: "R$ 1256.80",
+      lastPurchase: "14/04/2025"
+    },
+    {
+      clientName: "João Santos",
+      clientType: "Regular",
+      email: "joao@email.com",
+      phoneNumber: "(11) 88888-8888",
+      city: "Rio de Janeiro",
+      totalSpent: "R$ 845.30",
+      lastPurchase: "11/07/2025"
+    },
+    {
+      clientName: "Pedro Henrique Pinheiro",
+      clientType: "Premium",
+      email: "pedro@email.com",
+      phoneNumber: "(11) 77777-7777",
+      city: "Belo Horizonte",
+      totalSpent: "R$ 2340.50",
+      lastPurchase: "09/09/2025"
+    }
+  ];
+
+  const filteredClients = clients.filter(c => {
+    const matchesSearch =
+      c.clientName.toLowerCase().includes(search.toLowerCase()) ||
+      c.email.toLowerCase().includes(search.toLowerCase()) ||
+      c.phoneNumber.includes(search);
+
+    const matchesType =
+      typeFilter === "all" || c.clientType.toLowerCase() === typeFilter;
+
+    return matchesSearch && matchesType;
+  });
   
     const toggleSidebar = () => {
       setSidebarOpen(prev => !prev);
@@ -58,6 +103,7 @@ const Clients = () => {
               className="InputDashboard" 
               type="text" 
               placeholder="Buscar por nome, email, telefone..." 
+              onChange={(e) => setSearch(e.target.value)}
             />
             <div className="filters-block">
               <FilterSelect
@@ -69,39 +115,29 @@ const Clients = () => {
                   { label: "Regular", value: "regular" },
                 ]}
                 defaultValue="Todos"
-                onSelect={(val) => console.log("Tipo escolhido:", val)}
+                onSelect={(val) => setTypeFilter(val)}
               />
             </div>
           </div>    
 
           <div className="clientInformationCards">
-            <ClientInformationCard 
-              clientName="Carlos Soares" 
-              clientType="VIP"
-              email="carlos@email.com"
-              phoneNumber="(11) 99999-9999"
-              city="São Paulo"
-              totalSpent="R$ 1256.80"
-              lastPurchase="14/04/2025"
-            />
-            <ClientInformationCard 
-              clientName="João Santos" 
-              clientType="Regular"
-              email="joao@email.com"
-              phoneNumber="(11) 88888-8888"
-              city="Rio de Janeiro"
-              totalSpent="R$ 845.30"
-              lastPurchase="11/07/2025"
-            />
-            <ClientInformationCard 
-              clientName="Pedro Henrique" 
-              clientType="Premium"
-              email="pedro@email.com"
-              phoneNumber="(11) 77777-7777"
-              city="Belo Horizonte"
-              totalSpent="R$ 2340.50"
-              lastPurchase="09/09/2025"
-            />
+            {filteredClients.length > 0 ? (
+            filteredClients.map((c, idx) => (
+              <ClientInformationCard 
+                key={idx}
+                clientName={c.clientName}
+                clientType={c.clientType}
+                email={c.email}
+                phoneNumber={c.phoneNumber}
+                city={c.city}
+                totalSpent={c.totalSpent}
+                lastPurchase={c.lastPurchase}
+              />
+            ))
+          ) : (
+            <p className="nothing-was-found" style={{marginTop: 20}}>Nenhum cliente encontrado.</p>
+          )}
+
           </div>
 
         </div>
