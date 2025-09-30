@@ -48,7 +48,7 @@ header > nav > a {
 }
 
 @media (max-width: 425px) {
-    .button {
-        display: none;
+    .mobile-button-none {
+        display: none !important;
     }
 }
