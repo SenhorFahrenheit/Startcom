@@ -112,7 +112,6 @@
 .form-dashboard {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
   height: 100%;
   gap: 10px;
@@ -130,10 +129,12 @@
 .dashboard-modal-title {
   font-size: 1.10rem;
   font-weight: 600;
+  margin-bottom: 15px;
 }
 
 .input-dashboard-block {
   width: 100%;
+  margin: 2.5px 0;
 }
 
 .input-dashboard-block > label {

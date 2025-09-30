@@ -5,7 +5,7 @@ import Sidebar from "../../layouts/Sidebar/Sidebar"
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
 import Button from "../../components/Button/Button";
 
-import NewClientModal from "../../components/Modals/ClientModal";
+import NewClientModal from "../../components/Modals/NewClientModal";
 import ClientInformationCard from "../../components/ClientInformationCard/ClientInformationCard";
 import ClientCard from "../../components/ClientCard/ClientCard";
 import FilterSelect from "../../components/FilterSelect/FilterSelect";

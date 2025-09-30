@@ -11,20 +11,23 @@ import "./BackButton.css";
  * - label: string, text displayed next to the back icon (default: "Voltar")
  * - icon: React node, custom icon to display (default: left arrow icon)
  * - className: string, additional CSS class names for customization
+ * - color: string, CSS color for text/icon
  */
 const BackButton = ({ 
   onClick, 
   label = "Voltar", 
-  icon = <MdOutlineArrowBackIosNew color='var(--secondary-color)' />, 
+  icon = <MdOutlineArrowBackIosNew color="currentColor" />,
+  color,
   className = "" 
 }) => {
   return (
     <button 
-      className={`back-button ${className}`} // Base style + optional custom classes
-      onClick={onClick} // Click event handler
+      className={`back-button ${className}`} 
+      style={{ color }}
+      onClick={onClick}
     >
-      {icon} {/* Render the icon */}
-      <span className="back-button-text">{label}</span> {/* Render the label */}
+      {icon}
+      <span style={{color}} className="back-button-text">{label}</span>
     </button>
   );
 };

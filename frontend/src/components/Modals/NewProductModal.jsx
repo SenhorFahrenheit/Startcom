@@ -76,7 +76,7 @@ const NewProductModal = ({ isOpen, onClose }) => {
       contentLabel="Cadastrar Nova Venda"
       width="500px"
       height="500px"
-      showCloseButton={false}
+      showCloseButton={true}
     >
       <h2 className="dashboard-modal-title">Registrar Nova Venda</h2>
 

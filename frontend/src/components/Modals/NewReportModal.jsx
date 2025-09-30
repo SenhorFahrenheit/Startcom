@@ -25,8 +25,8 @@ const NewReportModal = ({ isOpen, onClose }) => {
       onClose={onClose}
       contentLabel="Criar Novo Relatório"
       width="620px"
-      height="250px"
-      showCloseButton={false}
+      height="270px"
+      showCloseButton={true}
     >
       <h2 className="dashboard-modal-title">Gerar Novo Relatório</h2>
 

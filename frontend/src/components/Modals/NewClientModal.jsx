@@ -79,8 +79,8 @@ const NewClientModal = ({ isOpen, onClose }) => {
       onClose={onClose}
       contentLabel="Cadastrar Novo Cliente"
       width="420px"
-      height="420px"
-      showCloseButton={false}
+      height="440px"
+      showCloseButton={true}
     >
       <h2 className="dashboard-modal-title">Registrar Novo Cliente</h2>
 
