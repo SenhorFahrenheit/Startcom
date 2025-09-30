@@ -2,7 +2,7 @@ import "./SalesTable.css";
 import { useEffect, useState } from "react";
 import { LuEye } from "react-icons/lu";
 
-const SalesTable = ({ dateFilter, statusFilter }) => {
+const SalesTable = ({ dateFilter, statusFilter, search }) => {
   const [sales, setSales] = useState([]);
   const [filteredSales, setFilteredSales] = useState([]);
 
@@ -28,7 +28,14 @@ const SalesTable = ({ dateFilter, statusFilter }) => {
   useEffect(() => {
     let result = [...sales];
 
-    // filtro por status
+    if (search.trim() !== "") {
+      result = result.filter(sale =>
+      sale.client.toLowerCase().includes(search.toLowerCase()) ||
+      String(sale.id).padStart(3, "0").includes(search) || 
+      sale.date.includes(search)
+      );
+    }
+
     result = result.filter(sale => {
       if (sale.status === "completed" && !statusFilter["Concluído"]) return false;
       if (sale.status === "pending" && !statusFilter["Pendente"]) return false;
@@ -61,8 +68,8 @@ const SalesTable = ({ dateFilter, statusFilter }) => {
       return true;
     });
 
-    setFilteredSales(result);
-  }, [sales, dateFilter, statusFilter]);
+     setFilteredSales(result);
+  }, [sales, dateFilter, statusFilter, search]);
 
   return (
     <div className="sales-table-container">

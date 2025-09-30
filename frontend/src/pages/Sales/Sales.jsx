@@ -27,6 +27,7 @@ const Sales = () => {
     "Pendente": true,
     "Cancelada": true,
   });
+  const [search, setSearch] = useState("");
 
   const toggleSidebar = () => {
     setSidebarOpen(prev => !prev);
@@ -67,6 +68,8 @@ const Sales = () => {
             className="InputDashboard" 
             type="text" 
             placeholder="Buscar Vendas por cliente, ID..." 
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
           <div className="filters-block">
             <FilterDateButton 
@@ -90,6 +93,7 @@ const Sales = () => {
           <SalesTable 
             dateFilter={dateFilter} 
             statusFilter={statusFilter} 
+            search={search}
           />
         </div>
       </div>
