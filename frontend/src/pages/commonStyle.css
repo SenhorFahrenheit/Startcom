@@ -51,6 +51,10 @@
     transition: all ease 250ms;
 }
 
+.button {
+    gap: 10px;
+}
+
 .button-shadown:hover > button {
     background: var(--tertiary-color);
     transform: scale(1.025);
