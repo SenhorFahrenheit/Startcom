@@ -52,9 +52,8 @@ body {
   pointer-events: none;
 }
 
-/* Painel lateral */
 .side-panel {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
   width: 250px;
@@ -71,7 +70,6 @@ body {
   transition: all 1s ease;
 }
 
-/* Alternância login/register */
 .container.login-mode .login {
   left: 0;
   opacity: 1;
@@ -94,6 +92,23 @@ body {
   font-family: var(--font-base);
   font-size: 0.9rem;
   margin: 0.9rem 0;
+}
+
+.logo-auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.side-panel .back-button {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  transition: transform 0.5s ease;
+}
+
+.container.login-mode .side-panel .back-button {
+  transform: translateX(130px)
 }
 
 .auth-login {
