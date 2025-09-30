@@ -30,6 +30,7 @@
     width: 64px;
     height: 64px;
     transition: ease all 300ms;
+    border: 1px solid var(--quaternary-color);
 }
 
 .icon-circle > svg {
