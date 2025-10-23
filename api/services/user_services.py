@@ -72,6 +72,11 @@ class UserService:
             user_dict["passwordHash"] = password_hash  # MongoDB expects camelCase
             del user_dict["password"]
 
+            now = datetime.utcnow()
+            user_dict["created_at"] = now
+            user_dict["updated_at"] = now
+
+
             # Insert the new user into the database
             result = await self.users_collection.insert_one(user_dict)
             

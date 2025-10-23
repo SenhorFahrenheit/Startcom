@@ -89,4 +89,7 @@ class UserInDB(UserBase):
     Schema for the user data as it is stored in the database.
     This model includes the hashed password for security.
     """
+    id: Optional[str] = Field(None, description="Unique ID for the user in the database.")
     password_hash: str = Field(..., description="The cryptographic hash of the user's password.")
+    created_at: Optional[datetime] = Field(None, description="Date and time when the user was created.")
+    updated_at: Optional[datetime] = Field(None, description="Date and time when the user was last updated.")

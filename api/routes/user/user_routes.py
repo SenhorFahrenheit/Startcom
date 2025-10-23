@@ -38,6 +38,8 @@ async def create_user_route(user: UserCreate):
     try:
         created_user = await user_service.create_user(user)
         return created_user
+    except HTTPException as e:
+        raise e
     except ValueError as e:
         # Example: invalid email format or missing field
         raise HTTPException(status_code=400, detail=str(e))
