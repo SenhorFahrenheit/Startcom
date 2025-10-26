@@ -9,7 +9,6 @@ const Header = () => {
     <header>
         <div className="logo">
           <img src={Logo} alt="Logotipo da empresa StartCom"/>
-          <h2 className="logo-name">StartCom</h2>
         </div>
         <nav className="navigation">
             <a href="#resources">Recursos</a>

@@ -25,20 +25,19 @@
 
 .icon-circle {
     border-radius: 100%;
-    background-color: var(--primary-color);
+    background-color: #01768820;
     display: flex;
     align-items: center;
     justify-content: center;
     width: 64px;
     height: 64px;
     transition: ease all 300ms;
-    border: 1px solid var(--quaternary-color);
 }
 
 .icon-circle > svg {
-    width: 32px;
-    height: 32px;
-    color: #FFFFFF;
+    width: 28px;
+    height: 28px;
+    color: var(--primary-color);
 }
 
 .title-card {
