@@ -118,6 +118,7 @@
     justify-content: center;
     margin: 30px 0;
     flex-wrap: wrap;
+    gap: 10px;
 }
 
 .review-cards {

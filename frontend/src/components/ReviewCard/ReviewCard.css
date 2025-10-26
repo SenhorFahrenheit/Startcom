@@ -10,6 +10,9 @@
     border-radius: 5px;
     gap: 20px;
     transition: all ease 300ms;
+    box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);
 }
 
 .review-card:hover {

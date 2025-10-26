@@ -1,5 +1,5 @@
 .card {
-    width: 25%;
+    width: 24%;
     min-width: 250px;
     display: flex;
     flex-direction: column;
@@ -8,13 +8,15 @@
     align-items: center;
     gap: 20px;
     padding: 32px;
-    border-bottom: 1px solid #e8e8e8;
+    box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);
     transition: ease all 350ms;
 }
 
 .card:hover {
     box-shadow: 0 15px 15px #e8e8e8;
-    transform: translateY(-15px);
+    transform: translateY(-5px);
 }
 
 .card:hover > .icon-circle {

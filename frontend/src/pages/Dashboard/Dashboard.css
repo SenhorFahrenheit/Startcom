@@ -18,6 +18,8 @@
   border-radius: 10px;
   height: 400px;
   box-shadow: var(--primary-shadow-color);
+  border: var(--border-color);
+  border-radius: var(--border-radius);
   width: 65%;
   margin-top: 20px;
 }
@@ -25,6 +27,8 @@
 .chart-section-side {
   width: 32%;
   box-shadow: var(--primary-shadow-color);
+  border: var(--border-color);
+  border-radius: var(--border-radius);
   margin-top: 20px;
   display: flex;
   border-radius: 10px;
@@ -64,6 +68,8 @@
   padding: 24px;
   flex-direction: column;
   box-shadow: var(--primary-shadow-color);
+  border: var(--border-color);
+  border-radius: var(--border-radius);
   border-radius: 10px;
   gap: 20px;
 }
@@ -71,8 +77,9 @@
 .recent-activities-side {
   width: 32%;
   padding: 24px;
-  border-radius: 10px;
   box-shadow: var(--primary-shadow-color);
+  border: var(--border-color);
+  border-radius: var(--border-radius);
 }
 
 .recentActivities-title {

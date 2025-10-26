@@ -6,7 +6,8 @@
     gap: 30px;
     width: 32%;
     box-shadow: var(--primary-shadow-color);
-    border-radius: 10px;
+    border: var(--border-color);
+    border-radius: var(--border-radius);
     transition: all ease 250ms;
 }
 

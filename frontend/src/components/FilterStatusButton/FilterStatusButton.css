@@ -14,10 +14,11 @@
     font-family: var(--font-heading);
     gap: 8px;
     background: #fff;
-    border: 1px solid #ddd;
     font-weight: 600;
     padding: 8px 16px;
-    border-radius: 5px;
+    box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);  
     cursor: pointer;
 }
 

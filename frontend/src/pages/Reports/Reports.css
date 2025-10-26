@@ -20,6 +20,8 @@
     flex: 1;
     min-width: 0;
     box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);    
     height: 410px;
     padding: 24px;
     border-radius: 10px;
@@ -27,6 +29,8 @@
 
 .reports-section {
     box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);
     margin-top: 35px;
     font-family: var(--font-heading);
     padding: 24px;
