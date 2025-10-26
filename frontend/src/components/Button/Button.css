@@ -12,7 +12,7 @@
     font-family: var(--font-base);
     width: 120px;
     height: 45px;
-    border-radius: 5px;
+    border-radius: 10px;
     cursor: pointer;
     transition: all ease 250ms;
 }

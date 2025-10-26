@@ -32,7 +32,7 @@ const Home = () => {
           </div>
         </div>
 
-        <div className='second-container'>
+        <div className='second-container' id="resources">
           <h2 className='subtitle-page'>Tudo que você precisa em uma plataforma</h2>
           <p className='subtitle-description-page'>Ferramentas poderosas e intuitivas para levar seu negócio ao próximo nível</p>
           
@@ -44,7 +44,7 @@ const Home = () => {
           </div>
         </div>
 
-        <div className='third-container'>
+        <div className='third-container' id="reviews">
           <h2 className='subtitle-page'>O que nossos clientes dizem</h2>
           <p className='subtitle-description-page'>Histórias reais de empreendedores que transformaram seus negócios</p>
           <div className='review-cards'>

@@ -12,9 +12,9 @@ const Header = () => {
           <h2 className="logo-name">StartCom</h2>
         </div>
         <nav className="navigation">
-            <a href="">Recursos</a>
-            <a href="">Depoimentos</a>
-            <a href="">Contato</a>
+            <a href="#resources">Recursos</a>
+            <a href="#reviews">Depoimentos</a>
+            <a href="mailto:startcomltda@gmail.com">Contato</a>
         </nav>
  
         <Button styles="mobile-button-none" height={"40px"} width={"170px"} label={<NavLink className="link-inside-button" to="/painel">Acessar Dashboard</NavLink>} type='button' />
