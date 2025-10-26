@@ -5,6 +5,7 @@
     justify-content: space-between;
     gap: 30px;
     width: 32%;
+    background-color: var(--component-background-color);
     box-shadow: var(--primary-shadow-color);
     border: var(--border-color);
     border-radius: var(--border-radius);

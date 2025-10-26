@@ -9,6 +9,7 @@
     box-shadow: var(--primary-shadow-color);
     border: var(--border-color);
     border-radius: var(--border-radius);
+    background-color: var(--component-background-color);
     padding: 24px;
     margin-top: 20px;
     transition: all ease 250ms;

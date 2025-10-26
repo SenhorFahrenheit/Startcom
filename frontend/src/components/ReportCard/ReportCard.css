@@ -12,6 +12,7 @@
     gap: 10px;
     text-align: center;
     font-family: var(--font-heading);
+    background-color: var(--component-background-color);
     transition: all ease 250ms;
 }
 

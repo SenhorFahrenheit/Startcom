@@ -8,6 +8,7 @@
     padding: 18px;
     font-family: var(--font-heading);
     transition: all ease 250ms;
+    background-color: var(--component-background-color);
 }
 
 .GeneratedReport:hover {

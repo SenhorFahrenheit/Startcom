@@ -1,6 +1,7 @@
 .ProductCard {
     display: flex;
     padding: 24px;
+    background-color: var(--component-background-color);
     box-shadow: var(--primary-shadow-color);
     border: var(--border-color);
     border-radius: var(--border-radius);
