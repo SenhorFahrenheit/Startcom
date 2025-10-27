@@ -17,14 +17,23 @@ export const useLoginForm = (onSuccess) => {
       });
       return;
     }
+
+    const data = { email: loginEmail, password: loginPassword, keepLogged };
     
     try {
-      const login = await loginAPI({ email: loginEmail, password: loginPassword, keepLogged });
+      const response = await loginAPI(data);
 
-      if (!login) {
+      if (!response) {
         throw new Error("Resposta de login inválida.");
       }
+
+      toast.success("Login realizado!", { containerId: "toast-root" });
       
+      localStorage.setItem("token", response.token);
+
+      setTimeout(() => {
+        window.location.href = "/painel";
+      }, 1000);
     } catch (error) {
       toast.error("Erro ao realizar login: " + error.message, {
         position: "top-center",
@@ -32,15 +41,6 @@ export const useLoginForm = (onSuccess) => {
       });
       return;
     }
-
-    toast.success("Login realizado!", {
-      position: "top-center",
-      containerId: "toast-root",
-    });
-
-    onSuccess({ email: loginEmail });
-
-    window.location = "/painel";
   };
 
   return {

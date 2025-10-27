@@ -9,8 +9,8 @@ from ..config.database import AsyncIOMotorClient
 
 # Setup CryptContext for password hashing.
 # This ensures that passwords are never stored in plain text.
-# The 'bcrypt' algorithm is a strong, industry-standard choice.
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+# The 'argon2' algorithm is a strong, industry-standard choice.
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 class UserService:
     """

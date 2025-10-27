@@ -14,17 +14,18 @@ export const useRegisterForm = (onSuccess) => {
       if (!response) {
         throw new Error("Resposta de cadastro inválida.");
       }
+
+      toast.success("Cadastro realizado!", { containerId: "toast-root" });
+
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     } catch (error) {
       toast.error("Erro ao realizar cadastro: " + error.message, {
         containerId: "toast-root",
       });
       return;
     }
-
-    toast.success("Cadastro realizado!", { containerId: "toast-root" });
-    onSuccess(data);
-
-    window.location = "/painel";
   };
 
   const onError = (errors) => {

@@ -18,7 +18,6 @@ async def create_user_route(user: UserCreate):
     """
     try:
         created_user = await user_service.create_user(user)
-        return created_user
     except Exception as e:
         # In case of any error, raise an HTTP 500 error with the exception message
         raise HTTPException(status_code=500, detail=str(e))

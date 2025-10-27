@@ -1,14 +1,15 @@
 from passlib.context import CryptContext
-import jwt
+import jwt, os
 from datetime import datetime, timedelta
 
 class AuthService:
     def __init__(self, client):
         # client é o AsyncIOMotorClient
-        self.db = client["Startcom_Database"]  # pega o database correto
+        db_name = os.getenv("MONGO_DB")
+        self.db = client[db_name]  # pega o database correto
         self.users_collection = self.db["user"]  # pega a coleção
-        self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-        self.secret_key = "your_secret_key"
+        self.pwd_context = CryptContext(schemes=["argon2", "bcrypt"], deprecated="auto")
+        self.secret_key = os.getenv("JWT_SECRET")
         self.algorithm = "HS256"
         self.access_token_expire_minutes = 30
 
