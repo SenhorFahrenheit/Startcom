@@ -7,7 +7,10 @@
 .filter-search {
     padding: 24px;
     margin-top: 20px;
+    background-color: var(--component-background-color);
     box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);
     display: flex;
     gap: 10px;
 }
@@ -22,6 +25,8 @@
     margin-top: 20px;
     padding: 24px;
     box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);
 }
 
 .recentSells-title {

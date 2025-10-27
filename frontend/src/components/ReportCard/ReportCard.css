@@ -7,10 +7,12 @@
     margin-top: 35px;
     padding: 24px;
     box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);
     gap: 10px;
     text-align: center;
     font-family: var(--font-heading);
-    border-radius: 5px;
+    background-color: var(--component-background-color);
     transition: all ease 250ms;
 }
 

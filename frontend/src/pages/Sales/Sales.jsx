@@ -1,6 +1,8 @@
 import "./Sales.css"
 import "../commonStyle.css"
 
+import formatCurrency from '../../utils/format';
+
 import { useAuthModals } from "../../hooks/useAuthModals"
 import NewSaleModal from "../../components/Modals/NewSaleModal"
 
@@ -49,17 +51,17 @@ const Sales = () => {
             <Button 
               className="hover-dashboard" 
               onClick={openSale} 
-              height={40} 
-              width={140} 
-              label={<><LuPlus size={16}/>Nova Venda</>} 
+              height={"auto"} 
+              width={160} 
+              label={<><LuPlus size={"1.5rem"}/>Nova Venda</>} 
             />
           </div>
         </div>
 
         <section className="salesCards">
-          <SalesCard icon={<LuDollarSign size={24}/>} description="Vendas Hoje" value="R$ 1.247,50" information="+12.5% vs ontem"/>
+          <SalesCard icon={<LuDollarSign size={24}/>} description="Vendas Hoje" value={formatCurrency(1247.50)} information="+12,5% vs ontem"/>
           <SalesCard icon={<LuShoppingCart size={24}/>} description="Total de Vendas" value="156" information="+8 esta semana"/>
-          <SalesCard icon={<LuTrendingUp size={24}/>} description="Ticket Médio" value="R$ 89,50" information="+5.2% este mês"/>
+          <SalesCard icon={<LuTrendingUp size={24}/>} description="Ticket Médio" value={formatCurrency(89.50)} information="+5,2% este mês"/>
         </section>
 
         <div className="filter-search">

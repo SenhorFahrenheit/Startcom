@@ -1,5 +1,7 @@
-import { useState } from "react"; // <- importar useState
-import formattedDate from "../../utils/formattedDate"
+import { useState } from "react";
+import formattedDate from "../../utils/formattedDate";
+import formatCurrency from '../../utils/format';
+
 import "./Dashboard.css"
 import "../commonStyle.css"
 
@@ -56,8 +58,8 @@ const Dashboard = () => {
         </div>
 
         <section className="metricCards"> 
-          <MetricCard icon={<LuDollarSign size={24}/>} state="good" description="Vendas Hoje" value="R$ 2.847.50" data="+12.5%" /> 
-          <MetricCard icon={<LuTrendingUp size={24}/>} state="good" description="Faturamento Mensal" value="R$ 24.580,30" data="+8.2%" /> 
+          <MetricCard icon={<LuDollarSign size={24}/>} state="good" description="Vendas Hoje" value={formatCurrency(2847.5)} data="+12.5%" /> 
+          <MetricCard icon={<LuTrendingUp size={24}/>} state="good" description="Faturamento Mensal" value={formatCurrency(24580.30)} data="+8.2%" /> 
           <MetricCard icon={<LuUsers size={24}/>} state="good" description="Total de Clientes" value="156" data="+5 novos" /> 
           <MetricCard icon={<LuPackage size={24}/>} state="notgood" description="Itens em Baixa" value="8" data="Atenção necessária" />
         </section>
@@ -95,7 +97,7 @@ const Dashboard = () => {
                   type="Venda" time="há 2 minutos" 
                   action="Nova venda realizada" 
                   entity="Cliente Maria Silva"
-                  extra="R$ 156,80"
+                  extra={formatCurrency(156.8)}
                 />
 
                 <RecentActivities 
@@ -139,27 +141,27 @@ const Dashboard = () => {
                 <HighlightCard 
                   title="Cliente Top" 
                   highlight="Ana Oliveira"
-                  value="R$ 1.240"
+                  value={formatCurrency(1240)}
                 />
 
                 <HighlightCard 
                   title="Ticket Médio" 
                   highlight="Último mês"
-                  value="R$ 89,50"
+                  value={formatCurrency(89.50)}
                   extra="+15% vs anterior"
                 />
 
                 <HighlightCard 
                   title="Meta vs Realizado" 
-                  highlight="Meta: R$ 45.000"
-                  value="R$ 48.750"
+                  highlight={<>Meta: {formatCurrency(45000)}</>}
+                  value={formatCurrency(48750)}
                   extra="+8,3%"
                 />
 
                 <HighlightCard 
                   title="Maior Compra Individual" 
                   highlight="João Lima"
-                  value="R$ 980"
+                  value={formatCurrency(980)}
                 />
 
                 <HighlightCard 

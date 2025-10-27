@@ -2,6 +2,8 @@ import "./ProductTable.css";
 import { useEffect, useState } from "react";
 import { LuBarcode, LuPackage } from "react-icons/lu";
 
+import formatCurrency from '../../utils/format';
+
 const ProductTable = ({ categoryFilter, statusFilter, search }) => {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -73,9 +75,9 @@ const ProductTable = ({ categoryFilter, statusFilter, search }) => {
                     <p>mín: {product.min}</p>
                 </div>
               </td>
-              <td className="product-price-item">R$ {product.price}</td>
+              <td className="product-price-item">{formatCurrency(product.price)}</td>
               <td><p className={`product-status-item ${product.status}`}>{product.status}</p></td>
-              <td className="product-totalValue-item">R$ {product.totalValue}</td>
+              <td className="product-totalValue-item">{formatCurrency(product.totalValue)}</td>
             </tr>
           ))}
           {filteredProducts.length === 0 && (

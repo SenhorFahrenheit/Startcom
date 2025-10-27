@@ -4,6 +4,8 @@ import {
 } from "recharts";
 //import axios from "axios";
 
+import formatCurrency from '../../utils/format';
+
 import "./SalesChart.css"
 
 const SalesChart = ({ period }) => {
@@ -102,11 +104,11 @@ const SalesChart = ({ period }) => {
     <div className="chart">
       <h3 className="title-chart-dashboard">Desempenho de Vendas</h3>
       <ResponsiveContainer>
-        <BarChart data={data} margin={{ top: 20, right: 20, left: 0, bottom: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" />
+        <BarChart data={data} margin={{ top: 20, right: 0, left: 30, bottom: 0 }}>
+          <CartesianGrid strokeDasharray="2 2" />
           <XAxis dataKey="month"/>
-          <YAxis />
-          <Tooltip />
+          <YAxis tickFormatter={(value) => `${formatCurrency(value)}`} />
+          <Tooltip formatter={(value) => `${formatCurrency(value)}`}/>
           <Legend />
           <Bar dataKey="vendas" fill="var(--primary-color)" name="Vendas" />
           <Bar dataKey="meta" fill="#A9BCD0" name="Meta" />

@@ -1,6 +1,8 @@
 import './Reports.css'
 import "../commonStyle.css"
 
+import formatCurrency from '../../utils/format';
+
 import Sidebar from '../../layouts/Sidebar/Sidebar'
 import HeaderMobile from '../../layouts/HeaderMobile/HeaderMobile';
 import FilterDateButton from '../../components/FilterDateButton/FilterDateButton';
@@ -50,9 +52,9 @@ const Reports = () => {
                   <Button 
                     className="hover-dashboard" 
                     onClick={openReport} 
-                    height={40} 
-                    width={163} 
-                    label={<><LuChartColumn size={16}/>Novo Relatório</>} 
+                    height={"auto"} 
+                    width={160} 
+                    label={<><LuChartColumn size={"1.5rem"}/>Novo Relatório</>} 
                   />
                 </div>
               </div>
@@ -61,7 +63,7 @@ const Reports = () => {
           <section className='reportCards'>
             <ReportCard 
               icon={<LuDollarSign size={24}/>} 
-              value="R$ 28.450"
+              value={formatCurrency(28450)}
               description="Faturamento este mês" 
               information="+15% vs mês anterior"
             />
@@ -81,7 +83,7 @@ const Reports = () => {
              />
             <ReportCard 
               icon={<LuPackage size={24}/>} 
-              value="R$ 196" 
+              value={formatCurrency(196)}
               description="Ticket médio" 
               information="+5% vs mês anterior"
             /> 

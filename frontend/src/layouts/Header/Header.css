@@ -3,8 +3,7 @@ header {
     align-items: center;
     background-color: #FFFFFF;
     height: 64px;
-    justify-content: space-between;
-    padding: 0 80px;
+    justify-content: space-around;
 }
  
 header > nav {

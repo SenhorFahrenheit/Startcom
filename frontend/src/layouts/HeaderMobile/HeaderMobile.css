@@ -25,9 +25,4 @@
     color: #000000;
     cursor: pointer;
   }
-
-  .header-logo {
-    font-family: var(--font-heading);
-    font-size: 1.2rem;
-  }
 }

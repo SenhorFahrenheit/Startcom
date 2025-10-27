@@ -8,6 +8,7 @@
     padding: 18px;
     font-family: var(--font-heading);
     transition: all ease 250ms;
+    background-color: var(--component-background-color);
 }
 
 .GeneratedReport:hover {
@@ -32,7 +33,9 @@
     color: var(--primary-color);
     background-color: #58a4b020;
     border-radius: 10px;
-    border: 1px solid var(--primary-color);
+    box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);
 }
 
 .generated-report-all-informations {

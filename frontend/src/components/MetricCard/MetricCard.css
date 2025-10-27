@@ -2,13 +2,11 @@
     min-width: 200px;
     width: 23%;
     padding: 24px;
+    background-color: var(--component-background-color);
     box-shadow: var(--primary-shadow-color);
-    border-radius: 10px;
+    border: var(--border-color);
+    border-radius: var(--border-radius);
     transition: all ease 250ms;
-}
-
-.metricCard:hover {
-    box-shadow: var(--primary-shadow-hover-color);
 }
 
 .icons-part {

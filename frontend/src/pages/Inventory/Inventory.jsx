@@ -1,6 +1,8 @@
 import "../commonStyle.css"
 import "./Inventory.css"
 
+import formatCurrency from '../../utils/format';
+
 import Sidebar from "../../layouts/Sidebar/Sidebar"
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile"
 import Button from "../../components/Button/Button"
@@ -45,9 +47,9 @@ const Inventory = () => {
                 <Button 
                   className="hover-dashboard" 
                   onClick={openProduct} 
-                  height={40} 
-                  width={140} 
-                  label={<><LuPlus size={16}/>Novo Produto</>} 
+                  height={"auto"} 
+                  width={160} 
+                  label={<><LuPlus size={"1.5rem"}/>Novo Produto</>} 
                 />
             </div>
           </div>
@@ -56,7 +58,7 @@ const Inventory = () => {
             <ProductCard title="Total de Produtos" value="4" color="normal" icon={<LuBox size={20}/>}/>
             <ProductCard title="Estoque Baixo" value="2" extra="Atenção necessária" color="warning" icon={<LuTrendingDown size={20}/>}/>
             <ProductCard title="Crítico" value="0" extra="Reposição urgente" color="alert" icon={<LuTriangleAlert size={20}/>}/>
-            <ProductCard title="Valor Total" value="R$ 11202.20" color="normal" icon={<LuPackage size={20}/>}/>
+            <ProductCard title="Valor Total" value={formatCurrency(602.20)} color="normal" icon={<LuPackage size={20}/>}/>
           </div>
 
           <div className="filter-search">

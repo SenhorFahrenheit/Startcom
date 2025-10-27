@@ -9,6 +9,8 @@
     padding: 24px;
     margin-top: 20px;
     box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);    
     display: flex;
     gap: 10px;
     border-radius: 10px;

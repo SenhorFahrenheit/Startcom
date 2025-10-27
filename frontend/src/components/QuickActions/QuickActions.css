@@ -2,6 +2,9 @@
     display: flex;
     cursor: pointer;
     font-family: var(--font-heading);
+    box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);
 }
 
 .quick-action-icon {

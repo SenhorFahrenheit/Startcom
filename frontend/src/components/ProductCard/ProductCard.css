@@ -1,10 +1,12 @@
 .ProductCard {
     display: flex;
     padding: 24px;
+    background-color: var(--component-background-color);
     box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);
     width: 24%;
     gap: 40px;
-    border-radius: 10px;
     font-family: var(--font-heading);
     margin-top: 30px;
     transition: all ease 250ms;
