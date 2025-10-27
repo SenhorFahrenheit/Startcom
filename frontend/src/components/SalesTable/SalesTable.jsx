@@ -1,6 +1,7 @@
 import "./SalesTable.css";
 import { useEffect, useState } from "react";
 import { LuEye } from "react-icons/lu";
+import formatCurrency from "../../utils/format";
 
 const SalesTable = ({ dateFilter, statusFilter, search }) => {
   const [sales, setSales] = useState([]);
@@ -92,7 +93,7 @@ const SalesTable = ({ dateFilter, statusFilter, search }) => {
               <td>{sale.client}</td>
               <td>{sale.date}</td>
               <td style={{color: "var(--primary-color)", fontWeight: 600}}>
-                R$ {sale.amount.toLocaleString("pt-BR")}
+                {formatCurrency(sale.amount)}
               </td>
               <td>
                 <span className={`status ${sale.status}`}>

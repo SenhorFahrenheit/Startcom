@@ -1,6 +1,8 @@
 import "./Clients.css"
 import "../commonStyle.css"
 
+import formatCurrency from '../../utils/format';
+
 import Sidebar from "../../layouts/Sidebar/Sidebar"
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
 import Button from "../../components/Button/Button";
@@ -29,7 +31,7 @@ const Clients = () => {
       email: "carlos@email.com",
       phoneNumber: "(11) 99999-9999",
       city: "São Paulo",
-      totalSpent: "R$ 1256.80",
+      totalSpent: "1256.80",
       lastPurchase: "14/04/2025"
     },
     {
@@ -38,7 +40,7 @@ const Clients = () => {
       email: "joao@email.com",
       phoneNumber: "(11) 88888-8888",
       city: "Rio de Janeiro",
-      totalSpent: "R$ 845.30",
+      totalSpent: "845.30",
       lastPurchase: "11/07/2025"
     },
     {
@@ -47,7 +49,7 @@ const Clients = () => {
       email: "pedro@email.com",
       phoneNumber: "(11) 77777-7777",
       city: "Belo Horizonte",
-      totalSpent: "R$ 2340.50",
+      totalSpent: "2340.50",
       lastPurchase: "09/09/2025"
     }
   ];
@@ -83,9 +85,9 @@ const Clients = () => {
               <Button 
                 className="hover-dashboard" 
                 onClick={openClient} 
-                height={40} 
-                width={140} 
-                label={<><LuPlus size={16}/>Novo Cliente</>} 
+                height={"auto"} 
+                width={160} 
+                label={<><LuPlus size={"1.5rem"}/>Novo Cliente</>} 
               />
             </div>
           </div>
@@ -94,7 +96,7 @@ const Clients = () => {
             <ClientCard icon={<LuUsers size={24}/>} value="156" description="Total de Clientes" color="blue"/>
             <ClientCard icon={<LuStar size={24}/>} value="23" description="Clientes VIP" color="purple"/>
             <ClientCard icon={<LuCalendar size={24}/>} value="12" description="Novos este mês" color="orange"/>
-            <ClientCard icon={<LuSmile size={24}/>} value="4.8" description="Satisfação Média" color="green"/>
+            <ClientCard icon={<LuSmile size={24}/>} value="4,8" description="Satisfação Média" color="green"/>
           </section>
 
           <div className="filter-search">
@@ -130,7 +132,7 @@ const Clients = () => {
                 email={c.email}
                 phoneNumber={c.phoneNumber}
                 city={c.city}
-                totalSpent={c.totalSpent}
+                totalSpent={formatCurrency(c.totalSpent)}
                 lastPurchase={c.lastPurchase}
               />
             ))

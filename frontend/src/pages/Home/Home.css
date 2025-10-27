@@ -126,6 +126,7 @@
     align-items: center;
     display: flex;
     text-align: start;
+    justify-content: center;
     margin: 60px 0;
     gap: 35px;
 }
@@ -137,7 +138,8 @@
 
 .access-button {
     width: 270px;
-    height: 45px;
+    min-height: 45px;
+    height: auto;
     border-radius: 5px;
     background-color: #FFFFFF;
     color: var(--primary-color);
@@ -186,7 +188,7 @@
 
     .description-page {
         font-size: 1.112rem;
-        width: 40rem;
+        width: 30rem;
     }
 
     .subtitle-description-page {
