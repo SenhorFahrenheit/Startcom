@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, status
-from ...schemas.sale_schemas import SaleCreate, SaleSearchQuery
+from ...schemas.sale_schemas import SaleCreate, SaleSearchQuery, CompanyAllSalesRequest
 from ...services.sale_services import SaleService
 from ...config.database import get_database_client
 router = APIRouter(prefix="/sales", tags=["Sales"])
@@ -46,3 +46,27 @@ async def search_sale_route(
         "count": len(results),
         "results": results
     }
+
+
+@router.post("/get_all", status_code=status.HTTP_200_OK)
+async def get_all_sales_route(
+    body: CompanyAllSalesRequest,
+    db_client=Depends(get_database_client)
+):
+    """
+    Returns all sales for a specific company.
+
+    - Receives companyId in the JSON body.
+    - Returns each sale with client and product names.
+    - Only the sale ID (`_id`) is kept; all other IDs are replaced by readable names.
+    - Values and dates are properly formatted.
+    """
+    service = SaleService(db_client)
+    sales = await service.get_all_sales(body.companyId)
+
+    return {
+        "status": "success",
+        "count": len(sales),
+        "sales": sales
+    }
+

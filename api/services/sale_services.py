@@ -17,7 +17,7 @@ class SaleService:
     def __init__(self, db_client):
         self.db = db_client
         self.company_collection = self.db.get_collection("company")
-        self.client_service = ClientService(db_client)  # ✅ initialize client service
+        self.client_service = ClientService(db_client) 
 
     async def create_sale(self, sale_data: SaleCreate) -> SaleInDB:
         """
@@ -47,7 +47,7 @@ class SaleService:
                 client_id = client["_id"]
 
             # ✅ Step 2: Calculate total
-            total = sum(item.price * item.quantity for item in sale_data.items)
+            total = round(sum(item.price * item.quantity for item in sale_data.items), 2)
 
             sale_doc = {
                 "_id": ObjectId(),
@@ -142,3 +142,46 @@ class SaleService:
 
         # ✅ Serialize all ObjectIds and datetimes
         return serialize_mongo(results)
+
+    async def get_all_sales(self, company_id: str):
+        """
+        Retrieves all sales for a specific company.
+        Returns sales enriched with client and product names,
+        removing unnecessary internal IDs.
+        """
+        company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
+        if not company:
+            raise HTTPException(status_code=404, detail="Company not found")
+
+        sales = company.get("sales", [])
+        clients = {str(c["_id"]): c for c in company.get("clients", [])}
+        inventory = {str(p["_id"]): p for p in company.get("inventory", [])}
+
+        result = []
+
+        for sale in sales:
+            # 🔹 Resolve client name
+            client = clients.get(str(sale.get("clientId")))
+            client_name = client["name"] if client else "Unknown Client"
+
+            # 🔹 Resolve product names for each item
+            item_list = []
+            for item in sale.get("items", []):
+                product = inventory.get(str(item.get("productId")))
+                product_name = product["name"] if product else "Unknown Product"
+                item_list.append({
+                    "productName": product_name,
+                    "quantity": item["quantity"],
+                    "price": item["price"]
+                })
+
+            result.append({
+                "_id": str(sale["_id"]),
+                "clientName": client_name,
+                "items": item_list,
+                "total": round(float(sale["total"]), 2),
+                "date": sale["date"]
+            })
+
+        # ✅ Serialize possible ObjectIds/dates
+        return serialize_mongo(result)

@@ -33,3 +33,11 @@ class SaleSearchQuery(BaseModel):
     companyId: str = Field(..., description="ID of the company where to search sales")
     query: str = Field(..., description="Text to search across all sale fields")
 
+class CompanyAllSalesRequest(BaseModel):
+    """
+    JSON body schema for retrieving all sales from a company.
+    """
+    companyId: str = Field(..., description="ID of the company to fetch all sales for")
+
+
+
