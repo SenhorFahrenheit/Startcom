@@ -14,7 +14,7 @@ class SaleItem(BaseModel):
 # 🔹 Sale creation request
 class SaleCreate(BaseModel):
     companyId: PyObjectId = Field(..., description="Company making the sale")
-    clientId: PyObjectId = Field(..., description="Client buying the products")
+    clientName: str = Field(..., description="Name of the client buying the products")
     items: List[SaleItem] = Field(..., description="List of products and quantities")
 
 
