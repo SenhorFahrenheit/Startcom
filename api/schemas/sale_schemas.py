@@ -40,4 +40,7 @@ class CompanyAllSalesRequest(BaseModel):
     companyId: str = Field(..., description="ID of the company to fetch all sales for")
 
 
+class CompanyOverviewRequest(BaseModel):
+    companyId: str = Field(..., description="Company ID to retrieve sales overview for")
+
 

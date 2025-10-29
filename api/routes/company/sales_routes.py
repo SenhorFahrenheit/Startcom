@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, status
-from ...schemas.sale_schemas import SaleCreate, SaleSearchQuery, CompanyAllSalesRequest
+from ...schemas.sale_schemas import SaleCreate, SaleSearchQuery, CompanyAllSalesRequest, CompanyOverviewRequest
 from ...services.sale_services import SaleService
 from ...config.database import get_database_client
 router = APIRouter(prefix="/sales", tags=["Sales"])
@@ -70,3 +70,24 @@ async def get_all_sales_route(
         "sales": sales
     }
 
+
+@router.post("/overview", status_code=status.HTTP_200_OK)
+async def get_sales_overview_route(
+    body: CompanyOverviewRequest,
+    db_client=Depends(get_database_client)
+):
+    """
+    Returns analytical insights and sales overview for a company.
+    
+    Includes:
+    - Total sold today and comparison to yesterday (%)
+    - Total sales overall
+    - Total sales this week
+    - Average ticket and comparison with last month's average ticket (%)
+    """
+    service = SaleService(db_client)
+    overview = await service.get_sales_overview(body.companyId)
+    return {
+        "status": "success",
+        "overview": overview
+    }

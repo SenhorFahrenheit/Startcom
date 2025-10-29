@@ -7,7 +7,8 @@ from ..schemas.client_schemas import ClientCreate
 from ..services.client_services import ClientService  
 import re
 from ..utils.helper_functions import serialize_mongo
-
+import math
+from datetime import timedelta
 
 class SaleService:
     """
@@ -185,3 +186,102 @@ class SaleService:
 
         # ✅ Serialize possible ObjectIds/dates
         return serialize_mongo(result)
+    
+    async def get_sales_overview(self, company_id: str):
+        """
+        Generates sales insights and performance overview for a company.
+        Includes daily, weekly, and average ticket analytics.
+        """
+        company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
+        if not company:
+            raise HTTPException(status_code=404, detail="Company not found")
+
+        sales = company.get("sales", [])
+        if not sales:
+            return {
+                "todayTotal": 0.0,
+                "yesterdayComparison": 0.0,
+                "totalSales": 0.0,
+                "weekSales": 0.0,
+                "averageTicket": 0.0,
+                "averageTicketComparison": 0.0,
+            }
+
+        # Dates
+        now = datetime.utcnow()
+        today_start = datetime(now.year, now.month, now.day)
+        yesterday_start = today_start - timedelta(days=1)
+        week_start = today_start - timedelta(days=7)
+        month_start = datetime(now.year, now.month, 1)
+        last_month_end = month_start - timedelta(days=1)
+        last_month_start = datetime(last_month_end.year, last_month_end.month, 1)
+
+        # Helper vars
+        today_total = 0
+        yesterday_total = 0
+        week_total = 0
+        total_sales = 0
+        today_count = 0
+        last_month_ticket_values = []
+        this_month_ticket_values = []
+
+        # Iterate over all sales
+        for sale in sales:
+            sale_date = sale.get("date")
+            total_value = float(sale.get("total", 0))
+            total_sales += total_value
+
+            if sale_date >= week_start:
+                week_total += total_value
+
+            if sale_date >= today_start:
+                today_total += total_value
+                today_count += 1
+            elif yesterday_start <= sale_date < today_start:
+                yesterday_total += total_value
+
+            # Tickets médios (mês atual e anterior)
+            if sale_date >= month_start:
+                this_month_ticket_values.append(total_value)
+            elif last_month_start <= sale_date < last_month_end:
+                last_month_ticket_values.append(total_value)
+
+        # ✅ Cálculos de métricas
+        today_total = round(today_total, 2)
+        week_total = round(week_total, 2)
+        total_sales = round(total_sales, 2)
+
+        # Comparação diária (%)
+        if yesterday_total == 0:
+            daily_comparison = 0.0
+        else:
+            daily_comparison = round(((today_total - yesterday_total) / yesterday_total) * 100, 2)
+
+        # Ticket médio atual e do mês passado
+        avg_ticket = round(total_sales / len(sales), 2) if sales else 0
+        avg_ticket_this_month = round(sum(this_month_ticket_values) / len(this_month_ticket_values), 2) if this_month_ticket_values else 0
+        avg_ticket_last_month = round(sum(last_month_ticket_values) / len(last_month_ticket_values), 2) if last_month_ticket_values else 0
+
+        # Comparação de ticket médio mensal
+        if avg_ticket_last_month == 0:
+            ticket_comparison = 0.0
+        else:
+            ticket_comparison = round(((avg_ticket_this_month - avg_ticket_last_month) / avg_ticket_last_month) * 100, 2)
+
+        return {
+            "overview": {
+                "today": {
+                    "total": today_total,
+                    "comparison": daily_comparison
+                },
+                "sales": {
+                    "total": total_sales,
+                    "week": week_total
+                },
+                "ticket": {
+                    "average": avg_ticket,
+                    "comparison": ticket_comparison
+                }
+            }
+        }
+
