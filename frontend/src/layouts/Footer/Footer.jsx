@@ -1,6 +1,10 @@
 import "./Footer.css"
+import { NavLink } from "react-router-dom"
 
 const Footer = () => {
+
+    const year = new Date().getFullYear();
+
   return (
     <footer>
         <div className="line-footer">
@@ -13,10 +17,10 @@ const Footer = () => {
                 <h3>Recursos</h3>
 
                 <ul className="list-footer">
-                    <li><a href="">Vendas</a></li>
-                    <li><a href="">Clientes</a></li>
-                    <li><a href="">Estoque</a></li>
-                    <li><a href="">Relatórios</a></li>
+                    <li><NavLink to="/vendas">Vendas</NavLink></li>
+                    <li><NavLink to="/clientes">Clientes</NavLink></li>
+                    <li><NavLink to="/estoque">Estoque</NavLink></li>
+                    <li><NavLink to="/relatorios">Relatórios</NavLink></li>
                 </ul>
             </section>
 
@@ -24,17 +28,17 @@ const Footer = () => {
                 <h3>Suporte</h3>
 
                 <ul className="list-footer">
-                    <li><a href="">Central de Ajuda</a></li>
-                    <li><a href="">Contato</a></li>
-                    <li><a href="">WhatsApp</a></li>
-                    <li><a href="">Privacidade</a></li>
+                    <li><NavLink to="/">Central de Ajuda</NavLink></li>
+                    <li><NavLink to="/">Contato</NavLink></li>
+                    <li><NavLink to="/">WhatsApp</NavLink></li>
+                    <li><NavLink to="/">Privacidade</NavLink></li>
                 </ul>
             </section>
         </div>
 
         <div className="bottom-line-footer"></div>
 
-        <p className="copyright">© 2024 StartCom. Todos os direitos reservados. Transformando pequenos negócios em grandes sucessos.</p>
+        <p className="copyright">© {year} StartCom. Todos os direitos reservados. Transformando pequenos negócios em grandes sucessos.</p>
     </footer>
   )
 }

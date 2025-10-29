@@ -1,5 +1,5 @@
 .card {
-    width: 25%;
+    width: 24%;
     min-width: 250px;
     display: flex;
     flex-direction: column;
@@ -8,12 +8,15 @@
     align-items: center;
     gap: 20px;
     padding: 32px;
+    box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);
     transition: ease all 350ms;
 }
 
 .card:hover {
     box-shadow: 0 15px 15px #e8e8e8;
-    transform: translateY(-15px);
+    transform: translateY(-5px);
 }
 
 .card:hover > .icon-circle {
@@ -22,7 +25,7 @@
 
 .icon-circle {
     border-radius: 100%;
-    background-color: var(--primary-color);
+    background-color: #01768820;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -32,9 +35,9 @@
 }
 
 .icon-circle > svg {
-    width: 32px;
-    height: 32px;
-    color: #FFFFFF;
+    width: 28px;
+    height: 28px;
+    color: var(--primary-color);
 }
 
 .title-card {

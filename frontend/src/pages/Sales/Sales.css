@@ -1,0 +1,57 @@
+.salesCards {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.filter-search {
+    padding: 24px;
+    margin-top: 20px;
+    background-color: var(--component-background-color);
+    box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);
+    display: flex;
+    gap: 10px;
+}
+
+.filters-block {
+  display: flex;
+  flex: 1;
+  gap: 10px;
+}
+
+.recent-sells {
+    margin-top: 20px;
+    padding: 24px;
+    box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);
+}
+
+.recentSells-title {
+    display: flex;
+    margin-bottom: 20px;
+    align-items: center;
+    font-size: 1rem;
+    gap: 5px;
+    font-family: var(--font-heading);
+}
+
+@media (max-width: 1024px) {
+    .filter-search {
+        flex-direction: column;
+    }
+
+    .filters-block {
+        justify-content: center;
+        gap: 20px;
+    }
+}
+
+@media (max-width: 375px) {
+    .filters-block {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

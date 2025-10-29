@@ -3,8 +3,7 @@ header {
     align-items: center;
     background-color: #FFFFFF;
     height: 64px;
-    justify-content: space-between;
-    padding: 0 80px;
+    justify-content: space-around;
 }
  
 header > nav {
@@ -21,8 +20,34 @@ header > nav > a {
     font-family: var(--font-base);
 }
 
+.link-inside-button {
+    color: #FFFFFF;
+    text-decoration-line: none;
+}
+
+.button {
+    min-width: 125px;
+}
+
 @media (max-width: 768px){
     .navigation {
         display: none;
+    }
+}
+
+@media (max-width: 650px) {
+    header {
+        justify-content: center;
+        gap: 30px;
+    }
+    
+    .button {
+        font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 425px) {
+    .mobile-button-none {
+        display: none !important;
     }
 }

@@ -1,0 +1,76 @@
+.metricCard {
+    min-width: 200px;
+    width: 23%;
+    padding: 24px;
+    background-color: var(--component-background-color);
+    box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);
+    transition: all ease 250ms;
+}
+
+.icons-part {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.icon-metricCard {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.good{
+    background-color: rgba(88, 164, 176, 0.125);
+    color: var(--primary-color);
+}
+
+.icon-metricCard.good {
+    border: 1px solid var(--primary-color);
+}
+
+.notgood {
+    background-color: rgba(245, 158, 11, 0.125);
+    color: #F59E0B;
+}
+
+.icon-metricCard.notgood {
+    border: 1px solid #F59E0B;
+}
+
+.noBackground {
+    background-color: transparent;
+}
+
+.texts-part {
+    font-family: var(--font-base);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.description {
+    font-size: 0.875rem;
+    color: rgb(55, 63, 81);
+}
+
+.important-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.data {
+    font-size: 0.875rem;
+    font-weight: 600;
+}
+
+@media (max-width: 1200px) {
+    .metricCard {
+        width: 45%;
+    }
+}

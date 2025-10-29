@@ -1,0 +1,63 @@
+.SalesCard {
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    width: 32%;
+    background-color: var(--component-background-color);
+    box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);
+    transition: all ease 250ms;
+}
+
+.SalesCard:hover {
+    box-shadow: var(--primary-shadow-hover-color);
+}
+
+.sales-card-block {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-family: var(--font-heading);
+}
+
+.sales-card-icon {
+    background-color: rgba(88, 164, 176, 0.125);
+    color: var(--primary-color);
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid var(--primary-color);
+}
+
+.sales-description {
+    color: rgb(77, 77, 77);
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.sales-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.sales-information {
+    font-size: 0.8rem;
+    color: #059669;
+    font-weight: 600;
+}
+
+@media (max-width: 1024px) {
+    .salesCards {
+        flex-direction: column;
+    }
+
+    .SalesCard {
+        width: 100%;
+    }
+}

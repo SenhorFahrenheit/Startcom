@@ -5,7 +5,7 @@ footer {
     justify-content: center;
     align-items: center;
     padding: 64px 0;
-    background-color: #1B1B1E;
+    background-color: var(--primary-layout-background-color);
     color: #ffffff;
     font-family: var(--font-base);
     font-size: 16px;

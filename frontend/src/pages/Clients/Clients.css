@@ -1,0 +1,46 @@
+.clientCards {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.filter-search {
+    padding: 24px;
+    margin-top: 20px;
+    box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);    
+    display: flex;
+    gap: 10px;
+    border-radius: 10px;
+}
+
+.filter-search > .InputDashboard {
+    width: 100% !important;
+}
+
+.filters-block {
+  display: flex;
+  flex: 1;
+  gap: 10px;
+}
+
+.clientInformationCards {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 1024px) {
+    .clientCards {
+        gap: 10px;
+    }
+}
+
+@media (max-width: 375px) {
+    .filters-block {
+        flex-direction: row;
+        justify-content: center !important;
+    }
+}

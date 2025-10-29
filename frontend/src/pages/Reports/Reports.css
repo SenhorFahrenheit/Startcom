@@ -1,0 +1,61 @@
+.report-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.reportCards {
+    display: flex;
+    justify-content: space-between;
+}
+
+.chart-section {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.chart-wrapper {
+    flex: 1;
+    min-width: 0;
+    background-color: var(--component-background-color);
+    box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);    
+    height: 410px;
+    padding: 24px;
+    border-radius: 10px;
+}
+
+.reports-section {
+    box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);
+    margin-top: 35px;
+    font-family: var(--font-heading);
+    padding: 24px;
+}
+
+.generated-reports {
+    display: flex;
+    flex-direction: column;
+    margin-top: 25px;
+    gap: 20px;
+}
+
+@media (max-width: 1024px) {
+    .report-buttons {
+        flex-direction: column;
+    }
+
+    .reportCards {
+        flex-wrap: wrap;
+    }
+} 
+
+@media (max-width: 768px) {
+    .report-buttons {
+        width: 100%;
+    }
+}

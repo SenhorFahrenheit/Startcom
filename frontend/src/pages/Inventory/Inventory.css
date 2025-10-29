@@ -1,0 +1,30 @@
+.productCards {
+    display: flex;
+    justify-content: space-between;
+    padding: 24px 0;
+}
+
+@media (max-width: 1300px) {
+    .productCards {
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 900px) {
+    .productCards {
+        padding: 0;
+    }
+}
+
+@media(max-width: 425px) {
+  .filter-search {
+    padding: 0px;
+    box-shadow: none !important;
+  }
+
+  .filter-block {
+    flex-wrap: wrap;
+  }
+
+
+}

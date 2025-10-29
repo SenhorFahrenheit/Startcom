@@ -3,7 +3,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  border-radius: 5px;
+  border-radius: 10px;
   margin: 10px 0;
   height: 45px;
   padding: 0 12px;
@@ -42,4 +42,7 @@
 .buttons-row > .button-with-icon {
   flex: 1;
   min-width: 0; 
+  width: 100%;
+  height: max-content;
+  padding: 10px 0;
 }

@@ -11,22 +11,25 @@ body {
 
 .container {
   position: relative;
-  width: 730px;
+  width: 90%;
+  max-width: 730px;
   height: 480px;
 }
 
+/* Formulários */
 .form-container {
   position: absolute;
   top: 0;
-  width: 480px !important;
+  width: 80%;
+  max-width: 480px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 480px;
-  padding: 20px;
+  padding: 1rem;
   border-radius: 0 25px 25px 0;
-  background: #FFFFFF;
+  background: #fff;
   transition: all 1s ease;
 }
 
@@ -50,14 +53,14 @@ body {
 }
 
 .side-panel {
-  position: absolute;
+  position: relative;
   top: 0;
   left: 0;
-  width: 250px !important;
+  width: 250px;
   height: 480px;
-  padding: 20px;
+  padding: 1rem;
   background: var(--primary-color);
-  color: #FFFFFF;
+  color: #fff;
   border-radius: 25px 0 0 25px;
   display: flex;
   flex-direction: column;
@@ -71,7 +74,7 @@ body {
   left: 0;
   opacity: 1;
   pointer-events: auto;
-  border-radius: 25px 0 0 25px
+  border-radius: 25px 0 0 25px;
 }
 
 .container.login-mode .register {
@@ -84,10 +87,28 @@ body {
   border-radius: 0 25px 25px 0;
 }
 
+/* Textos */
 .login-or-signin-text {
   font-family: var(--font-base);
-  font-size: 14.6px;
-  margin: 15px 0;
+  font-size: 0.9rem;
+  margin: 0.9rem 0;
+}
+
+.logo-auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.side-panel .back-button {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  transition: transform 0.5s ease;
+}
+
+.container.login-mode .side-panel .back-button {
+  transform: translateX(130px)
 }
 
 .auth-login {
@@ -99,9 +120,14 @@ body {
 
 h2 {
   font-family: var(--font-heading);
-  font-size: 30.3px;
+  font-size: 2rem;
 }
 
+  input:not([type="checkbox"]) {
+    width: 100%;
+  }
+
+/* Blocos de itens */
 .items-block {
   display: flex;
   width: 100%;
@@ -110,9 +136,11 @@ h2 {
   flex-direction: column;
 }
 
-.forgot-password, .maintain-logged {
+/* Links e opções */
+.forgot-password,
+.maintain-logged {
   width: 85%;
-  font-size: 10.2px;
+  font-size: 1rem;
   font-family: var(--font-base);
   cursor: pointer;
   color: var(--quaternary-color);
@@ -120,12 +148,12 @@ h2 {
 
 .forgot-password {
   text-align: end;
-  margin-bottom: 10px;
+  margin-bottom: 0.9rem;
 }
 
 .maintain-logged {
   text-align: start;
-  margin-bottom: 40px;
+  margin-bottom: 2.5rem;
 }
 
 .maintain-logged > label {
@@ -135,14 +163,16 @@ h2 {
 }
 
 .forgot-password:hover {
-  text-decoration-line: underline;
+  text-decoration: underline;
 }
 
+/* Botões sociais */
 .login-with {
   display: flex;
-  gap: 20px;
+  gap: 10%;
 }
 
+/* CPF/CNPJ */
 .CPF-or-CNPJ {
   display: flex;
   width: 85%;
@@ -153,18 +183,107 @@ h2 {
   border-radius: 5px;
 }
 
-.CPF, .CNPJ {
+.CPF,
+.CNPJ {
   width: 100%;
   height: 45px;
   background-color: var(--secondary-color);
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: all ease 0.75s;
+  transition: all 0.75s ease;
   font-weight: bold;
 }
 
-.CPF:focus, .CNPJ:focus, .CPF.active, .CNPJ.active {
+.CPF:focus,
+.CNPJ:focus,
+.CPF.active,
+.CNPJ.active {
   background-color: var(--quinary-color);
-  color: #FFFFFF;
+  color: #fff;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .container {
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    max-width: none;
+  }
+
+  .form-container {
+    width: 100%;
+    max-width: none;
+    height: auto;
+    min-height: 400px;
+    border-radius: 0 0 25px 25px !important;
+    padding: 25px 20px;
+  }
+
+  .side-panel {
+    position: relative;
+    width: 100%;
+    height: auto;
+    min-height: 180px;
+    border-radius: 25px 25px 0 0 !important;
+    padding: 25px 20px;
+    order: -1;
+  }
+
+  .register,
+  .login {
+    position: relative;
+    left: 0;
+    opacity: 1;
+    pointer-events: auto;
+    display: none;
+  }
+
+  .form-register,
+  .form-register > div {
+    width: 100%;
+  }
+
+  .container.login-mode .login,
+  .container:not(.login-mode) .register {
+    display: flex;
+  }
+
+  .container.login-mode .register,
+  .container:not(.login-mode) .login {
+    display: none;
+  }
+
+  .container.login-mode .side-panel {
+    left: 0;
+  }
+
+  .items-block {
+    width: 100%;
+  }
+
+  .CPF-or-CNPJ {
+    width: 100%;
+  }
+
+  .CPF,
+  .CNPJ {
+    width: 48%;
+  }
+
+  .forgot-password,
+  .maintain-logged {
+    width: 100%;
+  }
+
+  .login-with {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .icon {
+    padding: 0 !important;
+  }
+
 }

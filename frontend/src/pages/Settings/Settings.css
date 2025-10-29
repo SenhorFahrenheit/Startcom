@@ -1,0 +1,84 @@
+.settings-container-form, .notification-settings {
+    padding: 24px;
+    box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);
+    margin-top: 30px;
+    border-radius: 10px;
+    font-family: var(--font-heading);
+    color: #09090B;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.setting-page {
+    padding: 32px 100px;
+}
+
+.settings-title {
+    display: flex;
+    font-family: var(--font-heading);
+    font-size: 1rem;
+    gap: 10px;
+    line-height: 1.5rem;
+    color: var(--title-heading-color);
+}
+
+.form-setting-gap {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 49%;
+    margin-top: 20px;
+}
+
+.form-setting-gap > input, .form-setting-gap-unique > input {
+    font-size: 0.9rem;
+    padding-left: 12px;
+}
+
+.form-setting-gap-unique {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.form-setting-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.setting-save-changes {
+    display: flex;
+    justify-content: end;
+    margin: 24px 0 0;
+}
+
+.setting-save-changes > button {
+    padding: 0 12px;
+}
+
+.notificationSettings {
+    width: 100%;
+}
+
+@media (max-width: 1024px) {
+    .setting-page {
+        padding: 24px;
+    }
+}
+
+@media (max-width: 888px) {
+
+    .setting-page {
+        padding: 12px;
+    }
+
+    .form-setting-group {
+        flex-direction: column;
+    }
+
+    .form-setting-gap {
+        width: 100%;
+    }
+}

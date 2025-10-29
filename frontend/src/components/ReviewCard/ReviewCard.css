@@ -4,12 +4,16 @@
     justify-content: space-around;
     width: 33.3%;
     min-width: 240px;
-    height: 240px;
+    min-height: 240px;
+    height: auto;
     padding: 32px;
     background-color: #FFFFFF;
     border-radius: 5px;
     gap: 20px;
     transition: all ease 300ms;
+    box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);
 }
 
 .review-card:hover {

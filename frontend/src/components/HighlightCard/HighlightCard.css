@@ -1,0 +1,50 @@
+.HighlightCard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--primary-shadow-color);
+    border: var(--border-color);
+    border-radius: var(--border-radius);
+    height: 70px;
+    width: 100%;
+    margin: 20px 0;
+    font-family: var(--font-heading);
+    background-color: var(--component-background-color);
+    padding: 0 12px;
+}
+
+.highlight-name {
+    font-size: 0.875rem;
+}
+
+.highlight-value {
+    color: var(--primary-color);
+    font-weight: 600;
+    text-align: end;
+}
+
+.highlight-extra {
+    font-size: 0.725rem;
+    text-align: center;
+    font-weight: 600;
+    color: #059669;
+    text-align: end;
+}
+
+@media (max-width: 320px) {
+    .highlight-title {
+        font-size: 0.875rem;
+    }
+
+    .highlight-name {
+        font-size: 0.775rem;
+    }
+
+    .highlight-value {
+        font-size: 0.9rem;
+    }
+
+    .highlight-extra {
+        font-size: 0.625rem;
+    }
+}

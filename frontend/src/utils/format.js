@@ -64,3 +64,22 @@ export const formatPhone = (value) => {
     return cleaned.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3"); // (11) 98765-4321
   }
 };
+
+// Utility function to format Brazilian currency (BRL)
+// Examples:
+// "1247.3" -> "R$ 1.247,30"
+// "0" -> "R$ 0,00"
+const formatCurrency = (value) => {
+  if (value == null || value === "") return "R$ 0,00";
+
+  const number = typeof value === "number" ? value : parseFloat(value.replace(",", "."));
+
+  if (isNaN(number)) return "R$ 0,00";
+
+  return number.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+};
+
+export default formatCurrency;

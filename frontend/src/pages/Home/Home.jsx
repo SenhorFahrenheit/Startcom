@@ -14,6 +14,8 @@ import { FiShoppingCart } from 'react-icons/fi';
 import { BsBoxSeam } from 'react-icons/bs';
 import { FaRegChartBar } from 'react-icons/fa';
 
+import { NavLink } from 'react-router-dom';
+
 import "./Home.css"
 
 const Home = () => {
@@ -26,12 +28,11 @@ const Home = () => {
           <p className='description-page'>A plataforma completa para pequenos e médios empreendedores gerenciarem vendas, clientes, estoque e muito mais em um só lugar.</p>
         
           <div className='two-buttons'>
-            <Button fontSize={"1.05rem"} width={"250px"} height={"44px"} label={<>Acessar Dashboard <FaArrowRight /></>}/>
-            <button className='about-button'>Saiba Mais</button>
+            <NavLink className="link-to-dashboard" to="/login"><button style={{width: 260}} className='access-button variant-hover'>Acessar minha conta <FaArrowRight size={14}/></button></NavLink>
           </div>
         </div>
 
-        <div className='second-container'>
+        <div className='second-container' id="resources">
           <h2 className='subtitle-page'>Tudo que você precisa em uma plataforma</h2>
           <p className='subtitle-description-page'>Ferramentas poderosas e intuitivas para levar seu negócio ao próximo nível</p>
           
@@ -43,7 +44,7 @@ const Home = () => {
           </div>
         </div>
 
-        <div className='third-container'>
+        <div className='third-container' id="reviews">
           <h2 className='subtitle-page'>O que nossos clientes dizem</h2>
           <p className='subtitle-description-page'>Histórias reais de empreendedores que transformaram seus negócios</p>
           <div className='review-cards'>
@@ -56,8 +57,7 @@ const Home = () => {
         <div className='fourth-container'>
             <h2 className='subtitle-page last white'>Pronto para transformar seu negócio?</h2>
             <p className='subtitle-description-page white'>Junte-se a milhares de empreendedores que já estão usando a StartCom para crescer mais rápido.</p>
-        
-            <button className='access-button'>Acessar minha conta <FaArrowRight size={14}/></button>
+            <NavLink className="link-to-dashboard" to="/painel"><button className='access-button'>Acessar Dashboard <FaArrowRight size={14}/></button></NavLink>
         </div>
         
         <Footer/>
