@@ -3,8 +3,8 @@ from bson import ObjectId
 from fastapi import HTTPException, status
 from pymongo.errors import PyMongoError
 from ..schemas.sale_schemas import SaleCreate, SaleInDB
-from ..schemas.client_schemas import ClientCreate  # ✅ import schema
-from ..services.client_services import ClientService  # ✅ import service
+from ..schemas.client_schemas import ClientCreate  
+from ..services.client_services import ClientService  
 
 
 class SaleService:

@@ -36,7 +36,7 @@ class ClientService:
         Returns the created client document.
         """
         new_client = {
-            "_id": ObjectId(),  # ✅ generate a new unique ObjectId
+            "_id": ObjectId(),  
             "name": client_data.name,
             "email": client_data.email or "",
             "phone": client_data.phone or "",
