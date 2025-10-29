@@ -5,6 +5,8 @@ from pymongo.errors import PyMongoError
 from ..schemas.sale_schemas import SaleCreate, SaleInDB
 from ..schemas.client_schemas import ClientCreate  
 from ..services.client_services import ClientService  
+import re
+from ..utils.helper_functions import serialize_mongo
 
 
 class SaleService:
@@ -48,6 +50,7 @@ class SaleService:
             total = sum(item.price * item.quantity for item in sale_data.items)
 
             sale_doc = {
+                "_id": ObjectId(),
                 "clientId": client_id,
                 "items": [
                     {
@@ -82,3 +85,60 @@ class SaleService:
 
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+    
+    async def search_sales(self, company_id: str, query: str):
+        """
+        Searches all company sales by a single text query.
+        Matches saleId, client name, product name, date, and total (partial and case-insensitive).
+        Returns sales enriched with client and product names instead of internal IDs.
+        """
+        company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
+        if not company:
+            raise HTTPException(status_code=404, detail="Company not found")
+
+        sales = company.get("sales", [])
+        clients = {str(c["_id"]): c for c in company.get("clients", [])}
+        inventory = {str(p["_id"]): p for p in company.get("inventory", [])}
+
+        query_pattern = re.compile(re.escape(query), re.IGNORECASE)
+        results = []
+
+        for sale in sales:
+            # 🔹 Get related client
+            client = clients.get(str(sale.get("clientId")))
+            client_name = client["name"] if client else "Unknown Client"
+
+            # 🔹 Get related product names
+            product_names = []
+            item_list = []
+            for item in sale["items"]:
+                product = inventory.get(str(item["productId"]))
+                product_name = product.get("name", "Unknown Product") if product else "Unknown Product"
+                product_names.append(product_name)
+                item_list.append({
+                    "productName": product_name,
+                    "quantity": item["quantity"],
+                    "price": item["price"]
+                })
+
+            # 🔹 Build searchable text
+            searchable_text = " ".join([
+                str(sale.get("_id", "")),
+                client_name,
+                " ".join(product_names),
+                sale.get("date", datetime.utcnow()).strftime("%Y-%m-%d"),
+                str(sale.get("total", ""))
+            ])
+
+            # 🔹 Match query in any field
+            if query_pattern.search(searchable_text):
+                results.append({
+                    "_id": str(sale["_id"]),              # keep sale id
+                    "clientName": client_name,            # human-readable name
+                    "items": item_list,                   # product names instead of IDs
+                    "total": sale["total"],
+                    "date": sale["date"]
+                })
+
+        # ✅ Serialize all ObjectIds and datetimes
+        return serialize_mongo(results)

@@ -24,3 +24,12 @@ class SaleInDB(BaseModel):
     items: List[SaleItem]
     total: float
     date: datetime = Field(default_factory=lambda: datetime.utcnow())
+
+
+class SaleSearchQuery(BaseModel):
+    """
+    Schema for performing a text-based search over all sales fields.
+    """
+    companyId: str = Field(..., description="ID of the company where to search sales")
+    query: str = Field(..., description="Text to search across all sale fields")
+
