@@ -27,6 +27,13 @@ mongo = MongoDB(
     mongo_db_name
 )
 
+# ✅ Dependency for FastAPI
+async def get_database_client():
+    """
+    Dependency that provides the MongoDB client instance to FastAPI routes.
+    """
+    return mongo.db
+
 # Define an asynchronous function to test MongoDB operations
 async def test_mongo():
     # Get the 'user' collection from the database
