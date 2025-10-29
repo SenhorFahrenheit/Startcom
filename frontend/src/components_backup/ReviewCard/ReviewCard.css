@@ -1,0 +1,48 @@
+.review-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 33.3%;
+    min-width: 240px;
+    height: 240px;
+    padding: 32px;
+    background-color: #FFFFFF;
+    border-radius: 5px;
+    gap: 20px;
+    transition: all ease 300ms;
+}
+
+.review-card:hover {
+    box-shadow: 0 5px 20px var(--shadow-color);
+}
+
+.rating > svg {
+    width: 20px;
+    height: 20px;
+}
+
+.comment {
+    font-style: oblique;
+    font-family: var(--font-base);
+    font-size: 0.9rem;
+    color: var(--quaternary-color);
+}
+
+.name {
+    font-weight: bold;
+    font-size: 0.9em;
+    font-family: var(--font-base);
+}
+
+.business {
+    font-family: var(--font-base);
+    font-size: 0.8rem;
+    color: var(--primary-color);
+}
+
+@media (max-width: 1024px) {
+    .review-card {
+        width: 100%;
+        height: auto;
+    }
+}
