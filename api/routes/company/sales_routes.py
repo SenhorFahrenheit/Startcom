@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status
 from ...schemas.sale_schemas import SaleCreate, SaleSearchQuery, CompanyAllSalesRequest, CompanyOverviewRequest
 from ...services.sale_services import SaleService
-from ...config.database import get_database_client
+from ...infra.database import get_database_client
 router = APIRouter(prefix="/sales", tags=["Sales"])
 
 @router.post("/create_sale", status_code=status.HTTP_201_CREATED)

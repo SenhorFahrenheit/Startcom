@@ -8,7 +8,7 @@ from datetime import datetime, date
 from ..services.company_services import CompanyService
 from ..schemas.user_schemas import UserCreate, UserInDB
 from ..schemas.company_schemas import CompanyCreate
-from ..config.database import AsyncIOMotorClient
+from ..infra.database import AsyncIOMotorClient
 
 
 # ----------------------------------------------

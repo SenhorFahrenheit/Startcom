@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from api.services.auth_services import AuthService
-from ...config.database import mongo
+from ...infra.database import mongo
 from ...schemas.auth_schemas import LoginRequest
 # Create a router instance to group all auth-related routes
 router = APIRouter()

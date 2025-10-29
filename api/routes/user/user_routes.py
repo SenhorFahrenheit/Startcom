@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from api.services.user_services import UserService
 from api.schemas.user_schemas import UserCreate, UserCreatedResponse
-from ...config.database import mongo
+from ...infra.database import mongo
 
 # Create a router instance to group all user-related routes
 router = APIRouter()

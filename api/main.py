@@ -4,7 +4,8 @@ from api.routes.auth.apple_routes import router as apple_router
 from api.routes.user.user_routes import router as user_router
 from api.routes.auth.auth_routes import router as auth_router
 from api.routes.company.sales_routes import router as sale_routes
-from api.config.config_cors import setup_cors
+from api.infra.config_cors import setup_cors
+from api.infra.scheduler.scheduler import start_scheduler
 
 app = FastAPI()
 
@@ -17,3 +18,8 @@ app.include_router(apple_router, prefix="/AuthApple")
 app.include_router(user_router, prefix="/User")
 app.include_router(auth_router, prefix="/Auth")
 app.include_router(sale_routes, prefix="/Company")
+
+@app.on_event("startup")
+async def startup_event():
+    start_scheduler()
+    print("[App] Scheduler successfully initialized.")
