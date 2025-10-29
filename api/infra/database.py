@@ -17,7 +17,6 @@ class MongoDB:
         return self.db[collection_name]
 
 
-print(os.getenv("MONGO_URI"))
 # Read MongoDB URI and database name from environment variables
 mongo_uri = os.getenv("MONGO_URI")
 mongo_db_name = os.getenv("MONGO_DB")
