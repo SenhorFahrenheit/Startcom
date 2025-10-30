@@ -39,7 +39,6 @@ const Sales = () => {
 
   const toggleSidebar = () => setSidebarOpen(prev => !prev);
 
-  // 🔹 useEffect para buscar os dados do backend
   useEffect(() => {
     async function fetchOverview() {
       try {
@@ -47,7 +46,7 @@ const Sales = () => {
           "http://127.0.0.1:8000/Company/sales/overview",
           { companyId: "69019f25b407b09e0d09cff5" }
         );
-        const data = response.data.overview.overview; // acessa o bloco correto
+        const data = response.data.overview.overview;
 
         setOverview({
           todayTotal: data.today.total,
@@ -89,25 +88,45 @@ const Sales = () => {
           </div>
         </div>
 
-        {/* 🔹 Cards atualizados dinamicamente */}
         <section className="salesCards">
           <SalesCard 
             icon={<LuDollarSign size={24}/>} 
             description="Vendas Hoje" 
             value={formatCurrency(overview.todayTotal)} 
             information={`${overview.todayComparison > 0 ? "+" : ""}${overview.todayComparison}% vs ontem`}
+            progress={
+              overview.todayComparison > 0
+                ? "good-progress"
+                : overview.todayComparison < 0
+                ? "bad-progress"
+                : "neutral-progress"
+            }
           />
           <SalesCard 
             icon={<LuShoppingCart size={24}/>} 
             description="Total de Vendas" 
             value={formatCurrency(overview.totalSales)} 
             information={`+${formatCurrency(overview.weekSales)} esta semana`}
+            progress={
+              overview.weekSales > 0
+                ? "good-progress"
+                : overview.weekSales < 0
+                ? "bad-progress"
+                : "neutral-progress"
+            }
           />
           <SalesCard 
             icon={<LuTrendingUp size={24}/>} 
             description="Ticket Médio" 
             value={formatCurrency(overview.averageTicket)} 
             information={`${overview.averageTicketComparison > 0 ? "+" : ""}${overview.averageTicketComparison}% este mês`}
+            progress={
+              overview.averageTicketComparison > 0
+                ? "good-progress"
+                : overview.averageTicketComparison < 0
+                ? "bad-progress"
+                : "neutral-progress"
+            }
           />
         </section>
 
