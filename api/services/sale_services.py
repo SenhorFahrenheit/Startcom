@@ -20,6 +20,7 @@ class SaleService:
         self.company_collection = self.db.get_collection("company")
         self.client_service = ClientService(db_client) 
 
+    # dont forget to decrement inventory
     async def create_sale(self, sale_data: SaleCreate) -> SaleInDB:
         """
         Creates and registers a sale in the corresponding company.
@@ -32,7 +33,7 @@ class SaleService:
             if not company:
                 raise HTTPException(status_code=404, detail="Company not found")
 
-            # ✅ Step 1: Find or create client inside company
+            # Step 1: Find or create client inside company
             client = await self.client_service.get_client_by_name(company_id, sale_data.clientName)
 
             if not client:
