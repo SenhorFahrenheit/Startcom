@@ -52,6 +52,10 @@ html {
 
     --shadow-color: #adadad;
 
+    --progress-positive-color:#059669;
+    --progress-negative-color: #ff343e;
+    --progress-neutral-color: #9f9f9f;
+
     --font-base: "Open Sans", sans-serif;
     --font-heading: "ui-sans-serif", sans-serif;
 }

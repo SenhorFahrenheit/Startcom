@@ -1,12 +1,12 @@
 import "./SalesCard.css"
 
-const SalesCard = ({icon, description, value, information}) => {
+const SalesCard = ({icon, description, value, information, progress}) => {
   return (
     <div className="SalesCard">
         <div className="sales-card-block">
             <p className="sales-description">{description}</p>
             <p className="sales-value">{value}</p>
-            <p className="sales-information">{information}</p>
+            <p className={`sales-information ${progress}`}>{information}</p>
         </div>
         <div className="sales-card-icon">{icon}</div>
     </div>
