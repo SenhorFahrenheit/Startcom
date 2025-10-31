@@ -24,3 +24,11 @@ class ClientInDB(ClientBase):
     class Config:
         from_attributes = True
         populate_by_name = True
+
+
+class ClientOverviewRequest(BaseModel):
+    """
+    Request body for retrieving the full client overview,
+    including overview stats and all company sales.
+    """
+    companyId: str = Field(..., description="ID of the company to fetch client and sales overview for")
