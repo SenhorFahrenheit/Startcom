@@ -20,7 +20,7 @@ const SalesTable = ({ dateFilter, statusFilter, search }) => {
           client: sale.clientName,
           date: new Date(sale.date).toLocaleDateString("pt-BR"),
           amount: sale.total,
-          status: "completed",
+          /*status: "completed",*/
           items: sale.items.reduce((acc, item) => acc + item.quantity, 0),
         }));
 

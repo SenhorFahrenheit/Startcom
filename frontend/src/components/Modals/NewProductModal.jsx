@@ -78,7 +78,7 @@ const NewProductModal = ({ isOpen, onClose }) => {
       height="500px"
       showCloseButton={true}
     >
-      <h2 className="dashboard-modal-title">Registrar Nova Venda</h2>
+      <h2 className="dashboard-modal-title">Registrar Novo Produto</h2>
 
       <form className="form-dashboard" onSubmit={newProduct}>
         <div className="align-dashboard-form">

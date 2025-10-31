@@ -61,11 +61,6 @@ const NewSaleModal = ({ isOpen, onClose }) => {
           </div>
 
           <div className="input-dashboard-block">
-            <label htmlFor="valor">Valor </label>
-            <InputDashboard type="number" name="valor" id="valor" />
-          </div>
-
-          <div className="input-dashboard-block">
             <label htmlFor="status">Status </label>
             <select name="status" id="status" defaultValue="Concluída" className="InputDashboard">
               <option>Concluída</option>
@@ -73,6 +68,12 @@ const NewSaleModal = ({ isOpen, onClose }) => {
               <option>Cancelada</option>
             </select>
           </div>
+
+          <div className="input-dashboard-block">
+            <label htmlFor="valor">Valor </label>
+            <InputDashboard readonly={true} type="number" name="valor" id="valor" />
+          </div>
+
         </div>
         <div className="button-shadown">
           <Button height={45} width={200} type="submit" label="Salvar Venda" />

@@ -146,10 +146,10 @@ const Sales = () => {
               onSelect={setDateFilter}
             />
 
-            <FilterStatusButton 
+            {/*<FilterStatusButton 
               options={["Concluído", "Pendente", "Cancelada"]}
               onSelect={setStatusFilter}
-            />
+            />*/}
           </div>
         </div>
 
