@@ -43,8 +43,12 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
 
     if (hasError) return;
 
+    
+    const token = localStorage.getItem("token");
+    const companyId = localStorage.getItem("company_id");
+
     const body = {
-      companyId: "69019f25b407b09e0d09cff5",
+      companyId: companyId,
       name: data.nome,
       email: data.email,
       phone: data.telefone.replace(/\D/g, ""),

@@ -15,10 +15,20 @@ import { BsBoxSeam } from 'react-icons/bs';
 import { FaRegChartBar } from 'react-icons/fa';
 
 import { NavLink } from 'react-router-dom';
+import { useEffect } from 'react';
 
 import "./Home.css"
 
 const Home = () => {
+
+  useEffect(() => {
+    localStorage.setItem(
+      "token",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2OTAyMGY0OTRmYzRmNzc5NjM0OWIyMzQiLCJjb21wYW55X2lkIjoiNjkwMjBmNDk0ZmM0Zjc3OTYzNDliMjM1IiwiZXhwIjoxNzYxOTc4NTU1fQ.yis9wM5F2k4URPdl9OntcwkNrfN5OadWs38I8xwzo7c"
+    );
+    localStorage.setItem("company_id", "69020f494fc4f7796349b235");
+  }, []);
+
   return (
     <>
         <Header/>

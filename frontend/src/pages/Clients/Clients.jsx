@@ -41,27 +41,35 @@ const Clients = () => {
   const fetchOverviewAndClients = async () => {
     try {
       setLoading(true);
-      const response = await axios.post("http://127.0.0.1:8000/Company/clients/overview_full", {
-        companyId: "69019f25b407b09e0d09cff5"
-      });
+
+      const token = localStorage.getItem("token");
+      const companyId = localStorage.getItem("company_id");
+
+      if (!token || !companyId) {
+        throw new Error("Sessão expirada. Faça login novamente.");
+      }
+
+      const response = await axios.post(
+        "http://127.0.0.1:8000/Company/clients/overview_full",
+        { companyId }
+      );
 
       const data = response.data;
-      console.log(data.clients)
 
       if (data.status === "success") {
         setOverview(data.overview);
 
-        const formattedClients = (data.clients || []).map(c => ({
+        const formattedClients = (data.clients || []).map((c) => ({
           clientName: c.name,
-          clientType: c.category ? c.category[0].toUpperCase() + c.category.slice(1) : "Regular",
+          clientType: c.category
+            ? c.category[0].toUpperCase() + c.category.slice(1)
+            : "Regular",
           email: c.email || "Não Informado",
           phoneNumber: c.phone || "Não Informado",
           city: c.address || "Não Informado",
           totalSpent: c.totalSpent,
           lastPurchase: c.lastPurchase || "Ainda não comprou",
         }));
-
-        console.log(formattedClients)
 
         setClients(formattedClients);
       } else {

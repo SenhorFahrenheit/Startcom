@@ -16,6 +16,10 @@ import SalesTable from "../../components/SalesTable/SalesTable";
 import { LuPlus, LuDollarSign, LuShoppingCart, LuTrendingUp } from "react-icons/lu";
 
 const Sales = () => {
+
+  const token = localStorage.getItem("token");
+  const companyId = localStorage.getItem("company_id");
+
   const { activeModal, openSale, closeModal } = useAuthModals();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [dateFilter, setDateFilter] = useState("Este Mês");
@@ -42,7 +46,7 @@ const Sales = () => {
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/Company/sales/overview",
-        { companyId: "69019f25b407b09e0d09cff5" }
+        { companyId }
       );
       const data = response.data.overview.overview;
 

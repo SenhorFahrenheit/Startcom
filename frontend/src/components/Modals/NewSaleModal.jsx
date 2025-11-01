@@ -14,6 +14,10 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [clientInput, setClientInput] = useState("");
 
+  
+  const token = localStorage.getItem("token");
+  const companyId = localStorage.getItem("company_id");
+
   const priceRef = useRef();
 
   useEffect(() => {
@@ -25,9 +29,7 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/Company/inventory/full", {
-        companyId: "69019f25b407b09e0d09cff5",
-      });
+      const response = await axios.post("http://127.0.0.1:8000/Company/inventory/full", {companyId});
 
       if (response.data?.status === "success" && response.data?.products) {
         setProducts(response.data.products);
@@ -40,14 +42,12 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
 
   const fetchClients = async () => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/Company/clients/names", {
-        companyId: "69019f25b407b09e0d09cff5",
-      });
+      const response = await axios.post("http://127.0.0.1:8000/Company/clients/names", {companyId});
       if (response.data?.clients) {
         setClients(response.data.clients);
       }
     } catch (error) {
-      console.error("Erro ao buscar clientes:", error);
+      console.error("Erro ao buscar vendas:", error);
     }
   };
 
@@ -94,6 +94,9 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
 
   const newSale = async (e) => {
     e.preventDefault();
+    
+    const token = localStorage.getItem("token");
+    const companyId = localStorage.getItem("company_id");
 
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
@@ -122,7 +125,6 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
 
     if (hasError) return;
 
-    const companyId = "69019f25b407b09e0d09cff5";
     const selectedProduct = products.find((p) => p._id === data.product);
 
     const payload = {

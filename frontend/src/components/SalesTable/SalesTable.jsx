@@ -8,11 +8,15 @@ const SalesTable = ({ dateFilter, statusFilter, search, refreshTrigger }) => {
   const [sales, setSales] = useState([]);
   const [filteredSales, setFilteredSales] = useState([]);
 
+  const token = localStorage.getItem("token");
+  const companyId = localStorage.getItem("company_id");
+
   const fetchSales = async () => {
+
     try {
       const response = await axios.post(
         "http://127.0.0.1:8000/Company/sales/get_all",
-        { companyId: "69019f25b407b09e0d09cff5" }
+        { companyId }
       );
 
       console.log("API response:", response.data);
