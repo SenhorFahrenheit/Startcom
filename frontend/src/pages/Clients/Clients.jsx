@@ -115,6 +115,39 @@ const Clients = () => {
   
   const toggleSidebar = () => setSidebarOpen(prev => !prev);
 
+  const fetchOverview = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("http://127.0.0.1:8000/Company/clients/overview_full", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          companyId: "69020f494fc4f7796349b235",
+        }),
+      });
+
+      if (!response.ok) throw new Error("Erro ao buscar dados dos clientes");
+      const data = await response.json();
+
+      if (data.status === "success") {
+        setOverview(data.overview);
+      } else {
+        throw new Error("Resposta inválida da API");
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOverview();
+  }, []);
+
+
   return (
     <section className="body-section">
       <HeaderMobile onToggleSidebar={toggleSidebar} />
@@ -222,6 +255,7 @@ const Clients = () => {
       <NewClientModal
         isOpen={activeModal === "client"}
         onClose={closeModal}
+        onSuccess={fetchOverview}
       />
     </section>
   )

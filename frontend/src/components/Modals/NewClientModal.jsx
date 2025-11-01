@@ -1,5 +1,4 @@
 import { useState } from "react";
-
 import { toast } from "react-toastify";
 
 import BaseModal from "./BaseModal";
@@ -8,8 +7,7 @@ import InputDashboard from "../InputDashboard/InputDashboard";
 
 import { formatPhone } from "../../utils/format";
 
-const NewClientModal = ({ isOpen, onClose }) => {
-
+const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
   const [telefone, setTelefone] = useState("");
 
   const handleTelefoneChange = (e) => {
@@ -17,8 +15,7 @@ const NewClientModal = ({ isOpen, onClose }) => {
     setTelefone(formatted);
   };
 
-
-  const newClient = (e) => {
+  const newClient = async (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
@@ -64,13 +61,40 @@ const NewClientModal = ({ isOpen, onClose }) => {
 
     if (hasError) return;
 
-    console.log("Dados validados:", data);
-    toast.success("Venda registrada com sucesso!", {
-      position: "top-right",
-      containerId: "toast-root",
-    });
+    const body = {
+      companyId: "69020f494fc4f7796349b235",
+      name: data.nome,
+      email: data.email,
+      phone: data.telefone.replace(/\D/g, ""),
+      city: data.cidade,
+    };
 
-    onClose();
+    try {
+      const response = await fetch("http://127.0.0.1:8000/Company/clients/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (!response.ok) throw new Error("Erro ao cadastrar cliente.");
+
+      toast.success("Cliente registrado com sucesso!", {
+        position: "top-right",
+        containerId: "toast-root",
+      });
+
+      onClose();
+
+      if (onSuccess) onSuccess();
+    } catch (error) {
+      toast.error(`Erro: ${error.message}`, {
+        position: "top-right",
+        theme: "light",
+        containerId: "toast-root",
+      });
+    }
   };
 
   return (
@@ -87,34 +111,47 @@ const NewClientModal = ({ isOpen, onClose }) => {
       <form className="form-dashboard" onSubmit={newClient}>
         <div className="align-dashboard-form">
           <div className="input-dashboard-block">
-            <label htmlFor="nome">Nome </label>
+            <label htmlFor="nome">Nome</label>
             <InputDashboard name="nome" id="nome" />
           </div>
 
           <div className="input-dashboard-block">
-            <label htmlFor="email">Email </label>
+            <label htmlFor="email">Email</label>
             <InputDashboard type="email" name="email" id="email" />
           </div>
 
           <div className="input-dashboard-block">
-            <label htmlFor="telefone">Telefone </label>
-            <InputDashboard type="tel" maxLength={14} name="telefone" id="telefone" value={telefone} onChange={handleTelefoneChange} />
+            <label htmlFor="telefone">Telefone</label>
+            <InputDashboard
+              type="tel"
+              maxLength={14}
+              name="telefone"
+              id="telefone"
+              value={telefone}
+              onChange={handleTelefoneChange}
+            />
           </div>
 
           <div className="input-dashboard-block">
-            <label htmlFor="valor">Cidade </label>
+            <label htmlFor="cidade">Cidade</label>
             <InputDashboard type="text" name="cidade" id="cidade" />
           </div>
 
           <div className="input-dashboard-block">
-            <label htmlFor="tipo">Tipo </label>
-            <select name="tipo" id="tipo" defaultValue="Regular" className="InputDashboard">
+            <label htmlFor="tipo">Tipo</label>
+            <select
+              name="tipo"
+              id="tipo"
+              defaultValue="Regular"
+              className="InputDashboard"
+            >
               <option>Regular</option>
               <option>VIP</option>
               <option>Premium</option>
             </select>
           </div>
         </div>
+
         <div className="button-shadown">
           <Button height={45} width={200} type="submit" label="Salvar Cliente" />
         </div>
