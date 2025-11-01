@@ -85,14 +85,17 @@ class ClientService:
         - Clients added this month
         - Company's average satisfaction score
 
-        Also returns the list of all clients, excluding 'createdAt' and 'updatedAt'.
+        Also returns the list of all clients, including:
+        - Name, email, phone, address, category
+        - Total spent
+        - Last purchase
         """
         # Find the company document by ID
         company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
         if not company:
             raise HTTPException(status_code=404, detail="Company not found")
 
-        # Extract client data and satisfaction metric
+        # Extract data
         clients = company.get("clients", [])
         avg_satisfaction = company.get("average_satisfaction", 0)
 
@@ -110,16 +113,24 @@ class ClientService:
         ]
         total_new_clients = len(new_clients)
 
-        # Clean clients (remove unneeded fields)
+        # Build cleaned list with last purchase + total spent
         cleaned_clients = []
         for c in clients:
+            client_id = c.get("_id")
+
+            # Get total spent and last purchase using new methods
+            total_spent = await self.get_client_total_spent(company, client_id)
+            last_purchase = await self.get_client_last_purchase(company, client_id)
+
             cleaned_clients.append({
-                "id": str(c.get("_id")),
+                "id": str(client_id),
                 "name": c.get("name"),
                 "email": c.get("email"),
                 "phone": c.get("phone"),
                 "address": c.get("address"),
                 "category": c.get("category", "regular"),
+                "totalSpent": total_spent,
+                "lastPurchase": last_purchase["date"] if last_purchase else None,
             })
 
         # Return structured response
@@ -153,3 +164,45 @@ class ClientService:
             "status": "success",
             "clients": client_names
         }
+    
+    async def get_client_last_purchase(self, company: dict, client_id: ObjectId):
+        """
+        Returns the last (most recent) purchase made by the given client
+        within the company's embedded 'sales' array.
+
+        Returns:
+        {
+            "date": "YYYY-MM-DD",
+            "total": float
+        }
+        or None if no sales found.
+        """
+        sales = company.get("sales", [])
+        # Filter only this client's sales
+        client_sales = [s for s in sales if s.get("clientId") == client_id]
+
+        if not client_sales:
+            return None
+
+        # Find the latest sale by date
+        last_sale = max(client_sales, key=lambda s: s.get("date", datetime.min))
+
+        last_date = last_sale.get("date")
+        formatted_date = None
+        if isinstance(last_date, datetime):
+            # Keep only the date portion (YYYY-MM-DD)
+            formatted_date = last_date.strftime("%Y-%m-%d")
+
+        return {
+            "date": formatted_date,
+            "total": round(float(last_sale.get("total", 0)), 2)
+        }
+    
+    async def get_client_total_spent(self, company: dict, client_id: ObjectId) -> float:
+        """
+        Calculates the total amount of money spent by a specific client
+        across all their sales within the given company.
+        """
+        sales = company.get("sales", [])
+        total = sum(float(s.get("total", 0)) for s in sales if s.get("clientId") == client_id)
+        return round(total, 2)
