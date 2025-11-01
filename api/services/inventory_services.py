@@ -31,3 +31,20 @@ class InventoryService:
             "status": "success",
             "products": product_names
         }
+    async def get_product_by_name(self, company_id: str, product_name: str):
+        """
+        Retrieves a product document from a company's 'inventory' array by its name.
+        Returns the full product document, or raises 404 if not found.
+        """
+        company = await self.company_collection.find_one(
+            {"_id": ObjectId(company_id), "inventory.name": product_name},
+            {"inventory.$": 1}
+        )
+
+        if not company or "inventory" not in company or not company["inventory"]:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Product '{product_name}' not found in company inventory."
+            )
+
+        return company["inventory"][0]

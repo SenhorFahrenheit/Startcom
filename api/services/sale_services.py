@@ -4,7 +4,8 @@ from fastapi import HTTPException, status
 from pymongo.errors import PyMongoError
 from ..schemas.sale_schemas import SaleCreate, SaleInDB
 from ..schemas.client_schemas import ClientCreate  
-from ..services.client_services import ClientService  
+from ..services.client_services import ClientService
+from ..services.inventory_services import InventoryService
 import re
 from ..utils.helper_functions import serialize_mongo
 import math
@@ -19,54 +20,58 @@ class SaleService:
         self.db = db_client
         self.company_collection = self.db.get_collection("company")
         self.client_service = ClientService(db_client) 
+        self.inventory_service = InventoryService(db_client)
 
     # dont forget to decrement inventory
     async def create_sale(self, sale_data: SaleCreate) -> SaleInDB:
         """
         Creates and registers a sale in the corresponding company.
+        The frontend sends only product names; the backend resolves product IDs.
         """
         try:
             company_id = sale_data.companyId
 
-            # Check company exists
+            # Step 1: Check company exists
             company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
             if not company:
                 raise HTTPException(status_code=404, detail="Company not found")
 
-            # Step 1: Find or create client inside company
+            # Step 2: Find or create client
             client = await self.client_service.get_client_by_name(company_id, sale_data.clientName)
 
             if not client:
-                # Create client with generic data if not found
                 client_data = ClientCreate(
                     name=sale_data.clientName,
                     email=None,
                     phone=None
                 )
                 new_client = await self.client_service.create_client(company_id, client_data)
-                client_id = ObjectId(new_client.id)
+                client_id = ObjectId(str(new_client.id))
             else:
                 client_id = client["_id"]
 
-            # ✅ Step 2: Calculate total
-            total = round(sum(item.price * item.quantity for item in sale_data.items), 2)
+            # Step 3: Resolve product IDs by productName
+            sale_items = []
+            for item in sale_data.items:
+                product_doc = await self.inventory_service.get_product_by_name(company_id, item.productName)
+                sale_items.append({
+                    "productId": product_doc["_id"],
+                    "quantity": item.quantity,
+                    "price": item.price
+                })
+
+            # Step 4: Calculate total
+            total = round(sum(i["price"] * i["quantity"] for i in sale_items), 2)
 
             sale_doc = {
                 "_id": ObjectId(),
                 "clientId": client_id,
-                "items": [
-                    {
-                        "productId": ObjectId(i.productId),
-                        "quantity": i.quantity,
-                        "price": i.price
-                    } for i in sale_data.items
-                ],
+                "items": sale_items,
                 "total": total,
                 "date": datetime.utcnow()
-                # "date": datetime(2025, 9, 29)
             }
 
-            # ✅ Step 3: Push into company's sales array
+            # Step 5: Push into company's sales array
             result = await self.company_collection.update_one(
                 {"_id": ObjectId(company_id)},
                 {
