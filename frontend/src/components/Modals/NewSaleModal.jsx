@@ -18,16 +18,25 @@ const NewSaleModal = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (isOpen) {
-      const mockProducts = [
-        { _id: "69019f25b407b09e0d09d000", name: "Notebook Gamer", price: 4500.99 },
-        { _id: "69019f25b407b09e0d09d001", name: "Mouse Logitech", price: 150.9 },
-        { _id: "69019f25b407b09e0d09d002", name: "Teclado Mecânico", price: 300 },
-      ];
-      setProducts(mockProducts);
-
+      fetchProducts();
       fetchClients();
     }
   }, [isOpen]);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/Company/inventory/full", {
+        companyId: "69019f25b407b09e0d09cff5",
+      });
+
+      if (response.data?.status === "success" && response.data?.products) {
+        setProducts(response.data.products);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar produtos:", error);
+      toast.error("Erro ao carregar produtos!", { position: "top-right", containerId: "toast-root" });
+    }
+  };
 
   const fetchClients = async () => {
     try {
@@ -92,38 +101,22 @@ const NewSaleModal = ({ isOpen, onClose }) => {
     let hasError = false;
 
     if (!data.client?.trim()) {
-      toast.error("O campo Cliente não pode estar vazio!", {
-        position: "top-right",
-        theme: "light",
-        containerId: "toast-root",
-      });
+      toast.error("O campo Cliente não pode estar vazio!", { position: "top-right", theme: "light", containerId: "toast-root" });
       hasError = true;
     }
 
     if (!data.product) {
-      toast.error("Selecione um produto!", {
-        position: "top-right",
-        theme: "light",
-        containerId: "toast-root",
-      });
+      toast.error("Selecione um produto!", { position: "top-right", theme: "light", containerId: "toast-root" });
       hasError = true;
     }
 
     if (!data.quantity) {
-      toast.error("Selecione uma quantidade válida!", {
-        position: "top-right",
-        theme: "light",
-        containerId: "toast-root",
-      });
+      toast.error("Selecione uma quantidade válida!", { position: "top-right", theme: "light", containerId: "toast-root" });
       hasError = true;
     }
 
     if (!data.price?.trim()) {
-      toast.error("O campo Valor não pode estar vazio!", {
-        position: "top-right",
-        theme: "light",
-        containerId: "toast-root",
-      });
+      toast.error("O campo Valor não pode estar vazio!", { position: "top-right", theme: "light", containerId: "toast-root" });
       hasError = true;
     }
 
@@ -147,18 +140,12 @@ const NewSaleModal = ({ isOpen, onClose }) => {
     try {
       await axios.post("http://127.0.0.1:8000/Company/sales/create_sale", payload);
 
-      toast.success("Venda registrada com sucesso!", {
-        position: "top-right",
-        containerId: "toast-root",
-      });
+      toast.success("Venda registrada com sucesso!", { position: "top-right", containerId: "toast-root" });
 
       onClose();
     } catch (error) {
       console.error("Erro ao registrar venda:", error);
-      toast.error("Erro ao registrar venda!", {
-        position: "top-right",
-        containerId: "toast-root",
-      });
+      toast.error("Erro ao registrar venda!", { position: "top-right", containerId: "toast-root" });
     }
   };
 
@@ -210,18 +197,10 @@ const NewSaleModal = ({ isOpen, onClose }) => {
                   <li
                     key={index}
                     onClick={() => selectClient(name)}
-                    style={{
-                      padding: "8px 12px",
-                      cursor: "pointer",
-                      transition: "background 0.2s",
-                    }}
+                    style={{ padding: "8px 12px", cursor: "pointer", transition: "background 0.2s" }}
                     onMouseDown={(e) => e.preventDefault()}
-                    onMouseEnter={(e) =>
-                      (e.currentTarget.style.background = "#f2f2f2")
-                    }
-                    onMouseLeave={(e) =>
-                      (e.currentTarget.style.background = "transparent")
-                    }
+                    onMouseEnter={(e) => (e.currentTarget.style.background = "#f2f2f2")}
+                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                   >
                     {name}
                   </li>
