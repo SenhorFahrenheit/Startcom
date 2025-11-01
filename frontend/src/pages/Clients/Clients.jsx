@@ -180,23 +180,23 @@ const Clients = () => {
       <NewClientModal
         isOpen={activeModal === "client"}
         onClose={closeModal}
-       onSuccess={({ apiResponse, formData }) => {
+        onSuccess={(apiResponse) => {
         const clientFormatted = {
-          clientName: apiResponse.name || formData.name,
-          clientType: (apiResponse.category || formData.category)
-            ? (apiResponse.category || formData.category)[0].toUpperCase() + (apiResponse.category || formData.category).slice(1)
+          clientName: apiResponse.name,
+          clientType: apiResponse.category
+            ? apiResponse.category[0].toUpperCase() + apiResponse.category.slice(1)
             : "Regular",
-          email: apiResponse.email || formData.email,
-          phoneNumber: apiResponse.phone || formData.phone,
-          city: apiResponse.address || formData.address, 
+          email: apiResponse.email || "Não Informado",
+          phoneNumber: apiResponse.phone || "Não Informado",
+          city: apiResponse.city || "Não Informado",
           totalSpent: "0",
           lastPurchase: "Não há",
         };
 
-          setClients(prevClients => [clientFormatted, ...prevClients]);
+        setClients(prevClients => [clientFormatted, ...prevClients]);
+        fetchOverviewAndClients();
+      }}
 
-          fetchOverviewAndClients();
-        }}
       />
     </section>
   )

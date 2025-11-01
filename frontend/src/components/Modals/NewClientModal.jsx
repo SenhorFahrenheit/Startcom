@@ -44,7 +44,7 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
     if (hasError) return;
 
     const body = {
-      companyId: "69020f494fc4f7796349b235",
+      companyId: "69019f25b407b09e0d09cff5",
       name: data.nome,
       email: data.email,
       phone: data.telefone.replace(/\D/g, ""),
