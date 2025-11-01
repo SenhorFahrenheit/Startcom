@@ -42,7 +42,7 @@ const Clients = () => {
     try {
       setLoading(true);
       const response = await axios.post("http://127.0.0.1:8000/Company/clients/overview_full", {
-        companyId: "69020f494fc4f7796349b235"
+        companyId: "69019f25b407b09e0d09cff5"
       });
 
       const data = response.data;
@@ -53,8 +53,8 @@ const Clients = () => {
         const formattedClients = (data.clients || []).map(c => ({
           clientName: c.name,
           clientType: c.category ? c.category[0].toUpperCase() + c.category.slice(1) : "Regular",
-          email: c.email,
-          phoneNumber: c.phone,
+          email: c.email || "Não Informado",
+          phoneNumber: c.phone || "Não Informado",
           city: c.address || "Não Informado",
           totalSpent: "0",
           lastPurchase: "Não há",
