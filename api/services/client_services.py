@@ -2,6 +2,7 @@ from bson import ObjectId
 from datetime import datetime
 from fastapi import HTTPException, status
 from ..schemas.client_schemas import ClientCreate, ClientInDB
+from ..utils.helper_functions import serialize_mongo  # ou conforme o caminho certo
 
 
 class ClientService:
@@ -29,7 +30,26 @@ class ClientService:
         if company and "clients" in company and len(company["clients"]) > 0:
             return company["clients"][0]
         return None
+    async def get_client_by_email(self, company_id: str, client_email: str):
+        """
+        Searches for a client by email inside a specific company's embedded 'clients' array.
+        Returns the client if found.
+        """
+        if not client_email:
+            return None  # Email might be optional in some cases
 
+        company = await self.company_collection.find_one(
+            {
+                "_id": ObjectId(company_id),
+                "clients.email": client_email
+            },
+            {"clients.$": 1}
+        )
+
+        if company and "clients" in company and len(company["clients"]) > 0:
+            return company["clients"][0]
+        return None
+    
     async def create_client(self, company_id: str, client_data: ClientCreate) -> ClientInDB:
         """
         Adds a new client inside the specified company's embedded 'clients' array.
@@ -54,5 +74,42 @@ class ClientService:
 
         if result.modified_count == 0:
             raise HTTPException(status_code=500, detail="Failed to add client to company.")
-
+                                  
         return ClientInDB(**new_client)
+    
+    async def get_clients_overview_full(self, company_id: str):
+        company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
+        if not company:
+            raise HTTPException(status_code=404, detail="Company not found")
+
+        clients = company.get("clients", [])
+        sales = company.get("sales", [])
+        avg_satisfaction = company.get("average_satisfaction", 0)
+
+        # Totais
+        total_clients = len(clients)
+        vip_clients = len([c for c in clients if c.get("category") == "VIP"])
+
+        now = datetime.utcnow()
+        new_clients = [
+            c for c in clients
+            if c.get("createdAt")
+            and isinstance(c["createdAt"], datetime)
+            and c["createdAt"].month == now.month
+            and c["createdAt"].year == now.year
+        ]
+
+        total_new_clients = len(new_clients)
+
+        return {
+            "status": "success",
+            "overview": {
+                "clients": {
+                    "total": total_clients,
+                    "vip": vip_clients,
+                    "newThisMonth": total_new_clients,
+                    "averageSatisfaction": round(avg_satisfaction, 2)
+                },
+                "sales": serialize_mongo(sales)
+            }
+        }
