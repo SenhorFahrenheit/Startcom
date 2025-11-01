@@ -72,7 +72,7 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
   };
 
   return (
-    <BaseModal isOpen={isOpen} onClose={onClose} contentLabel="Cadastrar Novo Cliente" width="420px" height="440px" showCloseButton={true}>
+    <BaseModal isOpen={isOpen} onClose={onClose} contentLabel="Cadastrar Novo Cliente" width="420px" height="390px" showCloseButton={true}>
       <h2 className="dashboard-modal-title">Registrar Novo Cliente</h2>
 
       <form className="form-dashboard" onSubmit={newClient}>
@@ -97,14 +97,14 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
             <InputDashboard type="text" name="cidade" id="cidade" />
           </div>
 
-          <div className="input-dashboard-block">
+          {/*<div className="input-dashboard-block">
             <label htmlFor="tipo">Tipo</label>
             <select name="tipo" id="tipo" defaultValue="Regular" className="InputDashboard">
               <option>Regular</option>
               <option>VIP</option>
               <option>Premium</option>
             </select>
-          </div>
+          </div>*/}
         </div>
 
         <div className="button-shadown">
