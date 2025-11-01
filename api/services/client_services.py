@@ -135,3 +135,21 @@ class ClientService:
             },
             "clients": serialize_mongo(cleaned_clients)
         }
+    async def get_all_client_names(self, company_id: str):
+        """
+        Retrieves all client names for a given company.
+        Returns a list of strings with client names only.
+        """
+        # Find the company
+        company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
+        if not company:
+            raise HTTPException(status_code=404, detail="Company not found")
+
+        # Extract client names
+        clients = company.get("clients", [])
+        client_names = [c.get("name") for c in clients if "name" in c]
+
+        return {
+            "status": "success",
+            "clients": client_names
+        }

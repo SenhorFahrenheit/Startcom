@@ -44,3 +44,19 @@ class ClientCreateRequest(BaseModel):
     phone: Optional[str] = Field(None, description="Client phone (optional)")
     city: Optional[str] = Field(None, description="Client address (optional)")
 
+
+class ClientNamesRequest(BaseModel):
+    """
+    Request body for retrieving all client names
+    from a specific company's embedded client list.
+    """
+    companyId: str = Field(..., description="ID of the company to fetch client names from")
+
+
+class ClientNamesResponse(BaseModel):
+    """
+    Response model containing all client names of the company.
+    """
+    status: str = Field(..., description="Operation result status")
+    clients: list[str] = Field(..., description="List of all client names")
+
