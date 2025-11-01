@@ -56,8 +56,8 @@ const Clients = () => {
           email: c.email || "Não Informado",
           phoneNumber: c.phone || "Não Informado",
           city: c.address || "Não Informado",
-          totalSpent: "0",
-          lastPurchase: "Não há",
+          totalSpent: c.totalSpent || "Não Informado",
+          lastPurchase: c.lastPurchase || "Não Informado",
         }));
 
         setClients(formattedClients);

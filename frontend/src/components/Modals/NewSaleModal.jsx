@@ -9,6 +9,11 @@ import formatCurrency from "../../utils/format";
 
 const NewSaleModal = ({ isOpen, onClose }) => {
   const [products, setProducts] = useState([]);
+  const [clients, setClients] = useState([]);
+  const [filteredClients, setFilteredClients] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [clientInput, setClientInput] = useState("");
+
   const priceRef = useRef();
 
   useEffect(() => {
@@ -20,20 +25,52 @@ const NewSaleModal = ({ isOpen, onClose }) => {
       ];
       setProducts(mockProducts);
 
-      // === Future Backend ===
-      /*
-      async function fetchProducts() {
-        try {
-          const response = await axios.get("http://127.0.0.1:8000/products");
-          setProducts(response.data.products || []);
-        } catch (error) {
-          console.error("Erro ao buscar produtos:", error);
-        }
-      }
-      fetchProducts();
-      */
+      fetchClients();
     }
   }, [isOpen]);
+
+  const fetchClients = async () => {
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/Company/clients/names", {
+        companyId: "69019f25b407b09e0d09cff5",
+      });
+      if (response.data?.clients) {
+        setClients(response.data.clients);
+      }
+    } catch (error) {
+      console.error("Erro ao buscar clientes:", error);
+    }
+  };
+
+  const handleClientInput = (e) => {
+    const value = e.target.value;
+    setClientInput(value);
+    if (value.trim() === "") {
+      setFilteredClients([]);
+      return;
+    }
+    const filtered = clients.filter((name) =>
+      name.toLowerCase().includes(value.toLowerCase())
+    );
+    setFilteredClients(filtered);
+  };
+
+  const selectClient = (name) => {
+    setClientInput(name);
+    setFilteredClients([]);
+    setShowSuggestions(false);
+  };
+
+  const handleFocus = () => {
+    if (clients.length > 0) {
+      setFilteredClients(clients);
+      setShowSuggestions(true);
+    }
+  };
+
+  const handleBlur = () => {
+    setTimeout(() => setShowSuggestions(false), 150);
+  };
 
   const handleProductChange = (e) => {
     const selectedId = e.target.value;
@@ -95,7 +132,6 @@ const NewSaleModal = ({ isOpen, onClose }) => {
     const companyId = "69019f25b407b09e0d09cff5";
     const selectedProduct = products.find((p) => p._id === data.product);
 
-
     const payload = {
       companyId,
       clientName: data.client,
@@ -108,13 +144,8 @@ const NewSaleModal = ({ isOpen, onClose }) => {
       ],
     };
 
-    console.log(payload)
-
     try {
-      await axios.post(
-        "http://127.0.0.1:8000/Company/sales/create_sale",
-        payload
-      );
+      await axios.post("http://127.0.0.1:8000/Company/sales/create_sale", payload);
 
       toast.success("Venda registrada com sucesso!", {
         position: "top-right",
@@ -137,16 +168,66 @@ const NewSaleModal = ({ isOpen, onClose }) => {
       onClose={onClose}
       contentLabel="Cadastrar Nova Venda"
       width="500px"
-      height="390px"
+      height="420px"
       showCloseButton={true}
     >
       <h2 className="dashboard-modal-title">Registrar Nova Venda</h2>
 
       <form className="form-dashboard" onSubmit={newSale}>
         <div className="align-dashboard-form">
-          <div className="input-dashboard-block">
+          <div className="input-dashboard-block" style={{ position: "relative" }}>
             <label htmlFor="client">Cliente</label>
-            <InputDashboard name="client" id="client" />
+            <InputDashboard
+              name="client"
+              id="client"
+              value={clientInput}
+              onChange={handleClientInput}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+              autoComplete="off"
+            />
+            {showSuggestions && filteredClients.length > 0 && (
+              <ul
+                style={{
+                  position: "absolute",
+                  top: "45px",
+                  left: "90px",
+                  right: 0,
+                  background: "white",
+                  border: "1px solid #ccc",
+                  borderRadius: "8px",
+                  zIndex: 10,
+                  maxHeight: "160px",
+                  width: "360px",
+                  overflowY: "auto",
+                  listStyle: "none",
+                  padding: "5px 0",
+                  margin: 0,
+                  fontFamily: "var(--font-base)"
+                }}
+              >
+                {filteredClients.map((name, index) => (
+                  <li
+                    key={index}
+                    onClick={() => selectClient(name)}
+                    style={{
+                      padding: "8px 12px",
+                      cursor: "pointer",
+                      transition: "background 0.2s",
+                    }}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.background = "#f2f2f2")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.background = "transparent")
+                    }
+                  >
+                    {name}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <div className="input-dashboard-block">
@@ -173,7 +254,13 @@ const NewSaleModal = ({ isOpen, onClose }) => {
 
           <div className="input-dashboard-block">
             <label htmlFor="price">Valor</label>
-            <InputDashboard style="readOnly-Input" readOnly name="price" id="price" ref={priceRef} />
+            <InputDashboard
+              style="readOnly-Input"
+              readOnly
+              name="price"
+              id="price"
+              ref={priceRef}
+            />
           </div>
         </div>
 
