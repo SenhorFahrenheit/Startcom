@@ -101,7 +101,7 @@ const NewSaleModal = ({ isOpen, onClose }) => {
       clientName: data.client,
       items: [
         {
-          productId: selectedProduct._id,
+          productName: selectedProduct.name,
           quantity: Number(data.quantity),
           price: selectedProduct.price,
         },
