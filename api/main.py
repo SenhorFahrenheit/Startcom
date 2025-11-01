@@ -20,6 +20,8 @@ app.include_router(apple_router, prefix="/AuthApple")
 app.include_router(user_router, prefix="/User")
 app.include_router(auth_router, prefix="/Auth")
 app.include_router(sale_routes, prefix="/Company")
+app.include_router(client_routes, prefix="/Company")
+app.include_router(inventory_routes, prefix="/Company")
 
 @app.on_event("startup")
 async def startup_event():
