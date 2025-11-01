@@ -4,43 +4,42 @@ import { LuEye } from "react-icons/lu";
 import axios from "axios";
 import formatCurrency from "../../utils/format";
 
-const SalesTable = ({ dateFilter, statusFilter, search }) => {
+const SalesTable = ({ dateFilter, statusFilter, search, refreshTrigger }) => {
   const [sales, setSales] = useState([]);
   const [filteredSales, setFilteredSales] = useState([]);
 
-  useEffect(() => {
-    async function fetchSales() {
-      try {
-        const response = await axios.post(
-          "http://127.0.0.1:8000/Company/sales/get_all",
-          { companyId: "69019f25b407b09e0d09cff5" }
-        );
+  const fetchSales = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/Company/sales/get_all",
+        { companyId: "69019f25b407b09e0d09cff5" }
+      );
 
-        console.log("API response:", response.data);
+      console.log("API response:", response.data);
 
-        if (!response.data.sales) return;
+      if (!response.data.sales) return;
 
-        const data = response.data.sales.map((sale) => ({
-          id: sale._id,
-          client: sale.clientName,
-          date: new Date(sale.date), // mantemos como Date para filtro
-          amount: sale.total,
-          items: sale.items.reduce((acc, item) => acc + item.quantity, 0),
-        }));
+      const data = response.data.sales.map((sale) => ({
+        id: sale._id,
+        client: sale.clientName,
+        date: new Date(sale.date),
+        amount: sale.total,
+        items: sale.items.reduce((acc, item) => acc + item.quantity, 0),
+      }));
 
-        setSales(data);
-      } catch (error) {
-        console.error("Erro ao buscar vendas:", error);
-      }
+      setSales(data);
+    } catch (error) {
+      console.error("Erro ao buscar vendas:", error);
     }
+  };
 
+  useEffect(() => {
     fetchSales();
-  }, []);
+  }, [refreshTrigger]);
 
   useEffect(() => {
     let result = [...sales];
 
-    // Filtrar por busca
     if (search.trim() !== "") {
       result = result.filter(
         (sale) =>
@@ -50,7 +49,6 @@ const SalesTable = ({ dateFilter, statusFilter, search }) => {
       );
     }
 
-    // Filtrar por data
     const today = new Date();
     result = result.filter((sale) => {
       const saleDate = sale.date;

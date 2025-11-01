@@ -7,7 +7,7 @@ import Button from "../Button/Button";
 import InputDashboard from "../InputDashboard/InputDashboard";
 import formatCurrency from "../../utils/format";
 
-const NewSaleModal = ({ isOpen, onClose }) => {
+const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
   const [products, setProducts] = useState([]);
   const [clients, setClients] = useState([]);
   const [filteredClients, setFilteredClients] = useState([]);
@@ -143,6 +143,8 @@ const NewSaleModal = ({ isOpen, onClose }) => {
       toast.success("Venda registrada com sucesso!", { position: "top-right", containerId: "toast-root" });
 
       onClose();
+
+      if (onSuccess) onSuccess();
     } catch (error) {
       console.error("Erro ao registrar venda:", error);
       toast.error("Erro ao registrar venda!", { position: "top-right", containerId: "toast-root" });

@@ -29,7 +29,7 @@
 .clientInformationCards {
     display: flex;
     justify-content: start;
-    gap: 10px;
+    gap: 20px;
     flex-wrap: wrap;
 }
 
