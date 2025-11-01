@@ -63,6 +63,7 @@ class SaleService:
                 ],
                 "total": total,
                 "date": datetime.utcnow()
+                # "date": datetime(2025, 9, 29)
             }
 
             # ✅ Step 3: Push into company's sales array
