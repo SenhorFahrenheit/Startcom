@@ -46,28 +46,40 @@ class AuthService:
 
     async def login(self, email, password):
         """
-        Authenticate a user by email and password.
-        - Verifies that the user exists.
-        - Checks that the password is correct.
-        - Creates and returns a JWT access token if authentication succeeds.
+            Authenticate a user by email and password.
+            - Verifies that the user exists.
+            - Checks that the password is correct.
+            - Creates and returns a JWT access token if authentication succeeds.
         """
         user = await self.get_user_by_email(email)
         if not user:
-            # User not found
             raise Exception("Invalid email or password")
-        
-        # Check if the entered password matches the hashed password stored in the database
+
+        # Verify password
         if not await self.verify_password(password, user["passwordHash"]):
             raise Exception("Invalid email or password")
-        
-        # Define the token expiration time
+
+        # Define expiration time for the token
         expire = datetime.utcnow() + timedelta(minutes=self.access_token_expire_minutes)
 
-        # Define the JWT payload (contains user ID and expiration time)
-        payload = {"sub": str(user["_id"]), "exp": expire}
+        # Extract companyId (first item in array, if exists)
+        company_ids = user.get("companyIds", [])
+        company_id = str(company_ids[0]) if company_ids else None
 
-        # Generate the JWT access token using the secret key and algorithm
+        # Build JWT payload
+        payload = {
+            "sub": str(user["_id"]),            # User ID
+            "company_id": company_id,           # First companyId
+            "exp": expire                       # Expiration timestamp
+        }
+
+        # Encode token
         token = jwt.encode(payload, self.secret_key, algorithm=self.algorithm)
 
-        # Return the generated token
-        return token
+        # Return both token and decoded info (optional for frontend convenience)
+        return {
+            "access_token": token,
+            "token_type": "bearer",
+            "company_id": company_id
+        }
+
