@@ -46,6 +46,7 @@ const Clients = () => {
       });
 
       const data = response.data;
+      console.log(data.clients)
 
       if (data.status === "success") {
         setOverview(data.overview);
@@ -56,9 +57,11 @@ const Clients = () => {
           email: c.email || "Não Informado",
           phoneNumber: c.phone || "Não Informado",
           city: c.address || "Não Informado",
-          totalSpent: c.totalSpent || "Não Informado",
-          lastPurchase: c.lastPurchase || "Não Informado",
+          totalSpent: c.totalSpent,
+          lastPurchase: c.lastPurchase || "Ainda não comprou",
         }));
+
+        console.log(formattedClients)
 
         setClients(formattedClients);
       } else {
@@ -76,12 +79,17 @@ const Clients = () => {
   }, []);
 
   const filteredClients = clients.filter(c => {
-    return (
+    const matchesSearch =
       c.clientName?.toLowerCase().includes(search.toLowerCase()) ||
       c.email?.toLowerCase().includes(search.toLowerCase()) ||
-      c.phoneNumber?.includes(search)
-    );
+      c.phoneNumber?.includes(search);
+
+    const matchesType =
+      typeFilter === "all" ? true : c.clientType.toLowerCase() === typeFilter.toLowerCase();
+
+    return matchesSearch && matchesType;
   });
+
 
   const toggleSidebar = () => setSidebarOpen(prev => !prev);
 
@@ -172,18 +180,18 @@ const Clients = () => {
       <NewClientModal
         isOpen={activeModal === "client"}
         onClose={closeModal}
-        onSuccess={(newClientFromAPI) => {
-          const clientFormatted = {
-            clientName: newClientFromAPI.name,
-            clientType: newClientFromAPI.category 
-              ? newClientFromAPI.category[0].toUpperCase() + newClientFromAPI.category.slice(1)
-              : "Regular",
-            email: newClientFromAPI.email,
-            phoneNumber: newClientFromAPI.phone,
-            city: newClientFromAPI.address || "Não Informado",
-            totalSpent: "0",
-            lastPurchase: "Não há",
-          };
+       onSuccess={({ apiResponse, formData }) => {
+        const clientFormatted = {
+          clientName: apiResponse.name || formData.name,
+          clientType: (apiResponse.category || formData.category)
+            ? (apiResponse.category || formData.category)[0].toUpperCase() + (apiResponse.category || formData.category).slice(1)
+            : "Regular",
+          email: apiResponse.email || formData.email,
+          phoneNumber: apiResponse.phone || formData.phone,
+          city: apiResponse.address || formData.address, 
+          totalSpent: "0",
+          lastPurchase: "Não há",
+        };
 
           setClients(prevClients => [clientFormatted, ...prevClients]);
 

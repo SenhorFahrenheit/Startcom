@@ -49,7 +49,7 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
       email: data.email,
       phone: data.telefone.replace(/\D/g, ""),
       city: data.cidade,
-      category: data.tipo.toLowerCase()
+      category: (data.tipo || "Regular").toLowerCase()
     };
 
     try {
