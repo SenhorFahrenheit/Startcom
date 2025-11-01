@@ -1,6 +1,6 @@
 from bson import ObjectId
 from fastapi import HTTPException
-
+from ..utils.helper_functions import serialize_mongo
 
 class InventoryService:
     """
@@ -11,25 +11,48 @@ class InventoryService:
         self.db = db_client
         self.company_collection = self.db.get_collection("company")
 
-    async def get_inventory_names(self, company_id: str):
+    async def get_inventory_full(self, company_id: str):
         """
-        Retrieves the names of all products within the company's 'inventory' array.
-        Returns only the product names as a list of strings.
-        """
-        company = await self.company_collection.find_one(
-            {"_id": ObjectId(company_id)},
-            {"inventory.name": 1, "_id": 0}
-        )
+        Retrieves all products (except 'createdAt') from the company's 'inventory' array.
 
+        Returns:
+        {
+            "status": "success",
+            "products": [
+                {
+                    "_id": "69019f25b407b09e0d09d000",
+                    "name": "Notebook Gamer",
+                    "description": "Notebook Gamer description",
+                    "price": 4500,
+                    "quantity": 45
+                },
+                ...
+            ]
+        }
+        """
+        # Find the company
+        company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
         if not company:
             raise HTTPException(status_code=404, detail="Company not found")
 
         inventory = company.get("inventory", [])
-        product_names = [item.get("name") for item in inventory if "name" in item]
+        if not inventory:
+            return {"status": "success", "products": []}
+
+        # Exclude createdAt
+        cleaned_inventory = []
+        for item in inventory:
+            cleaned_inventory.append({
+                "_id": str(item.get("_id")),
+                "name": item.get("name"),
+                "description": item.get("description"),
+                "price": item.get("price"),
+                "quantity": item.get("quantity")
+            })
 
         return {
             "status": "success",
-            "products": product_names
+            "products": serialize_mongo(cleaned_inventory)
         }
     async def get_product_by_name(self, company_id: str, product_name: str):
         """
