@@ -60,7 +60,8 @@ class ClientService:
             "name": client_data.name,
             "email": client_data.email or "",
             "phone": client_data.phone or "",
-            "address": getattr(client_data, "address", ""),
+            # "address": getattr(client_data, "address", ""),
+            "address": client_data.city or "",
             "createdAt": datetime.utcnow()
         }
 
@@ -117,7 +118,6 @@ class ClientService:
         cleaned_clients = []
         for c in clients:
             client_id = c.get("_id")
-
             # Get total spent and last purchase using new methods
             total_spent = await self.get_client_total_spent(company, client_id)
             last_purchase = await self.get_client_last_purchase(company, client_id)
@@ -127,6 +127,7 @@ class ClientService:
                 "name": c.get("name"),
                 "email": c.get("email"),
                 "phone": c.get("phone"),
+                # o certo é address
                 "address": c.get("address"),
                 "category": c.get("category", "regular"),
                 "totalSpent": total_spent,
