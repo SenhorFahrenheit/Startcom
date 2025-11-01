@@ -78,15 +78,25 @@ class ClientService:
         return ClientInDB(**new_client)
     
     async def get_clients_overview_full(self, company_id: str):
+        """
+        Retrieves an overview of all clients for a given company, including:
+        - Total number of clients
+        - Total VIP clients
+        - Clients added this month
+        - Company's average satisfaction score
+
+        Also returns the list of all clients, excluding 'createdAt' and 'updatedAt'.
+        """
+        # Find the company document by ID
         company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
         if not company:
             raise HTTPException(status_code=404, detail="Company not found")
 
+        # Extract client data and satisfaction metric
         clients = company.get("clients", [])
-        sales = company.get("sales", [])
         avg_satisfaction = company.get("average_satisfaction", 0)
 
-        # Totais
+        # Overview metrics
         total_clients = len(clients)
         vip_clients = len([c for c in clients if c.get("category") == "VIP"])
 
@@ -98,9 +108,21 @@ class ClientService:
             and c["createdAt"].month == now.month
             and c["createdAt"].year == now.year
         ]
-
         total_new_clients = len(new_clients)
 
+        # Clean clients (remove unneeded fields)
+        cleaned_clients = []
+        for c in clients:
+            cleaned_clients.append({
+                "id": str(c.get("_id")),
+                "name": c.get("name"),
+                "email": c.get("email"),
+                "phone": c.get("phone"),
+                "address": c.get("address"),
+                "category": c.get("category", "regular"),
+            })
+
+        # Return structured response
         return {
             "status": "success",
             "overview": {
@@ -109,7 +131,7 @@ class ClientService:
                     "vip": vip_clients,
                     "newThisMonth": total_new_clients,
                     "averageSatisfaction": round(avg_satisfaction, 2)
-                },
-                "sales": serialize_mongo(sales)
-            }
+                }
+            },
+            "clients": serialize_mongo(cleaned_clients)
         }
