@@ -60,7 +60,8 @@ class ClientService:
             "name": client_data.name,
             "email": client_data.email or "",
             "phone": client_data.phone or "",
-            "address": getattr(client_data, "address", ""),
+            # "address": getattr(client_data, "address", ""),
+            "adress": client_data.city or "",
             "createdAt": datetime.utcnow()
         }
 
