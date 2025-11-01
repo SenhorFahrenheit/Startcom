@@ -1,9 +1,9 @@
-import "./Clients.css"
-import "../commonStyle.css"
+import "./Clients.css";
+import "../commonStyle.css";
 
 import formatCurrency from '../../utils/format';
 
-import Sidebar from "../../layouts/Sidebar/Sidebar"
+import Sidebar from "../../layouts/Sidebar/Sidebar";
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
 import Button from "../../components/Button/Button";
 
@@ -13,7 +13,8 @@ import ClientCard from "../../components/ClientCard/ClientCard";
 import FilterSelect from "../../components/FilterSelect/FilterSelect";
 
 import { useState, useEffect } from "react";
-import { useAuthModals } from "../../hooks/useAuthModals"
+import { useAuthModals } from "../../hooks/useAuthModals";
+import axios from "axios";
 
 import { LuPlus, LuSmile, LuUsers, LuStar, LuCalendar } from "react-icons/lu";
 
@@ -30,109 +31,36 @@ const Clients = () => {
       vip: 0,
       newThisMonth: 0,
       averageSatisfaction: 0,
-    },
-    sales: []
+    }
   });
 
+  const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchOverview = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch("http://127.0.0.1:8000/Company/clients/overview_full", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            companyId: "69020f494fc4f7796349b235",
-          }),
-        });
-
-        if (!response.ok) {
-          throw new Error("Erro ao buscar dados dos clientes");
-        }
-
-        const data = await response.json();
-        if (data.status === "success") {
-          setOverview(data.overview);
-        } else {
-          throw new Error("Resposta inválida da API");
-        }
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchOverview();
-  }, []);
-
-  const clients = [
-    {
-      clientName: "Carlos Soares Silva",
-      clientType: "VIP",
-      email: "carlos@email.com",
-      phoneNumber: "(11) 99999-9999",
-      city: "São Paulo",
-      totalSpent: "1256.80",
-      lastPurchase: "14/04/2025"
-    },
-    {
-      clientName: "João Santos",
-      clientType: "Regular",
-      email: "joao@email.com",
-      phoneNumber: "(11) 88888-8888",
-      city: "Rio de Janeiro",
-      totalSpent: "845.30",
-      lastPurchase: "11/07/2025"
-    },
-    {
-      clientName: "Pedro Henrique Pinheiro",
-      clientType: "Premium",
-      email: "pedro@email.com",
-      phoneNumber: "(11) 77777-7777",
-      city: "Belo Horizonte",
-      totalSpent: "2340.50",
-      lastPurchase: "09/09/2025"
-    }
-  ];
-
-  const filteredClients = clients.filter(c => {
-    const matchesSearch =
-      c.clientName.toLowerCase().includes(search.toLowerCase()) ||
-      c.email.toLowerCase().includes(search.toLowerCase()) ||
-      c.phoneNumber.includes(search);
-
-    const matchesType =
-      typeFilter === "all" || c.clientType.toLowerCase() === typeFilter;
-
-    return matchesSearch && matchesType;
-  });
-  
-  const toggleSidebar = () => setSidebarOpen(prev => !prev);
-
-  const fetchOverview = async () => {
+  const fetchOverviewAndClients = async () => {
     try {
       setLoading(true);
-      const response = await fetch("http://127.0.0.1:8000/Company/clients/overview_full", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          companyId: "69020f494fc4f7796349b235",
-        }),
+      const response = await axios.post("http://127.0.0.1:8000/Company/clients/overview_full", {
+        companyId: "69020f494fc4f7796349b235"
       });
 
-      if (!response.ok) throw new Error("Erro ao buscar dados dos clientes");
-      const data = await response.json();
+      const data = response.data;
 
       if (data.status === "success") {
         setOverview(data.overview);
+
+        const formattedClients = (data.clients || []).map(c => ({
+          clientName: c.name,
+          clientType: c.category ? c.category[0].toUpperCase() + c.category.slice(1) : "Regular",
+          email: c.email,
+          phoneNumber: c.phone,
+          city: c.address || "Não Informado",
+          totalSpent: "0",
+          lastPurchase: "Não há",
+        }));
+
+        setClients(formattedClients);
       } else {
         throw new Error("Resposta inválida da API");
       }
@@ -144,9 +72,18 @@ const Clients = () => {
   };
 
   useEffect(() => {
-    fetchOverview();
+    fetchOverviewAndClients();
   }, []);
 
+  const filteredClients = clients.filter(c => {
+    return (
+      c.clientName?.toLowerCase().includes(search.toLowerCase()) ||
+      c.email?.toLowerCase().includes(search.toLowerCase()) ||
+      c.phoneNumber?.includes(search)
+    );
+  });
+
+  const toggleSidebar = () => setSidebarOpen(prev => !prev);
 
   return (
     <section className="body-section">
@@ -179,30 +116,10 @@ const Clients = () => {
             <p style={{ color: "red" }}>{error}</p>
           ) : (
             <>
-              <ClientCard 
-                icon={<LuUsers size={24}/>} 
-                value={overview.clients.total} 
-                description="Total de Clientes" 
-                color="blue"
-              />
-              <ClientCard 
-                icon={<LuStar size={24}/>} 
-                value={overview.clients.vip} 
-                description="Clientes VIP" 
-                color="purple"
-              />
-              <ClientCard 
-                icon={<LuCalendar size={24}/>} 
-                value={overview.clients.newThisMonth} 
-                description="Novos este mês" 
-                color="orange"
-              />
-              <ClientCard 
-                icon={<LuSmile size={24}/>} 
-                value={overview.clients.averageSatisfaction.toFixed(1)} 
-                description="Satisfação Média" 
-                color="green"
-              />
+              <ClientCard icon={<LuUsers size={24}/>} value={overview.clients.total} description="Total de Clientes" color="blue"/>
+              <ClientCard icon={<LuStar size={24}/>} value={overview.clients.vip} description="Clientes VIP" color="purple"/>
+              <ClientCard icon={<LuCalendar size={24}/>} value={overview.clients.newThisMonth} description="Novos este mês" color="orange"/>
+              <ClientCard icon={<LuSmile size={24}/>} value={overview.clients.averageSatisfaction.toFixed(1)} description="Satisfação Média" color="green"/>
             </>
           )}
         </section>
@@ -255,10 +172,26 @@ const Clients = () => {
       <NewClientModal
         isOpen={activeModal === "client"}
         onClose={closeModal}
-        onSuccess={fetchOverview}
+        onSuccess={(newClientFromAPI) => {
+          const clientFormatted = {
+            clientName: newClientFromAPI.name,
+            clientType: newClientFromAPI.category 
+              ? newClientFromAPI.category[0].toUpperCase() + newClientFromAPI.category.slice(1)
+              : "Regular",
+            email: newClientFromAPI.email,
+            phoneNumber: newClientFromAPI.phone,
+            city: newClientFromAPI.address || "Não Informado",
+            totalSpent: "0",
+            lastPurchase: "Não há",
+          };
+
+          setClients(prevClients => [clientFormatted, ...prevClients]);
+
+          fetchOverviewAndClients();
+        }}
       />
     </section>
   )
 }
 
-export default Clients
+export default Clients;

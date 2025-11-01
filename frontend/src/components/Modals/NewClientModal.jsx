@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 import BaseModal from "./BaseModal";
 import Button from "../Button/Button";
@@ -24,38 +25,19 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
     let hasError = false;
 
     if (!data.nome.trim()) {
-      toast.error("O campo Nome não pode estar vazio!", {
-        position: "top-right",
-        theme: "light",
-        containerId: "toast-root",
-      });
+      toast.error("O campo Nome não pode estar vazio!", { position: "top-right", theme: "light", containerId: "toast-root" });
       hasError = true;
     }
-
     if (!data.email.trim()) {
-      toast.error("O campo Email não pode estar vazio!", {
-        position: "top-right",
-        theme: "light",
-        containerId: "toast-root",
-      });
+      toast.error("O campo Email não pode estar vazio!", { position: "top-right", theme: "light", containerId: "toast-root" });
       hasError = true;
     }
-
     if (!data.telefone.trim()) {
-      toast.error("O campo telefone não pode estar vazio!", {
-        position: "top-right",
-        theme: "light",
-        containerId: "toast-root",
-      });
+      toast.error("O campo telefone não pode estar vazio!", { position: "top-right", theme: "light", containerId: "toast-root" });
       hasError = true;
     }
-
     if (!data.cidade.trim()) {
-      toast.error("O campo cidade não pode estar vazio!", {
-        position: "top-right",
-        theme: "light",
-        containerId: "toast-root",
-      });
+      toast.error("O campo cidade não pode estar vazio!", { position: "top-right", theme: "light", containerId: "toast-root" });
       hasError = true;
     }
 
@@ -67,29 +49,21 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
       email: data.email,
       phone: data.telefone.replace(/\D/g, ""),
       city: data.cidade,
+      category: data.tipo.toLowerCase()
     };
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/Company/clients/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
+      const response = await axios.post("http://127.0.0.1:8000/Company/clients/create", body);
 
-      if (!response.ok) throw new Error("Erro ao cadastrar cliente.");
-
-      toast.success("Cliente registrado com sucesso!", {
-        position: "top-right",
-        containerId: "toast-root",
-      });
+      toast.success("Cliente registrado com sucesso!", { position: "top-right", containerId: "toast-root" });
 
       onClose();
 
-      if (onSuccess) onSuccess();
+      if (onSuccess) {
+        onSuccess(response.data);
+      }
     } catch (error) {
-      toast.error(`Erro: ${error.message}`, {
+      toast.error(`Erro: ${error.response?.data?.message || error.message}`, {
         position: "top-right",
         theme: "light",
         containerId: "toast-root",
@@ -98,14 +72,7 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
   };
 
   return (
-    <BaseModal
-      isOpen={isOpen}
-      onClose={onClose}
-      contentLabel="Cadastrar Novo Cliente"
-      width="420px"
-      height="440px"
-      showCloseButton={true}
-    >
+    <BaseModal isOpen={isOpen} onClose={onClose} contentLabel="Cadastrar Novo Cliente" width="420px" height="440px" showCloseButton={true}>
       <h2 className="dashboard-modal-title">Registrar Novo Cliente</h2>
 
       <form className="form-dashboard" onSubmit={newClient}>
@@ -122,14 +89,7 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
 
           <div className="input-dashboard-block">
             <label htmlFor="telefone">Telefone</label>
-            <InputDashboard
-              type="tel"
-              maxLength={14}
-              name="telefone"
-              id="telefone"
-              value={telefone}
-              onChange={handleTelefoneChange}
-            />
+            <InputDashboard type="tel" maxLength={14} name="telefone" id="telefone" value={telefone} onChange={handleTelefoneChange} />
           </div>
 
           <div className="input-dashboard-block">
@@ -139,12 +99,7 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
 
           <div className="input-dashboard-block">
             <label htmlFor="tipo">Tipo</label>
-            <select
-              name="tipo"
-              id="tipo"
-              defaultValue="Regular"
-              className="InputDashboard"
-            >
+            <select name="tipo" id="tipo" defaultValue="Regular" className="InputDashboard">
               <option>Regular</option>
               <option>VIP</option>
               <option>Premium</option>
