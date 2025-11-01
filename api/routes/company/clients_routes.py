@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status
 from ...infra.database import get_database_client
-from ...schemas.client_schemas import ClientOverviewRequest, ClientCreateRequest
+from ...schemas.client_schemas import ClientOverviewRequest, ClientCreateRequest, ClientNamesRequest
 from ...services.client_services import ClientService
 from fastapi import HTTPException
 from ...utils.helper_functions import serialize_mongo
@@ -55,3 +55,29 @@ async def create_client_route(
         "message": "Client created successfully.",
         # "client": serialize_mongo(created_client)
     }
+
+@router.post("/names", status_code=status.HTTP_200_OK)
+async def get_client_names(
+    body: ClientNamesRequest,
+    db_client=Depends(get_database_client)
+):
+    """
+    Returns only the names of all clients from the given company.
+    
+    Expected JSON body:
+    ```json
+    {
+        "companyId": "653b2f9d3e2b123456789012"
+    }
+    ```
+
+    Response example:
+    ```json
+    {
+        "status": "success",
+        "clients": ["Client 1", "Client 2", "Client 3"]
+    }
+    ```
+    """
+    service = ClientService(db_client)
+    return await service.get_all_client_names(body.companyId)
