@@ -13,6 +13,7 @@ class ClientCreate(ClientBase):
     """Schema used when automatically creating a client."""
     email: Optional[str] = Field(None, description="Client email (optional)")
     phone: Optional[str] = Field(None, description="Client phone (optional)")
+    city: Optional[str] = Field(None, description="Client city/address")
 
 
 class ClientInDB(ClientBase):
