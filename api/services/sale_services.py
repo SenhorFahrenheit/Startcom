@@ -43,7 +43,8 @@ class SaleService:
                 client_data = ClientCreate(
                     name=sale_data.clientName,
                     email=None,
-                    phone=None
+                    phone=None,
+                    city=None
                 )
                 new_client = await self.client_service.create_client(company_id, client_data)
                 client_id = ObjectId(str(new_client.id))
