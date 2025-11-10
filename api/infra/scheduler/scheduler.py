@@ -3,6 +3,7 @@ from ...infra.scheduler.jobs.update_client_category_jobs import update_client_ca
 from ...infra.scheduler.jobs.update_satisfaction_jobs import update_satisfaction_job
 from ...infra.scheduler.jobs.update_inventory_total_products_job import update_inventory_total_products_job
 from ...infra.scheduler.jobs.update_low_inventory_job import update_low_inventory_job
+from ...infra.scheduler.jobs.update_inventory_critic_job import update_critical_inventory_job
 scheduler = AsyncIOScheduler()
 
 def start_scheduler():
@@ -19,7 +20,8 @@ def start_scheduler():
     # scheduler.add_job(update_inventory_total_products_job, 'interval', hours=0, minutes=30)
 
     scheduler.add_job(update_low_inventory_job, "interval", hours=0, minutes=1)
-
     # scheduler.add_job(update_low_inventory_job, "inverval", hours=0, minutes=30)
+
+    scheduler.add_job(update_critical_inventory_job, "interval", hours=0, minutes=2)
 
     scheduler.start()
