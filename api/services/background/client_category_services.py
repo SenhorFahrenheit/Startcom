@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from bson import ObjectId
-from ..infra.database import mongo
+from ...infra.database import mongo
 
 
 class ClientCategoryService:

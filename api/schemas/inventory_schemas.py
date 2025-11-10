@@ -8,3 +8,10 @@ class InventoryFullRequest(BaseModel):
     """
     companyId: str = Field(..., description="ID of the company to fetch inventory from")
 
+class InventoryCountRequest(BaseModel):
+    """
+    Request body to (re)calculate the total number of products
+    for a given company.
+    """
+    companyId: str = Field(..., description="Company ID whose inventory count will be calculated")
+
