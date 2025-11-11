@@ -1,0 +1,19 @@
+/* SalesChart.css */
+
+.chart {
+    width: 100%;
+    height: 350px;
+}
+
+.title-chart-dashboard {
+    font-family: var(--font-base);
+}
+
+@media (max-width: 568px) {
+    .recharts-legend-wrapper {
+        top: auto !important; 
+        left: 50% !important;
+        transform: translateX(-50%) !important;
+        text-align: center !important;
+    }
+}

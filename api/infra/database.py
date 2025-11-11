@@ -21,11 +21,19 @@ class MongoDB:
 mongo_uri = os.getenv("MONGO_URI")
 mongo_db_name = os.getenv("MONGO_DB")
 
+
 # Create a global instance of the MongoDB class
 mongo = MongoDB(
     mongo_uri, 
     mongo_db_name
 )
+
+# ✅ Dependency for FastAPI
+async def get_database_client():
+    """
+    Dependency that provides the MongoDB client instance to FastAPI routes.
+    """
+    return mongo.db
 
 # Define an asynchronous function to test MongoDB operations
 async def test_mongo():

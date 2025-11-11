@@ -72,6 +72,19 @@
     font-weight: 600;
 }
 
+.good-progress {
+    color: var(--progress-positive-color);
+}
+
+.bad-progress {
+    color: var(--progress-negative-color);
+}
+
+.neutral-progress {
+    color: var(--progress-neutral-color);
+}
+
+
 @media (max-width: 768px) {
     .content-page-section {
         width: 100%;

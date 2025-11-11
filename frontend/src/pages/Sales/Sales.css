@@ -38,6 +38,19 @@
     font-family: var(--font-heading);
 }
 
+
+.good-progress {
+    color: var(--progress-positive-color);
+}
+
+.bad-progress {
+    color: var(--progress-negative-color);
+}
+
+.neutral-progress {
+    color: var(--progress-neutral-color);
+}
+
 @media (max-width: 1024px) {
     .filter-search {
         flex-direction: column;

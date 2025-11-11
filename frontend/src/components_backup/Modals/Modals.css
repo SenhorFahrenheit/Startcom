@@ -1,0 +1,145 @@
+/* General Modal Settings */
+.modal-overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.ReactModal__Overlay--after-open {
+  opacity: 1;
+}
+
+.ReactModal__Overlay--before-close {
+  opacity: 0;
+}
+
+.modal-content {
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 500px;
+  height: auto;
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: all 0.3s ease;
+}
+
+.ReactModal__Content--after-open {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.ReactModal__Content--before-close {
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+:focus-visible {
+  outline: none;
+}
+
+/* Same style between modals */
+
+.auth-modal-title {
+  font-size: 28.4px;
+  margin: 25px 0 25px 0;
+  color: var(--quaternary-color);
+}
+
+.auth-description {
+  color: var(--primary-color);
+  font-family: var(--font-base);
+  font-size: 12.2px;
+  margin-bottom: 40px;
+}
+
+.center-block {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  align-items: center;
+  gap: 5px;
+}
+
+.center-block > .input-with-icon {
+  width: 100%;
+}
+
+.center-block label {
+  align-self: flex-start;
+}
+
+.input-label {
+  font-size: 14.3px;
+  font-family: var(--font-base);
+  color: var(--quaternary-color);
+}
+
+/* ForgotPasswordModal Settings */
+
+/* CodeVerificationModal Settings */
+
+/* ChangePasswordModal Settings */
+.password-changer {
+  font-weight: bold;
+}
+
+.different-password {
+  width: 100%;
+  height: 60px;
+  gap: 10px;
+  padding: 10px;
+  background-color: #ffede7;
+  color: #ff6931;
+  border-radius: 5px;
+  font-size: 12.8px;
+  font-family: var(--font-base);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Dashboard Modals */
+.form-dashboard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  gap: 10px;
+}
+
+.align-dashboard-form {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.dashboard-modal-title {
+  font-size: 1.10rem;
+  font-weight: 600;
+}
+
+.input-dashboard-block {
+  width: 100%;
+}
+
+.input-dashboard-block > label {
+  width: 80px;
+  font-family: var(--font-heading);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2a2a2a;
+}

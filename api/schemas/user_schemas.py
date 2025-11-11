@@ -59,9 +59,37 @@ class UserResponse(UserBase):
     """
     id: str = Field(..., description="Unique identifier for the user in the database.")
 
+class UserCreatedResponse(BaseModel):
+    """
+    Response model returned after a successful user creation.
+    Excludes sensitive fields like password or password hash.
+    """
+    name: str
+    email: EmailStr
+    cpf_cnpj: str
+    birth_date: Optional[datetime] = None
+    created_at: Optional[datetime] = None
+
+    class Config:
+        orm_mode = True
+        json_schema_extra = {
+            "example": {
+                "id": "6718bfe56a9f3b2c8c90d74a",
+                "name": "Yuri Silva",
+                "email": "yuri@email.com",
+                "cpf_cnpj": "123.456.789-00",
+                "birth_date": "2005-10-10T00:00:00",
+                "created_at": "2025-10-23T09:30:00"
+            }
+        }
+
+
 class UserInDB(UserBase):
     """
     Schema for the user data as it is stored in the database.
     This model includes the hashed password for security.
     """
+    id: Optional[str] = Field(None, description="Unique ID for the user in the database.")
     password_hash: str = Field(..., description="The cryptographic hash of the user's password.")
+    created_at: Optional[datetime] = Field(None, description="Date and time when the user was created.")
+    updated_at: Optional[datetime] = Field(None, description="Date and time when the user was last updated.")

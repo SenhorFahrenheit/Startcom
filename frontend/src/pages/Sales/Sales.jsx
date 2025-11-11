@@ -1,23 +1,20 @@
 import "./Sales.css"
 import "../commonStyle.css"
+import { useState, useEffect } from "react"
+import axios from "axios"
 
 import formatCurrency from '../../utils/format';
-
 import { useAuthModals } from "../../hooks/useAuthModals"
 import NewSaleModal from "../../components/Modals/NewSaleModal"
-
 import Sidebar from "../../layouts/Sidebar/Sidebar"
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile"
 import SalesCard from "../../components/SalesCard/SalesCard"
 import Button from "../../components/Button/Button"
-
 import FilterDateButton from "../../components/FilterDateButton/FilterDateButton"
-
 import FilterStatusButton from "../../components/FilterStatusButton/FilterStatusButton"
 import SalesTable from "../../components/SalesTable/SalesTable"
 
 import { LuPlus, LuDollarSign, LuShoppingCart, LuTrendingUp } from "react-icons/lu"
-import { useState } from "react"
 
 const Sales = () => {
   const { activeModal, openSale, closeModal } = useAuthModals();
@@ -31,9 +28,42 @@ const Sales = () => {
   });
   const [search, setSearch] = useState("");
 
-  const toggleSidebar = () => {
-    setSidebarOpen(prev => !prev);
-  };
+  const [overview, setOverview] = useState({
+    todayTotal: 0,
+    todayComparison: 0,
+    totalSales: 0,
+    weekSales: 0,
+    averageTicket: 0,
+    averageTicketComparison: 0,
+  });
+
+  const toggleSidebar = () => setSidebarOpen(prev => !prev);
+
+  useEffect(() => {
+    async function fetchOverview() {
+      try {
+        const response = await axios.post(
+          "http://127.0.0.1:8000/Company/sales/overview",
+          { companyId: "69019f25b407b09e0d09cff5" }
+        );
+        const data = response.data.overview.overview;
+
+        setOverview({
+          todayTotal: data.today.total,
+          todayComparison: data.today.comparison,
+          totalSales: data.sales.total,
+          weekSales: data.sales.week,
+          averageTicket: data.ticket.average,
+          averageTicketComparison: data.ticket.comparison,
+        });
+
+      } catch (error) {
+        console.error("Erro ao buscar overview de vendas:", error);
+      }
+    }
+
+    fetchOverview();
+  }, []);
 
   return (
     <section className="body-section">
@@ -59,9 +89,45 @@ const Sales = () => {
         </div>
 
         <section className="salesCards">
-          <SalesCard icon={<LuDollarSign size={24}/>} description="Vendas Hoje" value={formatCurrency(1247.50)} information="+12,5% vs ontem"/>
-          <SalesCard icon={<LuShoppingCart size={24}/>} description="Total de Vendas" value="156" information="+8 esta semana"/>
-          <SalesCard icon={<LuTrendingUp size={24}/>} description="Ticket Médio" value={formatCurrency(89.50)} information="+5,2% este mês"/>
+          <SalesCard 
+            icon={<LuDollarSign size={24}/>} 
+            description="Vendas Hoje" 
+            value={formatCurrency(overview.todayTotal)} 
+            information={`${overview.todayComparison > 0 ? "+" : ""}${overview.todayComparison}% vs ontem`}
+            progress={
+              overview.todayComparison > 0
+                ? "good-progress"
+                : overview.todayComparison < 0
+                ? "bad-progress"
+                : "neutral-progress"
+            }
+          />
+          <SalesCard 
+            icon={<LuShoppingCart size={24}/>} 
+            description="Total de Vendas" 
+            value={formatCurrency(overview.totalSales)} 
+            information={`+${formatCurrency(overview.weekSales)} esta semana`}
+            progress={
+              overview.weekSales > 0
+                ? "good-progress"
+                : overview.weekSales < 0
+                ? "bad-progress"
+                : "neutral-progress"
+            }
+          />
+          <SalesCard 
+            icon={<LuTrendingUp size={24}/>} 
+            description="Ticket Médio" 
+            value={formatCurrency(overview.averageTicket)} 
+            information={`${overview.averageTicketComparison > 0 ? "+" : ""}${overview.averageTicketComparison}% este mês`}
+            progress={
+              overview.averageTicketComparison > 0
+                ? "good-progress"
+                : overview.averageTicketComparison < 0
+                ? "bad-progress"
+                : "neutral-progress"
+            }
+          />
         </section>
 
         <div className="filter-search">
@@ -80,10 +146,10 @@ const Sales = () => {
               onSelect={setDateFilter}
             />
 
-            <FilterStatusButton 
+            {/*<FilterStatusButton 
               options={["Concluído", "Pendente", "Cancelada"]}
               onSelect={setStatusFilter}
-            />
+            />*/}
           </div>
         </div>
 

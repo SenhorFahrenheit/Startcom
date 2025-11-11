@@ -1,6 +1,7 @@
 import "./SalesTable.css";
 import { useEffect, useState } from "react";
 import { LuEye } from "react-icons/lu";
+import axios from "axios";
 import formatCurrency from "../../utils/format";
 
 const SalesTable = ({ dateFilter, statusFilter, search }) => {
@@ -8,44 +9,51 @@ const SalesTable = ({ dateFilter, statusFilter, search }) => {
   const [filteredSales, setFilteredSales] = useState([]);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchSales() {
       try {
-        const res = {
-          data: [
-            { id: 1, client: "Maria Silva", date: "21/09/2025", amount: 256.80, status: "completed", items: 3 },
-            { id: 2, client: "João Santos", date: "20/09/2025", amount: 189.50, status: "pending", items: 2 },
-            { id: 3, client: "Ana Costa", date: "15/09/2025", amount: 445.29, status: "completed", items: 5 },
-            { id: 4, client: "Carlos Souza", date: "05/08/2025", amount: 89.99, status: "canceled", items: 1 }
-          ]
-        };
-        setSales(res.data);
+        const response = await axios.post("http://127.0.0.1:8000/Company/sales/get_all", {
+          companyId: "69019f25b407b09e0d09cff5",
+        });
+
+        const data = response.data.sales.map((sale) => ({
+          id: sale._id,
+          client: sale.clientName,
+          date: new Date(sale.date).toLocaleDateString("pt-BR"),
+          amount: sale.total,
+          /*status: "completed",*/
+          items: sale.items.reduce((acc, item) => acc + item.quantity, 0),
+        }));
+
+        setSales(data);
       } catch (error) {
-        console.error("Error fetching sales data:", error);
+        console.error("Erro ao buscar vendas:", error);
       }
     }
-    fetchData();
-  }, []);
 
+    fetchSales();
+  }, []);
+  
   useEffect(() => {
     let result = [...sales];
 
     if (search.trim() !== "") {
-      result = result.filter(sale =>
-      sale.client.toLowerCase().includes(search.toLowerCase()) ||
-      String(sale.id).padStart(3, "0").includes(search) || 
-      sale.date.includes(search)
+      result = result.filter(
+        (sale) =>
+          sale.client.toLowerCase().includes(search.toLowerCase()) ||
+          String(sale.id).includes(search) ||
+          sale.date.includes(search)
       );
     }
 
-    result = result.filter(sale => {
-      if (sale.status === "completed" && !statusFilter["Concluído"]) return false;
-      if (sale.status === "pending" && !statusFilter["Pendente"]) return false;
-      if (sale.status === "canceled" && !statusFilter["Cancelada"]) return false;
-      return true;
-    });
+    // result = result.filter((sale) => {
+    //   if (sale.status === "completed" && !statusFilter["Concluído"]) return false;
+    //   if (sale.status === "pending" && !statusFilter["Pendente"]) return false;
+    //   if (sale.status === "canceled" && !statusFilter["Cancelada"]) return false;
+    //   return true;
+    // });
 
     const today = new Date();
-    result = result.filter(sale => {
+    result = result.filter((sale) => {
       const [day, month, year] = sale.date.split("/");
       const saleDate = new Date(`${year}-${month}-${day}`);
 
@@ -69,7 +77,7 @@ const SalesTable = ({ dateFilter, statusFilter, search }) => {
       return true;
     });
 
-     setFilteredSales(result);
+    setFilteredSales(result);
   }, [sales, dateFilter, statusFilter, search]);
 
   return (
@@ -81,7 +89,7 @@ const SalesTable = ({ dateFilter, statusFilter, search }) => {
             <th>Cliente</th>
             <th>Data</th>
             <th>Valor</th>
-            <th>Status</th>
+            {/* <th>Status</th> */}
             <th>Itens</th>
             <th>Ações</th>
           </tr>
@@ -89,21 +97,21 @@ const SalesTable = ({ dateFilter, statusFilter, search }) => {
         <tbody>
           {filteredSales.map((sale) => (
             <tr key={sale.id}>
-              <td>#{String(sale.id).padStart(3, "0")}</td>
+              <td>#{String(sale.id).slice(-4).toUpperCase()}</td>
               <td>{sale.client}</td>
               <td>{sale.date}</td>
-              <td style={{color: "var(--primary-color)", fontWeight: 600}}>
+              <td style={{ color: "var(--primary-color)", fontWeight: 600 }}>
                 {formatCurrency(sale.amount)}
               </td>
-              <td>
+              {/* <td>
                 <span className={`status ${sale.status}`}>
-                  {sale.status === "completed" 
-                    ? "Concluída" 
-                    : sale.status === "pending" 
-                    ? "Pendente" 
+                  {sale.status === "completed"
+                    ? "Concluída"
+                    : sale.status === "pending"
+                    ? "Pendente"
                     : "Cancelada"}
                 </span>
-              </td>
+              </td> */}
               <td>{sale.items} itens</td>
               <td>
                 <button className="view-btn">
@@ -114,7 +122,7 @@ const SalesTable = ({ dateFilter, statusFilter, search }) => {
           ))}
           {filteredSales.length === 0 && (
             <tr>
-              <td colSpan="7" style={{textAlign: "center", padding: "16px"}}>
+              <td colSpan="7" style={{ textAlign: "center", padding: "16px" }}>
                 Nenhuma venda encontrada.
               </td>
             </tr>

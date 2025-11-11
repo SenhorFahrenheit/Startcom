@@ -6,6 +6,7 @@ const InputDashboard = React.forwardRef(({
   placeholder = '',
   maxLength,
   type = 'text',
+  readonly = false,
   ...rest
 } , ref) => {
   return (
@@ -14,6 +15,7 @@ const InputDashboard = React.forwardRef(({
         maxLength={maxLength} 
         placeholder={placeholder} 
         ref={ref}
+        readonly={readonly}
         {...rest}  
     />
   )
