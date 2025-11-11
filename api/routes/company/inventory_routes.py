@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status
 from ...infra.database import get_database_client
-from ...schemas.inventory_schemas import InventoryFullRequest
+from ...schemas.inventory_schemas import InventoryFullRequest, InventoryOverviewRequest, InventoryOverviewResponse
 from ...services.inventory_services import InventoryService
 
 router = APIRouter(prefix="/inventory", tags=["Inventory"])
@@ -48,3 +48,13 @@ async def get_inventory_full_route(
     """
     service = InventoryService(db_client)
     return await service.get_inventory_full(body.companyId)
+
+
+@router.post("/overview", response_model=InventoryOverviewResponse, status_code=status.HTTP_200_OK)
+async def inventory_overview_route(
+    body: InventoryOverviewRequest,
+    db_client = Depends(get_database_client)
+):
+    service = InventoryService(db_client)
+    
+    return await service.get_inventory_overview(body.companyId)

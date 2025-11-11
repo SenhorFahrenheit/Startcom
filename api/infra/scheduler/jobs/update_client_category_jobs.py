@@ -1,4 +1,4 @@
-from ....services.client_category_services import ClientCategoryService
+from ....services.background.client_category_services import ClientCategoryService
 
 
 async def update_client_category_job():

@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 import math
 import os
-from ..infra.database import mongo  # Adjust import path if needed
+from ...infra.database import mongo  # Adjust import path if needed
 
 
 # --------------------------------------------------------------------

@@ -1,4 +1,4 @@
-from ....services.satisfaction_services import SatisfactionService
+from ....services.background.satisfaction_services import SatisfactionService
 
 async def update_satisfaction_job():
     """
