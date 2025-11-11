@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status
 from ...infra.database import get_database_client
-from ...schemas.inventory_schemas import InventoryFullRequest, InventoryOverviewRequest, InventoryOverviewResponse
+from ...schemas.inventory_schemas import InventoryFullRequest, InventoryOverviewRequest, InventoryOverviewResponse, InventoryCreateRequest
 from ...services.inventory_services import InventoryService
 
 router = APIRouter(prefix="/inventory", tags=["Inventory"])
@@ -58,3 +58,22 @@ async def inventory_overview_route(
     service = InventoryService(db_client)
     
     return await service.get_inventory_overview(body.companyId)
+
+@router.post("/create", status_code=status.HTTP_201_CREATED)
+async def create_inventory_product(
+    body: InventoryCreateRequest,
+    db_client=Depends(get_database_client)
+):
+    """
+    Creates a new product in a company's inventory.
+    Ensures no duplicate product names exist in the same company.
+    """
+    service = InventoryService(db_client)
+
+    created_product = await service.create_product(body.companyId, body.product)
+
+    return {
+        "status": "success",
+        "message": "Product created successfully."
+
+    }

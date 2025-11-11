@@ -1,6 +1,10 @@
 from bson import ObjectId
 from fastapi import HTTPException
 from ..utils.helper_functions import serialize_mongo
+from ..utils.helper_functions import serialize_doc
+from datetime import datetime
+from fastapi import status
+from ..schemas.inventory_schemas import InventoryItemInDB, InventoryCreate
 
 class InventoryService:
     """
@@ -118,3 +122,35 @@ class InventoryService:
             "totalValue": stats.get("totalValue", 0.0),
             "products": formatted_products
         }
+    
+    async def create_product(self, company_id: str, product_data: InventoryCreate) -> InventoryItemInDB:
+        """
+        Inserts a new product into company's inventory.
+        Rejects duplicate product names in same company.
+        """
+        company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
+        if not company:
+            raise HTTPException(status_code=404, detail="Company not found")
+
+        # Check duplicate product name
+        existing = next((p for p in company.get("inventory", []) if p.get("name") == product_data.name), None)
+        if existing:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"Product '{product_data.name}' already exists in this company."
+            )
+
+        new_product = InventoryItemInDB(**product_data.dict())
+
+        result = await self.company_collection.update_one(
+            {"_id": ObjectId(company_id)},
+            {
+                "$push": {"inventory": new_product.dict(by_alias=True)},
+                "$set": {"updatedAt": datetime.utcnow()}
+            }
+        )
+
+        if result.modified_count == 0:
+            raise HTTPException(status_code=500, detail="Failed to add product to inventory.")
+
+        return new_product
