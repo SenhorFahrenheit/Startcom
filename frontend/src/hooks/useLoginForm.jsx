@@ -27,9 +27,10 @@ export const useLoginForm = (onSuccess) => {
         throw new Error("Resposta de login inválida.");
       }
 
+      localStorage.setItem("token", response.access_token.access_token);
+      localStorage.setItem("company_id", response.access_token.company_id);
+
       toast.success("Login realizado!", { containerId: "toast-root" });
-      
-      localStorage.setItem("token", response.token);
 
       setTimeout(() => {
         window.location.href = "/painel";
@@ -42,6 +43,7 @@ export const useLoginForm = (onSuccess) => {
       return;
     }
   };
+
 
   return {
     loginEmail,

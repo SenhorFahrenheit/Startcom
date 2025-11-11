@@ -1,25 +1,27 @@
-import "./Sales.css"
-import "../commonStyle.css"
-import { useState, useEffect } from "react"
-import axios from "axios"
+import "./Sales.css";
+import "../commonStyle.css";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 import formatCurrency from '../../utils/format';
-import { useAuthModals } from "../../hooks/useAuthModals"
-import NewSaleModal from "../../components/Modals/NewSaleModal"
-import Sidebar from "../../layouts/Sidebar/Sidebar"
-import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile"
-import SalesCard from "../../components/SalesCard/SalesCard"
-import Button from "../../components/Button/Button"
-import FilterDateButton from "../../components/FilterDateButton/FilterDateButton"
-import FilterStatusButton from "../../components/FilterStatusButton/FilterStatusButton"
-import SalesTable from "../../components/SalesTable/SalesTable"
+import { useAuthModals } from "../../hooks/useAuthModals";
+import NewSaleModal from "../../components/Modals/NewSaleModal";
+import Sidebar from "../../layouts/Sidebar/Sidebar";
+import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
+import SalesCard from "../../components/SalesCard/SalesCard";
+import Button from "../../components/Button/Button";
+import FilterDateButton from "../../components/FilterDateButton/FilterDateButton";
+import SalesTable from "../../components/SalesTable/SalesTable";
 
-import { LuPlus, LuDollarSign, LuShoppingCart, LuTrendingUp } from "react-icons/lu"
+import { LuPlus, LuDollarSign, LuShoppingCart, LuTrendingUp } from "react-icons/lu";
 
 const Sales = () => {
+
+  const token = localStorage.getItem("token");
+  const companyId = localStorage.getItem("company_id");
+
   const { activeModal, openSale, closeModal } = useAuthModals();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
   const [dateFilter, setDateFilter] = useState("Este Mês");
   const [statusFilter, setStatusFilter] = useState({
     "Concluído": true,
@@ -27,7 +29,6 @@ const Sales = () => {
     "Cancelada": true,
   });
   const [search, setSearch] = useState("");
-
   const [overview, setOverview] = useState({
     todayTotal: 0,
     todayComparison: 0,
@@ -37,31 +38,32 @@ const Sales = () => {
     averageTicketComparison: 0,
   });
 
+  const [refreshSales, setRefreshSales] = useState(0);
+
   const toggleSidebar = () => setSidebarOpen(prev => !prev);
 
-  useEffect(() => {
-    async function fetchOverview() {
-      try {
-        const response = await axios.post(
-          "http://127.0.0.1:8000/Company/sales/overview",
-          { companyId: "69019f25b407b09e0d09cff5" }
-        );
-        const data = response.data.overview.overview;
+  const fetchOverview = async () => {
+    try {
+      const response = await axios.post(
+        "http://127.0.0.1:8000/Company/sales/overview",
+        { companyId }
+      );
+      const data = response.data.overview.overview;
 
-        setOverview({
-          todayTotal: data.today.total,
-          todayComparison: data.today.comparison,
-          totalSales: data.sales.total,
-          weekSales: data.sales.week,
-          averageTicket: data.ticket.average,
-          averageTicketComparison: data.ticket.comparison,
-        });
-
-      } catch (error) {
-        console.error("Erro ao buscar overview de vendas:", error);
-      }
+      setOverview({
+        todayTotal: data.today.total,
+        todayComparison: data.today.comparison,
+        totalSales: data.sales.total,
+        weekSales: data.sales.week,
+        averageTicket: data.ticket.average,
+        averageTicketComparison: data.ticket.comparison,
+      });
+    } catch (error) {
+      console.error("Erro ao buscar overview de vendas:", error);
     }
+  };
 
+  useEffect(() => {
     fetchOverview();
   }, []);
 
@@ -145,11 +147,6 @@ const Sales = () => {
               defaultValue="Este Mês"
               onSelect={setDateFilter}
             />
-
-            {/*<FilterStatusButton 
-              options={["Concluído", "Pendente", "Cancelada"]}
-              onSelect={setStatusFilter}
-            />*/}
           </div>
         </div>
 
@@ -158,10 +155,11 @@ const Sales = () => {
             <h3>Vendas Recentes</h3>
           </div>
 
-          <SalesTable 
-            dateFilter={dateFilter} 
-            statusFilter={statusFilter} 
+          <SalesTable
+            dateFilter={dateFilter}
+            statusFilter={statusFilter}
             search={search}
+            refreshTrigger={refreshSales}
           />
         </div>
       </div>
@@ -169,6 +167,10 @@ const Sales = () => {
       <NewSaleModal
         isOpen={activeModal === "sale"}
         onClose={closeModal}
+        onSuccess={() => {
+          fetchOverview();
+          setRefreshSales(prev => prev + 1);
+        }}
       />
     </section>
   );

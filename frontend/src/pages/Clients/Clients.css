@@ -28,7 +28,8 @@
 
 .clientInformationCards {
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
+    gap: 20px;
     flex-wrap: wrap;
 }
 

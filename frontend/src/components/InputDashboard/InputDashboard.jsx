@@ -6,16 +6,17 @@ const InputDashboard = React.forwardRef(({
   placeholder = '',
   maxLength,
   type = 'text',
-  readonly = false,
+  readOnly = false,
+  style,
   ...rest
 } , ref) => {
   return (
-    <input className="InputDashboard" 
+    <input className={`InputDashboard ${style}`} 
         type={type} 
         maxLength={maxLength} 
         placeholder={placeholder} 
         ref={ref}
-        readonly={readonly}
+        readOnly={readOnly}
         {...rest}  
     />
   )

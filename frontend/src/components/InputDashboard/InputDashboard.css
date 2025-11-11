@@ -13,3 +13,11 @@
 .InputDashboard:focus {
     border: 3px solid #000000;
 }
+
+.readOnly-Input {
+  background-color: rgb(238, 238, 238);
+}
+
+.readOnly-Input:focus {
+  border: 0;
+}
