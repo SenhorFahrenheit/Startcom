@@ -27,11 +27,14 @@ class InventoryTotalValueService:
                 for p in inventory
             )
 
+            value = round(total_value, 2)
+            value = float(value) if isinstance(value, (int, float)) else 0.0
+
             await self.company_collection.update_one(
                 {"_id": ObjectId(company_id)},
                 {
                     "$set": {
-                        "inventoryStats.totalValue": round(total_value, 2),
+                        "inventoryStats.totalValue": value,
                         "updatedAt": datetime.utcnow()
                     }
                 }

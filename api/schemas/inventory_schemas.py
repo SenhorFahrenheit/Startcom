@@ -1,4 +1,6 @@
 from pydantic import BaseModel, Field
+from ..schemas.base_objectid import PyObjectId
+from typing import List
 
 
 class InventoryFullRequest(BaseModel):
@@ -14,4 +16,25 @@ class InventoryCountRequest(BaseModel):
     for a given company.
     """
     companyId: str = Field(..., description="Company ID whose inventory count will be calculated")
+
+
+class InventoryOverviewRequest(BaseModel):
+    companyId: PyObjectId = Field(..., description="ID da empresa")
+
+class ProductOverview(BaseModel):
+    name: str
+    category: str
+    quantity: int
+    minQuantity: int
+    unitPrice: float
+    status: str
+    totalValue: float
+
+class InventoryOverviewResponse(BaseModel):
+    totalProducts: int
+    lowInventory: int
+    criticalInventory: int
+    totalValue: float
+    products: List[ProductOverview]
+
 

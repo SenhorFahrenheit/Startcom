@@ -29,8 +29,7 @@ class InventoryLowService:
                     qty = product.get("quantity", 0)
                     min_qty = product.get("minQuantity", 0)
 
-                    # Count as low stock if quantity is below the minimum but still > 0
-                    if qty > 0 and qty < min_qty:
+                    if qty > min_qty and qty <= (min_qty + 10):
                         low_count += 1
 
                 await self.company_collection.update_one(

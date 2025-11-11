@@ -71,3 +71,50 @@ class InventoryService:
             )
 
         return company["inventory"][0]
+    
+    async def get_inventory_overview(self, company_id: str):
+        company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
+
+        if not company:
+            raise HTTPException(status_code=404, detail="Company not found")
+
+        inventory = company.get("inventory", [])
+        stats = company.get("inventoryStats", {})
+
+        formatted_products = []
+        for p in inventory:
+            name = p.get("name")
+            category = p.get("category", "Outros") or "Outros"
+            quantity = int(p.get("quantity", 0))
+            min_quantity = int(p.get("minQuantity", 0))
+            unit_price = float(p.get("price", 0))
+
+            if quantity == 0:
+                status = "Esgotado"
+            elif quantity <= min_quantity:
+                status = "Crítico"
+            elif quantity <= (min_quantity + 10):
+                status = "Baixo"
+            else:
+                status = "Normal"
+
+
+            total_value = round(quantity * unit_price, 2)
+
+            formatted_products.append({
+                "name": name,
+                "category": category,
+                "quantity": quantity,
+                "minQuantity": min_quantity,
+                "unitPrice": unit_price,
+                "status": status,
+                "totalValue": total_value,
+            })
+
+        return {
+            "totalProducts": stats.get("totalProducts", len(inventory)),
+            "lowInventory": stats.get("lowInventory", 0),
+            "criticalInventory": stats.get("criticalInventory", 0),
+            "totalValue": stats.get("totalValue", 0.0),
+            "products": formatted_products
+        }
