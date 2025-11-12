@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends, status
-from ...schemas.sale_schemas import SaleCreate, SaleSearchQuery, CompanyAllSalesRequest, CompanyOverviewRequest
+from fastapi import APIRouter, Depends, status, HTTPException
+from ...schemas.sale_schemas import SaleCreate, CompanyOverviewRequest
 from ...services.sale_services import SaleService
 from ...infra.database import get_database_client
 from ...utils.security import get_current_user
@@ -52,55 +52,103 @@ async def create_sale_route(
 
 
 
-
-
-@router.post("/search_sale", status_code=status.HTTP_200_OK)
-async def search_sale_route(
-    data: SaleSearchQuery,
-    db_client=Depends(get_database_client)
-):
-    """
-    Performs a real-time search for sales using a single text query.
-    The query is matched against:
-    - sale ID
-    - client name
-    - product names
-    - sale date (day, month, year)
-    - total sale value
-
-    Returns all matching sales.
-    """
-    service = SaleService(db_client)
-    results = await service.search_sales(data.companyId, data.query)
-
-    return {
-        "status": "success",
-        "count": len(results),
-        "results": results
-    }
-
-
 @router.post("/get_all", status_code=status.HTTP_200_OK)
 async def get_all_sales_route(
-    body: CompanyAllSalesRequest,
-    db_client=Depends(get_database_client)
+    db_client=Depends(get_database_client),
+    current_user=Depends(get_current_user)
 ):
     """
-    Returns all sales for a specific company.
+    Retrieve all sales for the authenticated user's company.
 
-    - Receives companyId in the JSON body.
-    - Returns each sale with client and product names.
-    - Only the sale ID (`_id`) is kept; all other IDs are replaced by readable names.
-    - Values and dates are properly formatted.
+    ## Authentication
+    Requires a valid **JWT token** in the `Authorization` header:
+    ```
+    Authorization: Bearer <access_token>
+    ```
+
+    ## Description
+    Returns all sales belonging to the company associated with the authenticated user.
+
+    Each sale includes:
+    - Client and product names
+    - Sale total and date
+    - All internal IDs replaced by human-readable values
+
+    ## Request
+    **No body required.**
+    The authenticated user's `companyId` is automatically extracted from the JWT token.
+
+    ## Responses
+
+    ### 200 OK
+    ```json
+    {
+      "status": "success",
+      "count": 2,
+      "sales": [
+        {
+          "_id": "672aaf29cf845a764b3f118a",
+          "clientName": "João Silva",
+          "items": [
+            {
+              "productName": "Notebook Gamer",
+              "quantity": 1,
+              "price": 4500.0
+            }
+          ],
+          "total": 4500.0,
+          "date": "2025-01-12T14:32:00Z"
+        },
+        {
+          "_id": "672aaf29cf845a764b3f118b",
+          "clientName": "Maria Oliveira",
+          "items": [
+            {
+              "productName": "Mouse Logitech",
+              "quantity": 2,
+              "price": 150.0
+            }
+          ],
+          "total": 300.0,
+          "date": "2025-01-10T09:21:00Z"
+        }
+      ]
+    }
+    ```
+
+    ### 401 Unauthorized
+    ```json
+    {
+      "detail": "Invalid or missing token"
+    }
+    ```
+
+    ### 404 Not Found
+    ```json
+    {
+      "detail": "Company not found"
+    }
+    ```
+
+    ### 500 Internal Server Error
+    ```json
+    {
+      "detail": "Unexpected error: <error_message>"
+    }
+    ```
+
+    ---
     """
+    company_id = current_user["companyId"]
     service = SaleService(db_client)
-    sales = await service.get_all_sales(body.companyId)
+    sales = await service.get_all_sales(company_id)
 
     return {
         "status": "success",
         "count": len(sales),
         "sales": sales
     }
+
 
 
 @router.post("/overview", status_code=status.HTTP_200_OK)

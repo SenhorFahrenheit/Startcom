@@ -134,69 +134,41 @@ class SaleService:
             raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
 
     
-    async def search_sales(self, company_id: str, query: str):
-        """
-        Searches all company sales by a single text query.
-        Matches saleId, client name, product name, date, and total (partial and case-insensitive).
-        Returns sales enriched with client and product names instead of internal IDs.
-        """
-        company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
-        if not company:
-            raise HTTPException(status_code=404, detail="Company not found")
-
-        sales = company.get("sales", [])
-        clients = {str(c["_id"]): c for c in company.get("clients", [])}
-        inventory = {str(p["_id"]): p for p in company.get("inventory", [])}
-
-        query_pattern = re.compile(re.escape(query), re.IGNORECASE)
-        results = []
-
-        for sale in sales:
-            # 🔹 Get related client
-            client = clients.get(str(sale.get("clientId")))
-            client_name = client["name"] if client else "Unknown Client"
-
-            # 🔹 Get related product names
-            product_names = []
-            item_list = []
-            for item in sale["items"]:
-                product = inventory.get(str(item["productId"]))
-                product_name = product.get("name", "Unknown Product") if product else "Unknown Product"
-                product_names.append(product_name)
-                item_list.append({
-                    "productName": product_name,
-                    "quantity": item["quantity"],
-                    "price": item["price"]
-                })
-
-            # 🔹 Build searchable text
-            searchable_text = " ".join([
-                str(sale.get("_id", "")),
-                client_name,
-                " ".join(product_names),
-                sale.get("date", datetime.utcnow()).strftime("%Y-%m-%d"),
-                str(sale.get("total", ""))
-            ])
-
-            # 🔹 Match query in any field
-            if query_pattern.search(searchable_text):
-                results.append({
-                    "_id": str(sale["_id"]),              # keep sale id
-                    "clientName": client_name,            # human-readable name
-                    "items": item_list,                   # product names instead of IDs
-                    "total": sale["total"],
-                    "date": sale["date"]
-                })
-
-        # ✅ Serialize all ObjectIds and datetimes
-        return serialize_mongo(results)
 
     async def get_all_sales(self, company_id: str):
         """
-        Retrieves all sales for a specific company.
-        Returns sales enriched with client and product names,
-        removing unnecessary internal IDs.
-        """
+    Retrieve all sales for a given company, returning enriched and serialized data.
+
+    **Description:**
+    Fetches all company sales, resolving:
+    - `clientId` → client name  
+    - `productId` → product name  
+    - Formats totals and dates for frontend readability.
+
+    **Args:**
+        company_id (str): The ObjectId of the company as a string.
+
+    **Returns:**
+        list[dict]: Each sale with resolved client/product names and numeric totals.
+        Example:
+        ```json
+        [
+          {
+            "_id": "672aaf29cf845a764b3f118a",
+            "clientName": "João Silva",
+            "items": [
+              {"productName": "Notebook Gamer", "quantity": 1, "price": 4500.0}
+            ],
+            "total": 4500.0,
+            "date": "2025-01-12T14:32:00Z"
+          }
+        ]
+        ```
+
+    **Raises:**
+        HTTPException(404): Company not found.
+    """
+
         company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
         if not company:
             raise HTTPException(status_code=404, detail="Company not found")
@@ -231,7 +203,7 @@ class SaleService:
                 "date": sale["date"]
             })
 
-        # ✅ Serialize possible ObjectIds/dates
+        # Serialize possible ObjectIds/dates
         return serialize_mongo(result)
     
     async def get_sales_overview(self, company_id: str):
