@@ -14,7 +14,6 @@ class SaleItem(BaseModel):
 
 # 🔹 Sale creation request (frontend sends product names only)
 class SaleCreate(BaseModel):
-    companyId: PyObjectId = Field(..., description="Company making the sale")
     clientName: str = Field(..., description="Name of the client buying the products")
     items: List[SaleItem] = Field(..., description="List of products and quantities")
 

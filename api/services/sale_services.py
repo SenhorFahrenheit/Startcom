@@ -23,13 +23,13 @@ class SaleService:
         self.inventory_service = InventoryService(db_client)
 
     # dont forget to decrement inventory
-    async def create_sale(self, sale_data: SaleCreate) -> SaleInDB:
+    async def create_sale(self, sale_data: SaleCreate, companyId) -> SaleInDB:
         """
         Creates and registers a sale in the corresponding company.
         The frontend sends only product names; the backend resolves product IDs.
         """
         try:
-            company_id = sale_data.companyId
+            company_id = companyId
 
             # Step 1: Check company exists
             company = await self.company_collection.find_one({"_id": ObjectId(company_id)})

@@ -2,23 +2,28 @@ from fastapi import APIRouter, Depends, status
 from ...schemas.sale_schemas import SaleCreate, SaleSearchQuery, CompanyAllSalesRequest, CompanyOverviewRequest
 from ...services.sale_services import SaleService
 from ...infra.database import get_database_client
+from ...utils.security import get_current_user
+
 router = APIRouter(prefix="/sales", tags=["Sales"])
 
 @router.post("/create_sale", status_code=status.HTTP_201_CREATED)
 async def create_sale_route(
     sale_data: SaleCreate,
-    db_client=Depends(get_database_client)
+    db_client=Depends(get_database_client),
+    current_user=Depends(get_current_user)
 ):
     """
-    Registers a new sale for a company.
-
-    Security:
-    - The companyId is received in the request body (JSON), not in the URL.
-    - Prevents exposing IDs via browser logs or query strings.
+    Registers a new sale for the authenticated user's company.
     """
+
+    company_id = current_user["companyId"]
+    
     service = SaleService(db_client)
-    await service.create_sale(sale_data)
+
+    await service.create_sale(sale_data, company_id)
+
     return {"status": "success", "message": "Sale created successfully."}
+
 
 
 
