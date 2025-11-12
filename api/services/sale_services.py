@@ -10,6 +10,10 @@ import re
 from ..utils.helper_functions import serialize_mongo
 import math
 from datetime import timedelta
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 class SaleService:
     """
@@ -23,23 +27,34 @@ class SaleService:
         self.inventory_service = InventoryService(db_client)
 
     # dont forget to decrement inventory
-    async def create_sale(self, sale_data: SaleCreate, companyId) -> SaleInDB:
+    async def create_sale(self, sale_data: SaleCreate, company_id: str) -> dict:
         """
-        Creates and registers a sale in the corresponding company.
-        The frontend sends only product names; the backend resolves product IDs.
+        Create and register a sale in the corresponding company.
+
+        Args:
+            sale_data (SaleCreate): Sale payload containing client and items.
+            company_id (str): MongoDB ObjectId of the company performing the sale.
+
+        Returns:
+            dict: The created sale document (serialized for JSON).
+
+        Raises:
+            HTTPException(404): If the company or product is not found.
+            HTTPException(500): On database or unexpected errors.
         """
         try:
-            company_id = companyId
-
-            # Step 1: Check company exists
+            # Step 1: Validate company existence
             company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
             if not company:
                 raise HTTPException(status_code=404, detail="Company not found")
+
+            logger.info(f"Creating sale for company {company_id}")
 
             # Step 2: Find or create client
             client = await self.client_service.get_client_by_name(company_id, sale_data.clientName)
 
             if not client:
+                logger.info(f"Client '{sale_data.clientName}' not found — creating new one.")
                 client_data = ClientCreate(
                     name=sale_data.clientName,
                     email=None,
@@ -51,17 +66,17 @@ class SaleService:
             else:
                 client_id = client["_id"]
 
-            # Step 3: Resolve product IDs by productName
+            # Step 3: Resolve product IDs
             sale_items = []
             for item in sale_data.items:
-                product_doc = await self.inventory_service.get_product_by_name(company_id, item.productName)
+                product = await self.inventory_service.get_product_by_name(company_id, item.productName)
                 sale_items.append({
-                    "productId": product_doc["_id"],
+                    "productId": product["_id"],
                     "quantity": item.quantity,
                     "price": item.price
                 })
 
-            # Step 4: Calculate total
+            # Step 4: Compute total
             total = round(sum(i["price"] * i["quantity"] for i in sale_items), 2)
 
             sale_doc = {
@@ -69,30 +84,35 @@ class SaleService:
                 "clientId": client_id,
                 "items": sale_items,
                 "total": total,
-                "date": datetime.utcnow()
+                "date": datetime.utcnow(),
             }
 
-            # Step 5: Push into company's sales array
+            # Step 5: Persist sale
             result = await self.company_collection.update_one(
                 {"_id": ObjectId(company_id)},
                 {
                     "$push": {"sales": sale_doc},
-                    "$set": {"updatedAt": datetime.utcnow()}
-                }
+                    "$set": {"updatedAt": datetime.utcnow()},
+                },
             )
 
             if result.modified_count == 0:
                 raise HTTPException(status_code=500, detail="Failed to register sale")
 
-            return SaleInDB(**sale_doc)
+            logger.info(f"Sale created successfully for company {company_id} — Total: R${total}")
+
+            # Return serialized sale for safe JSON output
+            return {"status": "success", "sale": serialize_mongo(sale_doc)}
 
         except PyMongoError as e:
+            logger.exception("Database error while creating sale")
             raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
         except HTTPException:
             raise
 
         except Exception as e:
+            logger.exception("Unexpected error while creating sale")
             raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
     
     async def search_sales(self, company_id: str, query: str):

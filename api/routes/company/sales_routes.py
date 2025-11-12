@@ -6,23 +6,50 @@ from ...utils.security import get_current_user
 
 router = APIRouter(prefix="/sales", tags=["Sales"])
 
-@router.post("/create_sale", status_code=status.HTTP_201_CREATED)
+@router.post(
+    "/create_sale",
+    status_code=status.HTTP_201_CREATED,
+    summary="Register a new sale",
+    response_description="Confirmation of successful sale registration"
+)
 async def create_sale_route(
     sale_data: SaleCreate,
     db_client=Depends(get_database_client),
     current_user=Depends(get_current_user)
 ):
     """
-    Registers a new sale for the authenticated user's company.
+    Register a new sale for the authenticated user's company.
+
+    ## Description
+    This endpoint allows authenticated users to register a new sale linked
+    to their company (extracted automatically from the JWT token).
+
+    - **Client Handling**: If the client name does not exist, a new client is automatically created.
+    - **Products**: Products are referenced by name and validated internally.
+    - **Inventory**: Quantities are updated according to the sold items.
+    - **Security**: Requires a valid JWT token in the `Authorization` header.
+
+    ## Request Body Example
+    ```json
+    {
+      "clientName": "John Doe",
+      "items": [
+        { "productName": "Notebook Gamer", "quantity": 2, "price": 4500 }
+      ]
+    }
+    ```
+
+    ## Responses
+    - **201 Created**: Sale successfully registered.
+    - **401 Unauthorized**: Missing or invalid JWT token.
+    - **404 Not Found**: Company not found.
+    - **500 Internal Server Error**: Unexpected server or database error.
     """
-
-    company_id = current_user["companyId"]
-    
+    companyId = current_user["companyId"]
     service = SaleService(db_client)
-
-    await service.create_sale(sale_data, company_id)
-
+    await service.create_sale(sale_data, companyId)
     return {"status": "success", "message": "Sale created successfully."}
+
 
 
 
