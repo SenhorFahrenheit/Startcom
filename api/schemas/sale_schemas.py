@@ -37,7 +37,3 @@ class SaleInDB(BaseModel):
         populate_by_name = True
         from_attributes = True
 
-
-# 🔹 Schema for retrieving sales overview
-class CompanyOverviewRequest(BaseModel):
-    companyId: str = Field(..., description="Company ID to retrieve sales overview for")

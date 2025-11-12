@@ -208,9 +208,31 @@ class SaleService:
     
     async def get_sales_overview(self, company_id: str):
         """
-        Generates sales insights and performance overview for a company.
-        Includes daily, weekly, and average ticket analytics.
-        """
+    Generate analytical sales metrics for a company.
+
+    Calculates and returns:
+    - Total sold today and comparison with yesterday (%)
+    - Total sales overall and in the last 7 days
+    - Average ticket value and monthly variation (%)
+
+    Args:
+        company_id (str): The ObjectId of the company as a string.
+
+    Returns:
+        dict: Structured analytics overview, e.g.:
+        ```json
+        {
+          "overview": {
+            "today": {"total": 1200.0, "comparison": 15.6},
+            "sales": {"total": 18900.0, "week": 5600.0},
+            "ticket": {"average": 315.0, "comparison": -5.2}
+          }
+        }
+        ```
+
+    Raises:
+        HTTPException(404): If the company is not found.
+    """
         company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
         if not company:
             raise HTTPException(status_code=404, detail="Company not found")
@@ -265,23 +287,23 @@ class SaleService:
             elif last_month_start <= sale_date < last_month_end:
                 last_month_ticket_values.append(total_value)
 
-        # ✅ Cálculos de métricas
+        # Metrics
         today_total = round(today_total, 2)
         week_total = round(week_total, 2)
         total_sales = round(total_sales, 2)
 
-        # Comparação diária (%)
+        # Daily comparison %
         if yesterday_total == 0:
             daily_comparison = 0.0
         else:
             daily_comparison = round(((today_total - yesterday_total) / yesterday_total) * 100, 2)
 
-        # Ticket médio atual e do mês passado
+        # Current average ticket price and average ticket price last month
         avg_ticket = round(total_sales / len(sales), 2) if sales else 0
         avg_ticket_this_month = round(sum(this_month_ticket_values) / len(this_month_ticket_values), 2) if this_month_ticket_values else 0
         avg_ticket_last_month = round(sum(last_month_ticket_values) / len(last_month_ticket_values), 2) if last_month_ticket_values else 0
 
-        # Comparação de ticket médio mensal
+        # Comparison of average monthly ticket price
         if avg_ticket_last_month == 0:
             ticket_comparison = 0.0
         else:

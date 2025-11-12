@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, status, HTTPException
-from ...schemas.sale_schemas import SaleCreate, CompanyOverviewRequest
+from ...schemas.sale_schemas import SaleCreate
 from ...services.sale_services import SaleService
 from ...infra.database import get_database_client
 from ...utils.security import get_current_user
@@ -153,20 +153,77 @@ async def get_all_sales_route(
 
 @router.post("/overview", status_code=status.HTTP_200_OK)
 async def get_sales_overview_route(
-    body: CompanyOverviewRequest,
-    db_client=Depends(get_database_client)
+    db_client=Depends(get_database_client),
+    current_user=Depends(get_current_user)
 ):
     """
-    Returns analytical insights and sales overview for a company.
-    
-    Includes:
-    - Total sold today and comparison to yesterday (%)
-    - Total sales overall
-    - Total sales this week
-    - Average ticket and comparison with last month's average ticket (%)
+    Retrieve sales overview and performance analytics for the authenticated user's company.
+
+    ## Authentication
+    Requires a valid **JWT token** in the `Authorization` header:
+    ```
+    Authorization: Bearer <access_token>
+    ```
+
+    ## Description
+    Returns sales analytics for the authenticated company, including:
+    - Total sold **today** and comparison to **yesterday (%)**
+    - Total sales **overall**
+    - Total sales **this week**
+    - **Average ticket** value and comparison to **last month (%)**
+
+    ## Request
+    **No body required.**
+    The authenticated user's `companyId` is automatically extracted from the JWT token.
+
+    ## Responses
+
+    ### 200 OK
+    ```json
+    {
+      "status": "success",
+      "overview": {
+        "today": {
+          "total": 1200.0,
+          "comparison": 15.6
+        },
+        "sales": {
+          "total": 18900.0,
+          "week": 5600.0
+        },
+        "ticket": {
+          "average": 315.0,
+          "comparison": -5.2
+        }
+      }
+    }
+    ```
+
+    ### 401 Unauthorized
+    ```json
+    {
+      "detail": "Invalid or missing token"
+    }
+    ```
+
+    ### 404 Not Found
+    ```json
+    {
+      "detail": "Company not found"
+    }
+    ```
+
+    ### 500 Internal Server Error
+    ```json
+    {
+      "detail": "Unexpected error: <error_message>"
+    }
+    ```
     """
+    company_id = current_user["companyId"]
     service = SaleService(db_client)
-    overview = await service.get_sales_overview(body.companyId)
+    overview = await service.get_sales_overview(company_id)
+
     return {
         "status": "success",
         "overview": overview
