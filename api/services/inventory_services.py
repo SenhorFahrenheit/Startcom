@@ -92,6 +92,7 @@ class InventoryService:
             quantity = int(p.get("quantity", 0))
             min_quantity = int(p.get("minQuantity", 0))
             unit_price = float(p.get("price", 0))
+            cost_price = float(p.get("costPrice", 0))
 
             if quantity == 0:
                 status = "Esgotado"
@@ -103,7 +104,7 @@ class InventoryService:
                 status = "Normal"
 
 
-            total_value = round(quantity * unit_price, 2)
+            total_value = round(quantity * cost_price, 2)
 
             formatted_products.append({
                 "name": name,
