@@ -40,6 +40,7 @@ class SaleService:
 
         Raises:
             HTTPException(404): If the company or product is not found.
+            HTTPException(400): If stock is insufficient.
             HTTPException(500): On database or unexpected errors.
         """
         try:
@@ -52,7 +53,6 @@ class SaleService:
 
             # Step 2: Find or create client
             client = await self.client_service.get_client_by_name(company_id, sale_data.clientName)
-
             if not client:
                 logger.info(f"Client '{sale_data.clientName}' not found — creating new one.")
                 client_data = ClientCreate(
@@ -66,19 +66,35 @@ class SaleService:
             else:
                 client_id = client["_id"]
 
-            # Step 3: Resolve product IDs
+            # Step 3: Resolve product IDs + validate stock
             sale_items = []
+            inventory_updates = []
             for item in sale_data.items:
                 product = await self.inventory_service.get_product_by_name(company_id, item.productName)
+                product_id = product["_id"]
+                current_qty = int(product.get("quantity", 0))
+
+                if current_qty < item.quantity:
+                    raise HTTPException(
+                        status_code=400,
+                        detail=f"Insufficient stock for product '{item.productName}'. Available: {current_qty}, Requested: {item.quantity}"
+                    )
+
+                # Prepare sale item
                 sale_items.append({
-                    "productId": product["_id"],
+                    "productId": product_id,
                     "quantity": item.quantity,
                     "price": item.price
                 })
 
-            # Step 4: Compute total
-            total = round(sum(i["price"] * i["quantity"] for i in sale_items), 2)
+                # Prepare inventory decrement operation
+                inventory_updates.append({
+                    "filter": {"_id": ObjectId(company_id), "inventory._id": product_id},
+                    "update": {"$inc": {"inventory.$.quantity": -item.quantity}}
+                })
 
+            # Step 4: Calculate total
+            total = round(sum(i["price"] * i["quantity"] for i in sale_items), 2)
             sale_doc = {
                 "_id": ObjectId(),
                 "clientId": client_id,
@@ -87,7 +103,7 @@ class SaleService:
                 "date": datetime.utcnow(),
             }
 
-            # Step 5: Persist sale
+            # Step 5: Save sale in company
             result = await self.company_collection.update_one(
                 {"_id": ObjectId(company_id)},
                 {
@@ -99,9 +115,11 @@ class SaleService:
             if result.modified_count == 0:
                 raise HTTPException(status_code=500, detail="Failed to register sale")
 
-            logger.info(f"Sale created successfully for company {company_id} — Total: R${total}")
+            # Step 6: Decrement stock for each sold product
+            for op in inventory_updates:
+                await self.company_collection.update_one(op["filter"], op["update"])
 
-            # Return serialized sale for safe JSON output
+            logger.info(f"Sale created successfully for company {company_id} — Total: R${total}")
             return {"status": "success", "sale": serialize_mongo(sale_doc)}
 
         except PyMongoError as e:
@@ -114,6 +132,7 @@ class SaleService:
         except Exception as e:
             logger.exception("Unexpected error while creating sale")
             raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+
     
     async def search_sales(self, company_id: str, query: str):
         """
