@@ -4,12 +4,7 @@ from typing import List
 from typing import Optional
 from datetime import datetime
 
-class InventoryFullRequest(BaseModel):
-    """
-    Request body for retrieving all product details
-    from a specific company's inventory.
-    """
-    companyId: str = Field(..., description="ID of the company to fetch inventory from")
+
 
 class InventoryCountRequest(BaseModel):
     """
@@ -19,8 +14,6 @@ class InventoryCountRequest(BaseModel):
     companyId: str = Field(..., description="Company ID whose inventory count will be calculated")
 
 
-class InventoryOverviewRequest(BaseModel):
-    companyId: PyObjectId = Field(..., description="ID da empresa")
 
 class ProductOverview(BaseModel):
     name: str
@@ -59,7 +52,6 @@ class InventoryItemInDB(InventoryCreate):
 
 
 class InventoryCreateRequest(BaseModel):
-    companyId: str = Field(..., description="ID of the company")
     product: InventoryCreate = Field(..., description="Product data to be inserted")
 
 

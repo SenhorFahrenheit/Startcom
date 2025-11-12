@@ -77,6 +77,26 @@ class InventoryService:
         return company["inventory"][0]
     
     async def get_inventory_overview(self, company_id: str):
+        """
+    Generate a summarized overview of a company's inventory.
+
+    Retrieves product data and aggregate statistics from `inventoryStats`, 
+    including total products, low and critical stock counts, and total 
+    invested value based on cost price.
+
+    Each product includes its name, category, quantity, minimum quantity, 
+    unit price, stock status ("Normal", "Baixo", "Crítico", "Esgotado") 
+    and total value (quantity × costPrice).
+
+    Args:
+        company_id (str): The ObjectId of the company in MongoDB.
+
+    Returns:
+        dict: Structured overview with aggregated stats and product details.
+
+    Raises:
+        HTTPException(404): If the company does not exist.
+    """
         company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
 
         if not company:
