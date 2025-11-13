@@ -13,7 +13,7 @@ import logging
 app = FastAPI()
 
 logging.basicConfig(
-    level=logging.INFO,  # Nível mínimo que será exibido
+    level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 
