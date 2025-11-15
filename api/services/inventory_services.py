@@ -175,3 +175,59 @@ class InventoryService:
             raise HTTPException(status_code=500, detail="Failed to add product to inventory.")
 
         return new_product
+    
+    async def increase_product_inventory(self, company_id: str, product_name: str, increment: int):
+        """
+        Increase the quantity of a product in the company's inventory.
+
+        Steps:
+        - Find company
+        - Search for product inside embedded inventory array
+        - Increase its quantity by the given 'increment'
+        - Update the document atomically
+        - Return the updated product
+
+        Raises:
+            404 - Company not found
+            404 - Product not found
+        """
+
+        # 1. Check company
+        company = await self.company_collection.find_one(
+            {"_id": ObjectId(company_id)},
+            {"inventory": 1}
+        )
+        if not company:
+            raise HTTPException(status_code=404, detail="Company not found")
+
+        # 2. Find product inside array
+        product = next(
+            (p for p in company.get("inventory", []) if p["name"].lower() == product_name.lower()),
+            None
+        )
+        if not product:
+            raise HTTPException(status_code=404, detail=f"Product '{product_name}' not found")
+
+        new_quantity = int(product.get("quantity", 0)) + int(increment)
+
+        # 3. Update using positional operator
+        result = await self.company_collection.update_one(
+            {
+                "_id": ObjectId(company_id),
+                "inventory._id": product["_id"]
+            },
+            {
+                "$set": {
+                    "inventory.$.quantity": new_quantity,
+                    "updatedAt": datetime.utcnow()
+                }
+            }
+        )
+
+        if result.modified_count == 0:
+            raise HTTPException(status_code=500, detail="Failed to update product inventory")
+
+    
+        return
+
+        

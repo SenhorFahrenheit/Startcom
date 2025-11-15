@@ -54,5 +54,8 @@ class InventoryItemInDB(InventoryCreate):
 class InventoryCreateRequest(BaseModel):
     product: InventoryCreate = Field(..., description="Product data to be inserted")
 
+class InventoryAddProduct(BaseModel):
+    name: str = Field(..., description="Name of the product to increase stock")
+    amount: int = Field(..., gt=0, description="How many units to add")
 
 

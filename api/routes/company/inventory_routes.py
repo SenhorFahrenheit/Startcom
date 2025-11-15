@@ -3,7 +3,8 @@ from ...infra.database import get_database_client
 from ...utils.security import get_current_user
 from ...schemas.inventory_schemas import (
     InventoryOverviewResponse,
-    InventoryCreateRequest
+    InventoryCreateRequest,
+    InventoryAddProduct
 )
 from ...services.inventory_services import InventoryService
 
@@ -200,4 +201,53 @@ async def create_inventory_product(
     return {
         "status": "success",
         "message": "Product created successfully."
+    }
+
+@router.post("/increase_inventory", status_code=status.HTTP_200_OK)
+async def increase_inventory_product(
+    body: InventoryAddProduct,
+    db_client = Depends(get_database_client),
+    current_user = Depends(get_current_user)
+):
+    """
+    Increase the quantity of a specific product in the authenticated user's company.
+
+    ## Authentication
+    Requires a valid **JWT Token** in the `Authorization` header:
+
+    ```
+    Authorization: Bearer <access_token>
+    ```
+
+    ## Request Body
+    The frontend must send the product name and the quantity to be added:
+    ```json
+    {
+        "name": "Notebook Gamer",
+        "amount": 5
+    }
+    ```
+
+    ## Successful Response
+    ```json
+    {
+        "status": "success",
+        "message": "Product quantity increased successfully"
+    }
+    ```
+
+    ## Possible Errors
+    - **401 Unauthorized:** Missing or invalid JWT token  
+    - **404 Not Found:** Company or product not found  
+    - **500 Internal Server Error:** Unexpected database issues  
+    """
+    
+    service = InventoryService(db_client)
+    company_id = current_user["companyId"]
+
+    await service.increase_product_inventory(company_id, body.name, body.amount)
+
+    return {
+        "status": "success",
+        "message": "Product quantity increased successfully"
     }
