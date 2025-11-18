@@ -99,7 +99,24 @@ const NewProductModal = ({ isOpen, onClose }) => {
               <option>Calçados</option>
               <option>Acessórios</option>
               <option>Eletrônicos</option>
+              <option>Informática</option>
+              <option>Alimentos</option>
+              <option>Bebidas</option>
+              <option>Móveis</option>
+              <option>Decoração</option>
+              <option>Livros</option>
+              <option>Brinquedos</option>
+              <option>Esportes</option>
+              <option>Beleza</option>
+              <option>Saúde</option>
+              <option>Papelaria</option>
+              <option>Ferramentas</option>
+              <option>Autopeças</option>
+              <option>Pet Shop</option>
+              <option>Limpeza</option>
+              <option>Outros</option>
             </select>
+
           </div>
 
           <div className="input-dashboard-block">
