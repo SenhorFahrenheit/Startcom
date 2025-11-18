@@ -15,8 +15,15 @@ export function AuthProvider({ children }) {
   });
 
   useEffect(() => {
+    const savedToken = localStorage.getItem("token");
+    const savedUser = localStorage.getItem("user");
+
+    if (savedToken) setToken(savedToken);
+    if (savedUser) setUser(JSON.parse(savedUser));
+
     setPageLoading(false);
   }, []);
+
 
   const isAuthenticated = !!token;
 

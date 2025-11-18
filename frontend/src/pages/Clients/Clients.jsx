@@ -81,10 +81,11 @@ const Clients = () => {
   };
 
   useEffect(() => {
-    if (companyId) {
+    if (!pageLoading && isAuthenticated && companyId) {
       fetchOverviewAndClients();
     }
-  }, [companyId]);
+  }, [pageLoading, isAuthenticated, companyId]);
+
 
   const filteredClients = clients.filter(c => {
     const matchesSearch =

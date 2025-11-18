@@ -69,10 +69,11 @@ const Sales = () => {
   };
 
   useEffect(() => {
-    if (companyId) {
+    if (!pageLoading && isAuthenticated && companyId) {
       fetchOverview();
     }
-  }, [companyId]);
+  }, [pageLoading, isAuthenticated, companyId]);
+
 
 
   return (
