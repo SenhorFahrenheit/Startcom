@@ -11,6 +11,14 @@ from ..utils.helper_functions import serialize_mongo
 import math
 from datetime import timedelta
 import logging
+from ..utils.sales_metrics import (
+    get_date_ranges,
+    calculate_daily_metrics,
+    calculate_sales_totals,
+    calculate_ticket_metrics,
+    calculate_sales_counts
+)
+
 
 logger = logging.getLogger(__name__)
 
@@ -208,31 +216,28 @@ class SaleService:
     
     async def get_sales_overview(self, company_id: str):
         """
-    Generate analytical sales metrics for a company.
+            Retrieve a summarized sales overview for a given company.
 
-    Calculates and returns:
-    - Total sold today and comparison with yesterday (%)
-    - Total sales overall and in the last 7 days
-    - Average ticket value and monthly variation (%)
+            This endpoint aggregates sales data to provide daily totals and comparisons,
+            weekly sales count, total sales count, and average ticket metrics. If the
+            company has no registered sales, all values are returned as zero.
 
-    Args:
-        company_id (str): The ObjectId of the company as a string.
+            Args:
+                company_id (str): The ID of the company to retrieve sales data for.
 
-    Returns:
-        dict: Structured analytics overview, e.g.:
-        ```json
-        {
-          "overview": {
-            "today": {"total": 1200.0, "comparison": 15.6},
-            "sales": {"total": 18900.0, "week": 5600.0},
-            "ticket": {"average": 315.0, "comparison": -5.2}
-          }
-        }
-        ```
+            Returns:
+                dict: A structured overview containing:
+                    - today.total: Total sales for today.
+                    - today.comparison: Percentage change compared to yesterday.
+                    - sales.total: Total number of sales.
+                    - sales.week: Number of sales in the current week.
+                    - ticket.average: Average ticket value for the current month.
+                    - ticket.comparison: Comparison with last month's average ticket.
 
-    Raises:
-        HTTPException(404): If the company is not found.
-    """
+            Raises:
+                HTTPException: If the company does not exist (404).
+        """
+
         company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
         if not company:
             raise HTTPException(status_code=404, detail="Company not found")
@@ -249,79 +254,38 @@ class SaleService:
             }
 
         # Dates
-        now = datetime.utcnow()
-        today_start = datetime(now.year, now.month, now.day)
-        yesterday_start = today_start - timedelta(days=1)
-        week_start = today_start - timedelta(days=7)
-        month_start = datetime(now.year, now.month, 1)
-        last_month_end = month_start - timedelta(days=1)
-        last_month_start = datetime(last_month_end.year, last_month_end.month, 1)
-
-        # Helper vars
-        today_total = 0
-        yesterday_total = 0
-        week_total = 0
-        total_sales = 0
-        today_count = 0
-        last_month_ticket_values = []
-        this_month_ticket_values = []
-
-        # Iterate over all sales
-        for sale in sales:
-            sale_date = sale.get("date")
-            total_value = float(sale.get("total", 0))
-            total_sales += total_value
-
-            if sale_date >= week_start:
-                week_total += total_value
-
-            if sale_date >= today_start:
-                today_total += total_value
-                today_count += 1
-            elif yesterday_start <= sale_date < today_start:
-                yesterday_total += total_value
-
-            # Tickets médios (mês atual e anterior)
-            if sale_date >= month_start:
-                this_month_ticket_values.append(total_value)
-            elif last_month_start <= sale_date < last_month_end:
-                last_month_ticket_values.append(total_value)
+        dates = get_date_ranges()
 
         # Metrics
-        today_total = round(today_total, 2)
-        week_total = round(week_total, 2)
-        total_sales = round(total_sales, 2)
-
-        # Daily comparison %
-        if yesterday_total == 0:
-            daily_comparison = 0.0
-        else:
-            daily_comparison = round(((today_total - yesterday_total) / yesterday_total) * 100, 2)
-
-        # Current average ticket price and average ticket price last month
-        avg_ticket = round(total_sales / len(sales), 2) if sales else 0
-        avg_ticket_this_month = round(sum(this_month_ticket_values) / len(this_month_ticket_values), 2) if this_month_ticket_values else 0
-        avg_ticket_last_month = round(sum(last_month_ticket_values) / len(last_month_ticket_values), 2) if last_month_ticket_values else 0
-
-        # Comparison of average monthly ticket price
-        if avg_ticket_last_month == 0:
-            ticket_comparison = 0.0
-        else:
-            ticket_comparison = round(((avg_ticket_this_month - avg_ticket_last_month) / avg_ticket_last_month) * 100, 2)
+        daily = calculate_daily_metrics(
+            sales,
+            dates["today_start"],
+            dates["yesterday_start"]
+        )
+        tickets = calculate_ticket_metrics(
+            sales,
+            dates["month_start"],
+            dates["last_month_start"],
+            dates["last_month_end"]
+        )
+        sales_counts = calculate_sales_counts(
+            sales,
+            dates["week_start"]
+        )
 
         return {
             "overview": {
                 "today": {
-                    "total": today_total,
-                    "comparison": daily_comparison
+                    "total": daily["today_total"],
+                    "comparison": daily["comparison"]
                 },
                 "sales": {
-                    "total": total_sales,
-                    "week": week_total
+                    "total": sales_counts["totalCount"],
+                    "week": sales_counts["weekCount"],
                 },
                 "ticket": {
-                    "average": avg_ticket,
-                    "comparison": ticket_comparison
+                    "average": tickets["average"],
+                    "comparison": tickets["comparison"]
                 }
             }
         }
