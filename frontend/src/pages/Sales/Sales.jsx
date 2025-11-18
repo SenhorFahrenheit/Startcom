@@ -1,7 +1,6 @@
 import "./Sales.css";
 import "../commonStyle.css";
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 import formatCurrency from '../../utils/format';
 import { useAuthModals } from "../../hooks/useAuthModals";
@@ -19,18 +18,18 @@ import api from "../../services/api";
 import { LuPlus, LuDollarSign, LuShoppingCart, LuTrendingUp } from "react-icons/lu";
 
 const Sales = () => {
-  const { token, user, isAuthenticated, loading } = useAuth();
+  const { token, user, isAuthenticated, pageLoading } = useAuth();
   const companyId = user?.companyId;
 
   useEffect(() => {
     if (!loading && !isAuthenticated) {
       window.location.href = "/login";
     }
-  }, [loading, isAuthenticated]);
-
+  }, [pageLoading, isAuthenticated]);
 
   const { activeModal, openSale, closeModal } = useAuthModals();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(false)
   const [dateFilter, setDateFilter] = useState("Este Mês");
   const [statusFilter, setStatusFilter] = useState({
     "Concluído": true,

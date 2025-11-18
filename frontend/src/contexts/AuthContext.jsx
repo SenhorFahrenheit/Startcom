@@ -3,7 +3,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [loading, setLoading] = useState(true);
+  const [pageLoading, setPageLoading] = useState(true);
 
   const [token, setToken] = useState(() => {
     return localStorage.getItem("token") || null;
@@ -15,7 +15,7 @@ export function AuthProvider({ children }) {
   });
 
   useEffect(() => {
-    setLoading(false);
+    setPageLoading(false);
   }, []);
 
   const isAuthenticated = !!token;
@@ -45,7 +45,7 @@ export function AuthProvider({ children }) {
         login,
         logout,
         isAuthenticated,
-        loading,
+        pageLoading,
       }}
     >
       {children}
