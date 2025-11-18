@@ -1,23 +1,16 @@
 import "./SalesTable.css";
 import { useEffect, useState } from "react";
 import { LuEye } from "react-icons/lu";
-import axios from "axios";
+import api from "../../services/api";
 import formatCurrency from "../../utils/format";
 
 const SalesTable = ({ dateFilter, statusFilter, search, refreshTrigger }) => {
   const [sales, setSales] = useState([]);
   const [filteredSales, setFilteredSales] = useState([]);
 
-  const token = localStorage.getItem("token");
-  const companyId = localStorage.getItem("company_id");
-
   const fetchSales = async () => {
-
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/Company/sales/get_all",
-        { companyId }
-      );
+      const response = await api.post("/Company/sales/get_all");
 
       console.log("API response:", response.data);
 
@@ -33,7 +26,7 @@ const SalesTable = ({ dateFilter, statusFilter, search, refreshTrigger }) => {
 
       setSales(data);
     } catch (error) {
-      console.error("Erro ao buscar vendas:", error);
+      console.error("Erro ao buscar vendas:", error.response?.data || error);
     }
   };
 

@@ -12,13 +12,22 @@ import SalesCard from "../../components/SalesCard/SalesCard";
 import Button from "../../components/Button/Button";
 import FilterDateButton from "../../components/FilterDateButton/FilterDateButton";
 import SalesTable from "../../components/SalesTable/SalesTable";
+import { useAuth } from "../../contexts/AuthContext";
+import api from "../../services/api";
+
 
 import { LuPlus, LuDollarSign, LuShoppingCart, LuTrendingUp } from "react-icons/lu";
 
 const Sales = () => {
+  const { token, user, isAuthenticated, loading } = useAuth();
+  const companyId = user?.companyId;
 
-  const token = localStorage.getItem("token");
-  const companyId = localStorage.getItem("company_id");
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      window.location.href = "/login";
+    }
+  }, [loading, isAuthenticated]);
+
 
   const { activeModal, openSale, closeModal } = useAuthModals();
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -44,19 +53,16 @@ const Sales = () => {
 
   const fetchOverview = async () => {
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/Company/sales/overview",
-        { companyId }
-      );
-      const data = response.data.overview.overview;
-
+      const response = await api.post("/Company/sales/overview");
+      const data = response.data.overview;
+      
       setOverview({
-        todayTotal: data.today.total,
-        todayComparison: data.today.comparison,
-        totalSales: data.sales.total,
-        weekSales: data.sales.week,
-        averageTicket: data.ticket.average,
-        averageTicketComparison: data.ticket.comparison,
+        todayTotal: data.todayTotal,
+        todayComparison: data.yesterdayComparison,
+        totalSales: data.totalSales,
+        weekSales: data.weekSales,
+        averageTicket: data.averageTicket,
+        averageTicketComparison: data.averageTicketComparison,
       });
     } catch (error) {
       console.error("Erro ao buscar overview de vendas:", error);
@@ -64,8 +70,11 @@ const Sales = () => {
   };
 
   useEffect(() => {
-    fetchOverview();
-  }, []);
+    if (companyId) {
+      fetchOverview();
+    }
+  }, [companyId]);
+
 
   return (
     <section className="body-section">
