@@ -118,8 +118,8 @@ const Sales = () => {
           <SalesCard 
             icon={<LuShoppingCart size={24}/>} 
             description="Total de Vendas" 
-            value={formatCurrency(overview.totalSales)} 
-            information={`+${formatCurrency(overview.weekSales)} esta semana`}
+            value={overview.totalSales} 
+            information={overview.weekSales + " esta semana"}
             progress={
               overview.weekSales > 0
                 ? "good-progress"
