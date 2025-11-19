@@ -1,8 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { toast } from "react-toastify";
 import { loginAPI } from "../services/api";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../contexts/AuthContext";
 
 export const useLoginForm = (onSuccess) => {
+  const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
+
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [keepLogged, setKeepLogged] = useState(false);
@@ -19,7 +24,7 @@ export const useLoginForm = (onSuccess) => {
     }
 
     const data = { email: loginEmail, password: loginPassword, keepLogged };
-    
+
     try {
       const response = await loginAPI(data);
 
@@ -27,14 +32,16 @@ export const useLoginForm = (onSuccess) => {
         throw new Error("Resposta de login inválida.");
       }
 
-      localStorage.setItem("token", response.access_token.access_token);
-      localStorage.setItem("company_id", response.access_token.company_id);
+      const token = response.access_token.access_token;
+      const companyId = response.access_token.company_id;
+      login(token, { companyId });
 
       toast.success("Login realizado!", { containerId: "toast-root" });
 
       setTimeout(() => {
-        window.location.href = "/painel";
+        navigate("/painel");
       }, 1000);
+
     } catch (error) {
       toast.error("Erro ao realizar login: " + error.message, {
         position: "top-center",
@@ -43,7 +50,6 @@ export const useLoginForm = (onSuccess) => {
       return;
     }
   };
-
 
   return {
     loginEmail,

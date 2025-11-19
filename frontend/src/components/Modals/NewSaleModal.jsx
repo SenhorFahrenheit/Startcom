@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
 
+import api from "../../services/api";
 import BaseModal from "./BaseModal";
 import Button from "../Button/Button";
 import InputDashboard from "../InputDashboard/InputDashboard";
@@ -14,10 +14,6 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [clientInput, setClientInput] = useState("");
 
-  
-  const token = localStorage.getItem("token");
-  const companyId = localStorage.getItem("company_id");
-
   const priceRef = useRef();
 
   useEffect(() => {
@@ -29,38 +25,45 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/Company/inventory/full", {companyId});
+      const response = await api.post("/Company/inventory/full");
 
       if (response.data?.status === "success" && response.data?.products) {
         setProducts(response.data.products);
       }
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
-      toast.error("Erro ao carregar produtos!", { position: "top-right", containerId: "toast-root" });
+      toast.error("Erro ao carregar produtos!", {
+        position: "top-right",
+        containerId: "toast-root",
+      });
     }
   };
 
   const fetchClients = async () => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/Company/clients/names", {companyId});
+      const response = await api.post("/Company/clients/names");
+
       if (response.data?.clients) {
         setClients(response.data.clients);
       }
     } catch (error) {
-      console.error("Erro ao buscar vendas:", error);
+      console.error("Erro ao buscar clientes:", error);
     }
   };
 
   const handleClientInput = (e) => {
     const value = e.target.value;
     setClientInput(value);
-    if (value.trim() === "") {
+
+    if (!value.trim()) {
       setFilteredClients([]);
       return;
     }
+
     const filtered = clients.filter((name) =>
       name.toLowerCase().includes(value.toLowerCase())
     );
+
     setFilteredClients(filtered);
   };
 
@@ -85,18 +88,13 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
     const selectedId = e.target.value;
     const selectedProduct = products.find((p) => p._id === selectedId);
 
-    if (selectedProduct) {
-      priceRef.current.value = formatCurrency(selectedProduct.price.toFixed(2));
-    } else {
-      priceRef.current.value = "";
-    }
+    priceRef.current.value = selectedProduct
+      ? formatCurrency(selectedProduct.price)
+      : "";
   };
 
   const newSale = async (e) => {
     e.preventDefault();
-    
-    const token = localStorage.getItem("token");
-    const companyId = localStorage.getItem("company_id");
 
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
@@ -104,22 +102,34 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
     let hasError = false;
 
     if (!data.client?.trim()) {
-      toast.error("O campo Cliente não pode estar vazio!", { position: "top-right", theme: "light", containerId: "toast-root" });
+      toast.error("O campo Cliente não pode estar vazio!", {
+        position: "top-right",
+        containerId: "toast-root",
+      });
       hasError = true;
     }
 
     if (!data.product) {
-      toast.error("Selecione um produto!", { position: "top-right", theme: "light", containerId: "toast-root" });
+      toast.error("Selecione um produto!", {
+        position: "top-right",
+        containerId: "toast-root",
+      });
       hasError = true;
     }
 
     if (!data.quantity) {
-      toast.error("Selecione uma quantidade válida!", { position: "top-right", theme: "light", containerId: "toast-root" });
+      toast.error("Selecione uma quantidade válida!", {
+        position: "top-right",
+        containerId: "toast-root",
+      });
       hasError = true;
     }
 
     if (!data.price?.trim()) {
-      toast.error("O campo Valor não pode estar vazio!", { position: "top-right", theme: "light", containerId: "toast-root" });
+      toast.error("O campo Valor não pode estar vazio!", {
+        position: "top-right",
+        containerId: "toast-root",
+      });
       hasError = true;
     }
 
@@ -128,7 +138,6 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
     const selectedProduct = products.find((p) => p._id === data.product);
 
     const payload = {
-      companyId,
       clientName: data.client,
       items: [
         {
@@ -140,16 +149,21 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
     };
 
     try {
-      await axios.post("http://127.0.0.1:8000/Company/sales/create_sale", payload);
+      await api.post("/Company/sales/create_sale", payload);
 
-      toast.success("Venda registrada com sucesso!", { position: "top-right", containerId: "toast-root" });
+      toast.success("Venda registrada com sucesso!", {
+        position: "top-right",
+        containerId: "toast-root",
+      });
 
       onClose();
-
-      if (onSuccess) onSuccess();
+      onSuccess?.();
     } catch (error) {
       console.error("Erro ao registrar venda:", error);
-      toast.error("Erro ao registrar venda!", { position: "top-right", containerId: "toast-root" });
+      toast.error("Erro ao registrar venda!", {
+        position: "top-right",
+        containerId: "toast-root",
+      });
     }
   };
 
@@ -177,6 +191,7 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
               onBlur={handleBlur}
               autoComplete="off"
             />
+
             {showSuggestions && filteredClients.length > 0 && (
               <ul
                 style={{
@@ -194,17 +209,18 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
                   listStyle: "none",
                   padding: "5px 0",
                   margin: 0,
-                  fontFamily: "var(--font-base)"
+                  fontFamily: "var(--font-base)",
                 }}
               >
                 {filteredClients.map((name, index) => (
                   <li
                     key={index}
                     onClick={() => selectClient(name)}
-                    style={{ padding: "8px 12px", cursor: "pointer", transition: "background 0.2s" }}
+                    style={{
+                      padding: "8px 12px",
+                      cursor: "pointer",
+                    }}
                     onMouseDown={(e) => e.preventDefault()}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = "#f2f2f2")}
-                    onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
                   >
                     {name}
                   </li>

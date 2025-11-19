@@ -8,8 +8,15 @@ from api.routes.company.clients_routes import router as client_routes
 from api.routes.company.inventory_routes import router as inventory_routes
 from api.infra.config_cors import setup_cors
 from api.infra.scheduler.scheduler import start_scheduler
+import logging
 
 app = FastAPI()
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
+
 
 # Set up CORS middleware
 setup_cors(app)

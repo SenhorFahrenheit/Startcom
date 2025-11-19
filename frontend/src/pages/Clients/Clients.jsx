@@ -14,11 +14,21 @@ import FilterSelect from "../../components/FilterSelect/FilterSelect";
 
 import { useState, useEffect } from "react";
 import { useAuthModals } from "../../hooks/useAuthModals";
-import axios from "axios";
+import api from "../../services/api";
+import { useAuth } from "../../contexts/AuthContext";
 
 import { LuPlus, LuSmile, LuUsers, LuStar, LuCalendar } from "react-icons/lu";
 
 const Clients = () => {
+  const { token, user, isAuthenticated, pageLoading } = useAuth();
+  const companyId = user?.companyId;
+
+  useEffect(() => {
+    if (!pageLoading && !isAuthenticated) {
+          window.location.href = "/login";
+        }
+  }, [pageLoading, isAuthenticated]);
+
   const { activeModal, openClient, closeModal } = useAuthModals();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -41,25 +51,13 @@ const Clients = () => {
   const fetchOverviewAndClients = async () => {
     try {
       setLoading(true);
-
-      const token = localStorage.getItem("token");
-      const companyId = localStorage.getItem("company_id");
-
-      if (!token || !companyId) {
-        throw new Error("Sessão expirada. Faça login novamente.");
-      }
-
-      const response = await axios.post(
-        "http://127.0.0.1:8000/Company/clients/overview_full",
-        { companyId }
-      );
-
+      const response = await api.post("/Company/clients/overview_full");
       const data = response.data;
 
       if (data.status === "success") {
-        setOverview(data.overview);
+        setOverview(data.overview.overview);
 
-        const formattedClients = (data.clients || []).map((c) => ({
+        const formattedClients = (data.overview.clients || []).map((c) => ({
           clientName: c.name,
           clientType: c.category
             ? c.category[0].toUpperCase() + c.category.slice(1)
@@ -83,8 +81,11 @@ const Clients = () => {
   };
 
   useEffect(() => {
-    fetchOverviewAndClients();
-  }, []);
+    if (!pageLoading && isAuthenticated && companyId) {
+      fetchOverviewAndClients();
+    }
+  }, [pageLoading, isAuthenticated, companyId]);
+
 
   const filteredClients = clients.filter(c => {
     const matchesSearch =
@@ -135,7 +136,7 @@ const Clients = () => {
               <ClientCard icon={<LuUsers size={24}/>} value={overview.clients.total} description="Total de Clientes" color="blue"/>
               <ClientCard icon={<LuStar size={24}/>} value={overview.clients.vip} description="Clientes VIP" color="purple"/>
               <ClientCard icon={<LuCalendar size={24}/>} value={overview.clients.newThisMonth} description="Novos este mês" color="orange"/>
-              <ClientCard icon={<LuSmile size={24}/>} value={overview.clients.averageSatisfaction.toFixed(1)} description="Satisfação Média" color="green"/>
+              <ClientCard icon={<LuSmile size={24}/>} value={overview.clients.averageSatisfaction} description="Satisfação Média" color="green"/>
             </>
           )}
         </section>

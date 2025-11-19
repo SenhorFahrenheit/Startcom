@@ -10,6 +10,18 @@ import re
 from ..utils.helper_functions import serialize_mongo
 import math
 from datetime import timedelta
+import logging
+from ..utils.sales_metrics import (
+    get_date_ranges,
+    calculate_daily_metrics,
+    calculate_sales_totals,
+    calculate_ticket_metrics,
+    calculate_sales_counts
+)
+
+
+logger = logging.getLogger(__name__)
+
 
 class SaleService:
     """
@@ -23,23 +35,34 @@ class SaleService:
         self.inventory_service = InventoryService(db_client)
 
     # dont forget to decrement inventory
-    async def create_sale(self, sale_data: SaleCreate) -> SaleInDB:
+    async def create_sale(self, sale_data: SaleCreate, company_id: str) -> dict:
         """
-        Creates and registers a sale in the corresponding company.
-        The frontend sends only product names; the backend resolves product IDs.
+        Create and register a sale in the corresponding company.
+
+        Args:
+            sale_data (SaleCreate): Sale payload containing client and items.
+            company_id (str): MongoDB ObjectId of the company performing the sale.
+
+        Returns:
+            dict: The created sale document (serialized for JSON).
+
+        Raises:
+            HTTPException(404): If the company or product is not found.
+            HTTPException(400): If stock is insufficient.
+            HTTPException(500): On database or unexpected errors.
         """
         try:
-            company_id = sale_data.companyId
-
-            # Step 1: Check company exists
+            # Step 1: Validate company existence
             company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
             if not company:
                 raise HTTPException(status_code=404, detail="Company not found")
 
+            logger.info(f"Creating sale for company {company_id}")
+
             # Step 2: Find or create client
             client = await self.client_service.get_client_by_name(company_id, sale_data.clientName)
-
             if not client:
+                logger.info(f"Client '{sale_data.clientName}' not found — creating new one.")
                 client_data = ClientCreate(
                     name=sale_data.clientName,
                     email=None,
@@ -51,113 +74,109 @@ class SaleService:
             else:
                 client_id = client["_id"]
 
-            # Step 3: Resolve product IDs by productName
+            # Step 3: Resolve product IDs + validate stock
             sale_items = []
+            inventory_updates = []
             for item in sale_data.items:
-                product_doc = await self.inventory_service.get_product_by_name(company_id, item.productName)
+                product = await self.inventory_service.get_product_by_name(company_id, item.productName)
+                product_id = product["_id"]
+                current_qty = int(product.get("quantity", 0))
+
+                if current_qty < item.quantity:
+                    raise HTTPException(
+                        status_code=400,
+                        detail=f"Insufficient stock for product '{item.productName}'. Available: {current_qty}, Requested: {item.quantity}"
+                    )
+
+                # Prepare sale item
                 sale_items.append({
-                    "productId": product_doc["_id"],
+                    "productId": product_id,
                     "quantity": item.quantity,
                     "price": item.price
                 })
 
+                # Prepare inventory decrement operation
+                inventory_updates.append({
+                    "filter": {"_id": ObjectId(company_id), "inventory._id": product_id},
+                    "update": {"$inc": {"inventory.$.quantity": -item.quantity}}
+                })
+
             # Step 4: Calculate total
             total = round(sum(i["price"] * i["quantity"] for i in sale_items), 2)
-
             sale_doc = {
                 "_id": ObjectId(),
                 "clientId": client_id,
                 "items": sale_items,
                 "total": total,
-                "date": datetime.utcnow()
+                "date": datetime.utcnow(),
             }
 
-            # Step 5: Push into company's sales array
+            # Step 5: Save sale in company
             result = await self.company_collection.update_one(
                 {"_id": ObjectId(company_id)},
                 {
                     "$push": {"sales": sale_doc},
-                    "$set": {"updatedAt": datetime.utcnow()}
-                }
+                    "$set": {"updatedAt": datetime.utcnow()},
+                },
             )
 
             if result.modified_count == 0:
                 raise HTTPException(status_code=500, detail="Failed to register sale")
 
-            return SaleInDB(**sale_doc)
+            # Step 6: Decrement stock for each sold product
+            for op in inventory_updates:
+                await self.company_collection.update_one(op["filter"], op["update"])
+
+            logger.info(f"Sale created successfully for company {company_id} — Total: R${total}")
+            return {"status": "success", "sale": serialize_mongo(sale_doc)}
 
         except PyMongoError as e:
+            logger.exception("Database error while creating sale")
             raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
         except HTTPException:
             raise
 
         except Exception as e:
+            logger.exception("Unexpected error while creating sale")
             raise HTTPException(status_code=500, detail=f"Unexpected error: {str(e)}")
+
     
-    async def search_sales(self, company_id: str, query: str):
-        """
-        Searches all company sales by a single text query.
-        Matches saleId, client name, product name, date, and total (partial and case-insensitive).
-        Returns sales enriched with client and product names instead of internal IDs.
-        """
-        company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
-        if not company:
-            raise HTTPException(status_code=404, detail="Company not found")
-
-        sales = company.get("sales", [])
-        clients = {str(c["_id"]): c for c in company.get("clients", [])}
-        inventory = {str(p["_id"]): p for p in company.get("inventory", [])}
-
-        query_pattern = re.compile(re.escape(query), re.IGNORECASE)
-        results = []
-
-        for sale in sales:
-            # 🔹 Get related client
-            client = clients.get(str(sale.get("clientId")))
-            client_name = client["name"] if client else "Unknown Client"
-
-            # 🔹 Get related product names
-            product_names = []
-            item_list = []
-            for item in sale["items"]:
-                product = inventory.get(str(item["productId"]))
-                product_name = product.get("name", "Unknown Product") if product else "Unknown Product"
-                product_names.append(product_name)
-                item_list.append({
-                    "productName": product_name,
-                    "quantity": item["quantity"],
-                    "price": item["price"]
-                })
-
-            # 🔹 Build searchable text
-            searchable_text = " ".join([
-                str(sale.get("_id", "")),
-                client_name,
-                " ".join(product_names),
-                sale.get("date", datetime.utcnow()).strftime("%Y-%m-%d"),
-                str(sale.get("total", ""))
-            ])
-
-            # 🔹 Match query in any field
-            if query_pattern.search(searchable_text):
-                results.append({
-                    "_id": str(sale["_id"]),              # keep sale id
-                    "clientName": client_name,            # human-readable name
-                    "items": item_list,                   # product names instead of IDs
-                    "total": sale["total"],
-                    "date": sale["date"]
-                })
-
-        # ✅ Serialize all ObjectIds and datetimes
-        return serialize_mongo(results)
 
     async def get_all_sales(self, company_id: str):
         """
-        Retrieves all sales for a specific company.
-        Returns sales enriched with client and product names,
-        removing unnecessary internal IDs.
-        """
+    Retrieve all sales for a given company, returning enriched and serialized data.
+
+    **Description:**
+    Fetches all company sales, resolving:
+    - `clientId` → client name  
+    - `productId` → product name  
+    - Formats totals and dates for frontend readability.
+
+    **Args:**
+        company_id (str): The ObjectId of the company as a string.
+
+    **Returns:**
+        list[dict]: Each sale with resolved client/product names and numeric totals.
+        Example:
+        ```json
+        [
+          {
+            "_id": "672aaf29cf845a764b3f118a",
+            "clientName": "João Silva",
+            "items": [
+              {"productName": "Notebook Gamer", "quantity": 1, "price": 4500.0}
+            ],
+            "total": 4500.0,
+            "date": "2025-01-12T14:32:00Z"
+          }
+        ]
+        ```
+
+    **Raises:**
+        HTTPException(404): Company not found.
+    """
+
         company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
         if not company:
             raise HTTPException(status_code=404, detail="Company not found")
@@ -192,14 +211,33 @@ class SaleService:
                 "date": sale["date"]
             })
 
-        # ✅ Serialize possible ObjectIds/dates
+        # Serialize possible ObjectIds/dates
         return serialize_mongo(result)
     
     async def get_sales_overview(self, company_id: str):
         """
-        Generates sales insights and performance overview for a company.
-        Includes daily, weekly, and average ticket analytics.
+            Retrieve a summarized sales overview for a given company.
+
+            This endpoint aggregates sales data to provide daily totals and comparisons,
+            weekly sales count, total sales count, and average ticket metrics. If the
+            company has no registered sales, all values are returned as zero.
+
+            Args:
+                company_id (str): The ID of the company to retrieve sales data for.
+
+            Returns:
+                dict: A structured overview containing:
+                    - today.total: Total sales for today.
+                    - today.comparison: Percentage change compared to yesterday.
+                    - sales.total: Total number of sales.
+                    - sales.week: Number of sales in the current week.
+                    - ticket.average: Average ticket value for the current month.
+                    - ticket.comparison: Comparison with last month's average ticket.
+
+            Raises:
+                HTTPException: If the company does not exist (404).
         """
+
         company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
         if not company:
             raise HTTPException(status_code=404, detail="Company not found")
@@ -216,79 +254,38 @@ class SaleService:
             }
 
         # Dates
-        now = datetime.utcnow()
-        today_start = datetime(now.year, now.month, now.day)
-        yesterday_start = today_start - timedelta(days=1)
-        week_start = today_start - timedelta(days=7)
-        month_start = datetime(now.year, now.month, 1)
-        last_month_end = month_start - timedelta(days=1)
-        last_month_start = datetime(last_month_end.year, last_month_end.month, 1)
+        dates = get_date_ranges()
 
-        # Helper vars
-        today_total = 0
-        yesterday_total = 0
-        week_total = 0
-        total_sales = 0
-        today_count = 0
-        last_month_ticket_values = []
-        this_month_ticket_values = []
-
-        # Iterate over all sales
-        for sale in sales:
-            sale_date = sale.get("date")
-            total_value = float(sale.get("total", 0))
-            total_sales += total_value
-
-            if sale_date >= week_start:
-                week_total += total_value
-
-            if sale_date >= today_start:
-                today_total += total_value
-                today_count += 1
-            elif yesterday_start <= sale_date < today_start:
-                yesterday_total += total_value
-
-            # Tickets médios (mês atual e anterior)
-            if sale_date >= month_start:
-                this_month_ticket_values.append(total_value)
-            elif last_month_start <= sale_date < last_month_end:
-                last_month_ticket_values.append(total_value)
-
-        # ✅ Cálculos de métricas
-        today_total = round(today_total, 2)
-        week_total = round(week_total, 2)
-        total_sales = round(total_sales, 2)
-
-        # Comparação diária (%)
-        if yesterday_total == 0:
-            daily_comparison = 0.0
-        else:
-            daily_comparison = round(((today_total - yesterday_total) / yesterday_total) * 100, 2)
-
-        # Ticket médio atual e do mês passado
-        avg_ticket = round(total_sales / len(sales), 2) if sales else 0
-        avg_ticket_this_month = round(sum(this_month_ticket_values) / len(this_month_ticket_values), 2) if this_month_ticket_values else 0
-        avg_ticket_last_month = round(sum(last_month_ticket_values) / len(last_month_ticket_values), 2) if last_month_ticket_values else 0
-
-        # Comparação de ticket médio mensal
-        if avg_ticket_last_month == 0:
-            ticket_comparison = 0.0
-        else:
-            ticket_comparison = round(((avg_ticket_this_month - avg_ticket_last_month) / avg_ticket_last_month) * 100, 2)
+        # Metrics
+        daily = calculate_daily_metrics(
+            sales,
+            dates["today_start"],
+            dates["yesterday_start"]
+        )
+        tickets = calculate_ticket_metrics(
+            sales,
+            dates["month_start"],
+            dates["last_month_start"],
+            dates["last_month_end"]
+        )
+        sales_counts = calculate_sales_counts(
+            sales,
+            dates["week_start"]
+        )
 
         return {
             "overview": {
                 "today": {
-                    "total": today_total,
-                    "comparison": daily_comparison
+                    "total": daily["today_total"],
+                    "comparison": daily["comparison"]
                 },
                 "sales": {
-                    "total": total_sales,
-                    "week": week_total
+                    "total": sales_counts["totalCount"],
+                    "week": sales_counts["weekCount"],
                 },
                 "ticket": {
-                    "average": avg_ticket,
-                    "comparison": ticket_comparison
+                    "average": tickets["average"],
+                    "comparison": tickets["comparison"]
                 }
             }
         }

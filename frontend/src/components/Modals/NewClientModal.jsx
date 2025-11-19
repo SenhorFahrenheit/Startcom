@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
-import axios from "axios";
+import api from "../../services/api";
 
 import BaseModal from "./BaseModal";
 import Button from "../Button/Button";
@@ -43,12 +43,7 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
 
     if (hasError) return;
 
-    
-    const token = localStorage.getItem("token");
-    const companyId = localStorage.getItem("company_id");
-
     const body = {
-      companyId: companyId,
       name: data.nome,
       email: data.email,
       phone: data.telefone.replace(/\D/g, ""),
@@ -57,7 +52,7 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
     };
 
     try {
-      const response = await axios.post("http://127.0.0.1:8000/Company/clients/create", body);
+      const response = await api.post("/Company/clients/create", body);
 
       toast.success("Cliente registrado com sucesso!", { position: "top-right", containerId: "toast-root" });
 

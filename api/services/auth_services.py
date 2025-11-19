@@ -64,12 +64,12 @@ class AuthService:
 
         # Extract companyId (first item in array, if exists)
         company_ids = user.get("companyIds", [])
-        company_id = str(company_ids[0]) if company_ids else None
+        companyId = str(company_ids[0]) if company_ids else None
 
         # Build JWT payload
         payload = {
             "sub": str(user["_id"]),            # User ID
-            "company_id": company_id,           # First companyId
+            "companyId": companyId,           # First companyId
             "exp": expire                       # Expiration timestamp
         }
 
@@ -80,6 +80,6 @@ class AuthService:
         return {
             "access_token": token,
             "token_type": "bearer",
-            "company_id": company_id
+            "company_id": companyId
         }
 

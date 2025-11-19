@@ -4,8 +4,10 @@ import BaseModal from "./BaseModal";
 import Button from "../Button/Button";
 import InputDashboard from "../InputDashboard/InputDashboard";
 
-const NewProductModal = ({ isOpen, onClose }) => {
-  const newProduct = (e) => {
+import api from "../../services/api";
+
+const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
+  const newProduct = async (e) => {
     e.preventDefault();
 
     const formData = new FormData(e.target);
@@ -22,8 +24,8 @@ const NewProductModal = ({ isOpen, onClose }) => {
       hasError = true;
     }
 
-    if (!data.code.trim()) {
-      toast.error("O campo Codigo não pode estar vazio!", {
+    if (!data.description.trim()) {
+      toast.error("O campo Descrição não pode estar vazio!", {
         position: "top-right",
         theme: "light",
         containerId: "toast-root",
@@ -58,13 +60,40 @@ const NewProductModal = ({ isOpen, onClose }) => {
       hasError = true;
     }
 
+    if (!data.costPrice.trim()) {
+      toast.error("O campo Custo de Preço não pode estar vazio!", {
+        position: "top-right",
+        theme: "light",
+        containerId: "toast-root",
+      });
+      hasError = true;
+    }
+
     if (hasError) return;
 
-    console.log("Dados validados:", data);
-    toast.success("Venda registrada com sucesso!", {
-      position: "top-right",
-      containerId: "toast-root",
-    });
+    const body = {
+      product: {
+        name: data.name,
+        description: data.description,
+        price: data.price,
+        costPrice: data.costPrice,
+        quantity: data.quantity,
+        minQuantity: data.min,
+        category: data.category
+      }
+    };
+
+    try {
+      const response = await api.post("/Company/inventory/create", body);
+      toast.success("Produto registrado com sucesso!", { position: "top-right", containerId: "toast-root" });
+      onClose();
+    } catch (error) {
+      toast.error(`Erro: ${error.response?.data?.message || error.message}`, {
+        position: "top-right",
+        theme: "light",
+        containerId: "toast-root",
+      });
+    }
 
     onClose();
   };
@@ -75,7 +104,7 @@ const NewProductModal = ({ isOpen, onClose }) => {
       onClose={onClose}
       contentLabel="Cadastrar Nova Venda"
       width="500px"
-      height="500px"
+      height="550px"
       showCloseButton={true}
     >
       <h2 className="dashboard-modal-title">Registrar Novo Produto</h2>
@@ -88,8 +117,8 @@ const NewProductModal = ({ isOpen, onClose }) => {
           </div>
 
           <div className="input-dashboard-block">
-            <label htmlFor="code">Código </label>
-            <InputDashboard type="number" name="code" id="code" />
+            <label htmlFor="description">Descrição </label>
+            <InputDashboard name="description" id="description"/>
           </div>
 
           <div className="input-dashboard-block">
@@ -99,7 +128,24 @@ const NewProductModal = ({ isOpen, onClose }) => {
               <option>Calçados</option>
               <option>Acessórios</option>
               <option>Eletrônicos</option>
+              <option>Informática</option>
+              <option>Alimentos</option>
+              <option>Bebidas</option>
+              <option>Móveis</option>
+              <option>Decoração</option>
+              <option>Livros</option>
+              <option>Brinquedos</option>
+              <option>Esportes</option>
+              <option>Beleza</option>
+              <option>Saúde</option>
+              <option>Papelaria</option>
+              <option>Ferramentas</option>
+              <option>Autopeças</option>
+              <option>Pet Shop</option>
+              <option>Limpeza</option>
+              <option>Outros</option>
             </select>
+
           </div>
 
           <div className="input-dashboard-block">
@@ -108,13 +154,18 @@ const NewProductModal = ({ isOpen, onClose }) => {
           </div>
 
           <div className="input-dashboard-block">
-            <label htmlFor="min">Mínimo </label>
+            <label htmlFor="min">Quantidade Mínima </label>
             <InputDashboard type="number" name="min" id="min" />
           </div>
 
           <div className="input-dashboard-block">
             <label htmlFor="price">Preço </label>
-            <InputDashboard type="number" name="price" id="price" />
+            <InputDashboard name="price" id="price" />
+          </div>
+
+          <div className="input-dashboard-block">
+            <label htmlFor="costPrice">Preço de Custo</label>
+            <InputDashboard name="costPrice" id="costPrice" />
           </div>
         </div>
         <div className="button-shadown">

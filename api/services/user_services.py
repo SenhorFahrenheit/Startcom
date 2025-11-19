@@ -14,7 +14,7 @@ from ..infra.database import AsyncIOMotorClient
 # ----------------------------------------------
 # Password hashing configuration (argon2)
 # ----------------------------------------------
-pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
 class UserService:

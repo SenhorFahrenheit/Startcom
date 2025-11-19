@@ -1,7 +1,6 @@
 import "./Sales.css";
 import "../commonStyle.css";
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 import formatCurrency from '../../utils/format';
 import { useAuthModals } from "../../hooks/useAuthModals";
@@ -12,16 +11,25 @@ import SalesCard from "../../components/SalesCard/SalesCard";
 import Button from "../../components/Button/Button";
 import FilterDateButton from "../../components/FilterDateButton/FilterDateButton";
 import SalesTable from "../../components/SalesTable/SalesTable";
+import { useAuth } from "../../contexts/AuthContext";
+import api from "../../services/api";
+
 
 import { LuPlus, LuDollarSign, LuShoppingCart, LuTrendingUp } from "react-icons/lu";
 
 const Sales = () => {
+  const { token, user, isAuthenticated, pageLoading } = useAuth();
+  const companyId = user?.companyId;
 
-  const token = localStorage.getItem("token");
-  const companyId = localStorage.getItem("company_id");
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      window.location.href = "/login";
+    }
+  }, [pageLoading, isAuthenticated]);
 
   const { activeModal, openSale, closeModal } = useAuthModals();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(false)
   const [dateFilter, setDateFilter] = useState("Este Mês");
   const [statusFilter, setStatusFilter] = useState({
     "Concluído": true,
@@ -44,10 +52,9 @@ const Sales = () => {
 
   const fetchOverview = async () => {
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/Company/sales/overview",
-        { companyId }
-      );
+      const response = await api.post("/Company/sales/overview");
+        console.log("Resposta real:", response.data);
+
       const data = response.data.overview.overview;
 
       setOverview({
@@ -64,8 +71,12 @@ const Sales = () => {
   };
 
   useEffect(() => {
-    fetchOverview();
-  }, []);
+    if (!pageLoading && isAuthenticated && companyId) {
+      fetchOverview();
+    }
+  }, [pageLoading, isAuthenticated, companyId]);
+
+
 
   return (
     <section className="body-section">

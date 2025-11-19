@@ -1,10 +1,23 @@
 import axios from "axios";
+console.log("BACKEND:", import.meta.env.VITE_BACKEND_URL);
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL, // Backend URL
+  baseURL: import.meta.env.VITE_BACKEND_URL,
   headers: {
     "Content-Type": "application/json"
   }
+});
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem("token");
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
+  return config;
+}, (error) => {
+  return Promise.reject(error);
 });
 
 export const registerAPI = async (data) => {
@@ -20,18 +33,15 @@ export const registerAPI = async (data) => {
       phone_number: `+55${data.telefone.replace(/\D/g, '')}`,
       cpf_cnpj: (data.cpf || data.cnpj).replace(/\D/g, ''),
       password: data.password
-    }
+    };
 
     const response = await api.post("/User/register", userData);
-    if (response.data) {
-      return response.data
-    }
-    else {
-      throw new Error("Erro ao receber o token");
-    }
+
+    if (response.data) return response.data;
+
+    throw new Error("Erro ao registrar");
   } catch (error) {
     console.error("Erro ao registrar usuário:", error.response?.data || error);
-    console.error(error.response.data.detail || "Erro desconhecido");
     throw error;
   }
 };
@@ -45,16 +55,15 @@ export const loginAPI = async (data) => {
     const userData = {
       email: data.email,
       password: data.password
-    }
+    };
 
-    const response = await api.post("/Auth/auth", userData);
-    if (response.data) {
-      return response.data;
-    } else {
-      throw new Error("Erro ao receber o token");
-    }
+    const response = await api.post("/Auth/login", userData);
+
+    if (response.data) return response.data;
+
+    throw new Error("Erro ao receber o token");
   } catch (error) {
-    console.error("Erro ao realizar login:", error);
+    console.error("Erro ao realizar login:", error.response?.data || error);
     throw error;
   }
 };

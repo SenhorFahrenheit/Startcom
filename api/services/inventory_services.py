@@ -1,6 +1,10 @@
 from bson import ObjectId
 from fastapi import HTTPException
 from ..utils.helper_functions import serialize_mongo
+from ..utils.helper_functions import serialize_doc
+from datetime import datetime
+from fastapi import status
+from ..schemas.inventory_schemas import InventoryItemInDB, InventoryCreate
 
 class InventoryService:
     """
@@ -73,6 +77,26 @@ class InventoryService:
         return company["inventory"][0]
     
     async def get_inventory_overview(self, company_id: str):
+        """
+    Generate a summarized overview of a company's inventory.
+
+    Retrieves product data and aggregate statistics from `inventoryStats`, 
+    including total products, low and critical stock counts, and total 
+    invested value based on cost price.
+
+    Each product includes its name, category, quantity, minimum quantity, 
+    unit price, stock status ("Normal", "Baixo", "Crítico", "Esgotado") 
+    and total value (quantity × costPrice).
+
+    Args:
+        company_id (str): The ObjectId of the company in MongoDB.
+
+    Returns:
+        dict: Structured overview with aggregated stats and product details.
+
+    Raises:
+        HTTPException(404): If the company does not exist.
+    """
         company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
 
         if not company:
@@ -88,6 +112,7 @@ class InventoryService:
             quantity = int(p.get("quantity", 0))
             min_quantity = int(p.get("minQuantity", 0))
             unit_price = float(p.get("price", 0))
+            cost_price = float(p.get("costPrice", 0))
 
             if quantity == 0:
                 status = "Esgotado"
@@ -99,7 +124,7 @@ class InventoryService:
                 status = "Normal"
 
 
-            total_value = round(quantity * unit_price, 2)
+            total_value = round(quantity * cost_price, 2)
 
             formatted_products.append({
                 "name": name,
@@ -118,3 +143,91 @@ class InventoryService:
             "totalValue": stats.get("totalValue", 0.0),
             "products": formatted_products
         }
+    
+    async def create_product(self, company_id: str, product_data: InventoryCreate) -> InventoryItemInDB:
+        """
+        Inserts a new product into company's inventory.
+        Rejects duplicate product names in same company.
+        """
+        company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
+        if not company:
+            raise HTTPException(status_code=404, detail="Company not found")
+
+        # Check duplicate product name
+        existing = next((p for p in company.get("inventory", []) if p.get("name") == product_data.name), None)
+        if existing:
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail=f"Product '{product_data.name}' already exists in this company."
+            )
+
+        new_product = InventoryItemInDB(**product_data.dict())
+
+        result = await self.company_collection.update_one(
+            {"_id": ObjectId(company_id)},
+            {
+                "$push": {"inventory": new_product.dict(by_alias=True)},
+                "$set": {"updatedAt": datetime.utcnow()}
+            }
+        )
+
+        if result.modified_count == 0:
+            raise HTTPException(status_code=500, detail="Failed to add product to inventory.")
+
+        return new_product
+    
+    async def increase_product_inventory(self, company_id: str, product_name: str, increment: int):
+        """
+        Increase the quantity of a product in the company's inventory.
+
+        Steps:
+        - Find company
+        - Search for product inside embedded inventory array
+        - Increase its quantity by the given 'increment'
+        - Update the document atomically
+        - Return the updated product
+
+        Raises:
+            404 - Company not found
+            404 - Product not found
+        """
+
+        # 1. Check company
+        company = await self.company_collection.find_one(
+            {"_id": ObjectId(company_id)},
+            {"inventory": 1}
+        )
+        if not company:
+            raise HTTPException(status_code=404, detail="Company not found")
+
+        # 2. Find product inside array
+        product = next(
+            (p for p in company.get("inventory", []) if p["name"].lower() == product_name.lower()),
+            None
+        )
+        if not product:
+            raise HTTPException(status_code=404, detail=f"Product '{product_name}' not found")
+
+        new_quantity = int(product.get("quantity", 0)) + int(increment)
+
+        # 3. Update using positional operator
+        result = await self.company_collection.update_one(
+            {
+                "_id": ObjectId(company_id),
+                "inventory._id": product["_id"]
+            },
+            {
+                "$set": {
+                    "inventory.$.quantity": new_quantity,
+                    "updatedAt": datetime.utcnow()
+                }
+            }
+        )
+
+        if result.modified_count == 0:
+            raise HTTPException(status_code=500, detail="Failed to update product inventory")
+
+    
+        return
+
+        
