@@ -6,6 +6,8 @@ from api.routes.auth.auth_routes import router as auth_router
 from api.routes.company.sales_routes import router as sale_routes
 from api.routes.company.clients_routes import router as client_routes
 from api.routes.company.inventory_routes import router as inventory_routes
+from api.routes.company.report_routes import router as report_routes
+
 from api.infra.config_cors import setup_cors
 from api.infra.scheduler.scheduler import start_scheduler
 import logging
@@ -29,6 +31,7 @@ app.include_router(auth_router, prefix="/Auth")
 app.include_router(sale_routes, prefix="/Company")
 app.include_router(client_routes, prefix="/Company")
 app.include_router(inventory_routes, prefix="/Company")
+app.include_router(report_routes, prefix="/Company")
 
 @app.on_event("startup")
 async def startup_event():
