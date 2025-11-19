@@ -55,7 +55,7 @@ const Sales = () => {
       const response = await api.post("/Company/sales/overview");
         console.log("Resposta real:", response.data);
 
-      const data = response.data.overview.overview;
+      const data = response.data.overview;
 
       setOverview({
         todayTotal: data.today.total,

@@ -56,7 +56,7 @@ const Clients = () => {
 
       if (data.status === "success") {
         setOverview(data.overview.overview);
-
+        console.log(overview)
         const formattedClients = (data.overview.clients || []).map((c) => ({
           clientName: c.name,
           clientType: c.category
