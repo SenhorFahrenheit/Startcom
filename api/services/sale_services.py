@@ -274,7 +274,6 @@ class SaleService:
         )
 
         return {
-            "overview": {
                 "today": {
                     "total": daily["today_total"],
                     "comparison": daily["comparison"]
@@ -287,6 +286,5 @@ class SaleService:
                     "average": tickets["average"],
                     "comparison": tickets["comparison"]
                 }
-            }
         }
 
