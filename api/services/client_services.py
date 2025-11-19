@@ -136,15 +136,12 @@ class ClientService:
 
         # Return structured response
         return {
-            "status": "success",
-            "overview": {
                 "clients": {
                     "total": total_clients,
                     "vip": vip_clients,
                     "newThisMonth": total_new_clients,
                     "averageSatisfaction": round(avg_satisfaction, 2)
-                }
-            },
+                },
             "clients": serialize_mongo(cleaned_clients)
         }
     async def get_all_client_names(self, company_id: str):
