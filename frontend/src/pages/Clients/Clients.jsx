@@ -36,12 +36,10 @@ const Clients = () => {
   const [typeFilter, setTypeFilter] = useState("all");
 
   const [overview, setOverview] = useState({
-    clients: {
-      total: 0,
-      vip: 0,
-      newThisMonth: 0,
-      averageSatisfaction: 0,
-    }
+    total: 0,
+    vip: 0,
+    newThisMonth: 0,
+    averageSatisfaction: 0,
   });
 
   const [clients, setClients] = useState([]);
@@ -53,9 +51,11 @@ const Clients = () => {
       setLoading(true);
       const response = await api.post("/Company/clients/overview_full");
       const data = response.data;
+      console.log(data)
 
       if (data.status === "success") {
-        setOverview(data.overview.overview);
+        setOverview(data.overview);
+        console.log(overview)
 
         const formattedClients = (data.overview.clients || []).map((c) => ({
           clientName: c.name,
@@ -133,10 +133,10 @@ const Clients = () => {
             <p style={{ color: "red" }}>{error}</p>
           ) : (
             <>
-              <ClientCard icon={<LuUsers size={24}/>} value={overview.clients.total} description="Total de Clientes" color="blue"/>
-              <ClientCard icon={<LuStar size={24}/>} value={overview.clients.vip} description="Clientes VIP" color="purple"/>
-              <ClientCard icon={<LuCalendar size={24}/>} value={overview.clients.newThisMonth} description="Novos este mês" color="orange"/>
-              <ClientCard icon={<LuSmile size={24}/>} value={overview.clients.averageSatisfaction} description="Satisfação Média" color="green"/>
+              <ClientCard icon={<LuUsers size={24}/>} value={overview.total} description="Total de Clientes" color="blue"/>
+              <ClientCard icon={<LuStar size={24}/>} value={overview.vip} description="Clientes VIP" color="purple"/>
+              <ClientCard icon={<LuCalendar size={24}/>} value={overview.newThisMonth} description="Novos este mês" color="orange"/>
+              <ClientCard icon={<LuSmile size={24}/>} value={overview.averageSatisfaction} description="Satisfação Média" color="green"/>
             </>
           )}
         </section>
