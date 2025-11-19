@@ -53,15 +53,17 @@ const Sales = () => {
   const fetchOverview = async () => {
     try {
       const response = await api.post("/Company/sales/overview");
-      const data = response.data.overview;
-      
+        console.log("Resposta real:", response.data);
+
+      const data = response.data.overview.overview;
+
       setOverview({
-        todayTotal: data.todayTotal,
-        todayComparison: data.yesterdayComparison,
-        totalSales: data.totalSales,
-        weekSales: data.weekSales,
-        averageTicket: data.averageTicket,
-        averageTicketComparison: data.averageTicketComparison,
+        todayTotal: data.today.total,
+        todayComparison: data.today.comparison,
+        totalSales: data.sales.total,
+        weekSales: data.sales.week,
+        averageTicket: data.ticket.average,
+        averageTicketComparison: data.ticket.comparison,
       });
     } catch (error) {
       console.error("Erro ao buscar overview de vendas:", error);
