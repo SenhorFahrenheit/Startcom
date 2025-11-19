@@ -55,7 +55,7 @@ const Sales = () => {
       const response = await api.post("/Company/sales/overview");
         console.log("Resposta real:", response.data);
 
-      const data = response.data.overview.overview;
+      const data = response.data.overview;
 
       setOverview({
         todayTotal: data.today.total,
@@ -118,8 +118,8 @@ const Sales = () => {
           <SalesCard 
             icon={<LuShoppingCart size={24}/>} 
             description="Total de Vendas" 
-            value={formatCurrency(overview.totalSales)} 
-            information={`+${formatCurrency(overview.weekSales)} esta semana`}
+            value={overview.totalSales} 
+            information={overview.weekSales + " esta semana"}
             progress={
               overview.weekSales > 0
                 ? "good-progress"
