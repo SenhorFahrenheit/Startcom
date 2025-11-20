@@ -14,6 +14,7 @@ import SalesTable from "../../components/SalesTable/SalesTable";
 import { useAuth } from "../../contexts/AuthContext";
 import api from "../../services/api";
 
+import "react-loading-skeleton/dist/skeleton.css";
 
 import { LuPlus, LuDollarSign, LuShoppingCart, LuTrendingUp } from "react-icons/lu";
 
@@ -29,7 +30,7 @@ const Sales = () => {
 
   const { activeModal, openSale, closeModal } = useAuthModals();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [loading, setLoading] = useState(false)
+  const [skeletonLoading, setSkeletonLoading] = useState(false)
   const [dateFilter, setDateFilter] = useState("Este Mês");
   const [statusFilter, setStatusFilter] = useState({
     "Concluído": true,
@@ -50,25 +51,30 @@ const Sales = () => {
 
   const toggleSidebar = () => setSidebarOpen(prev => !prev);
 
+  const [loading, setLoading] = useState(true);
+
   const fetchOverview = async () => {
-    try {
-      const response = await api.post("/Company/sales/overview");
-        console.log("Resposta real:", response.data);
+  try {
+    setSkeletonLoading(true);
+    const response = await api.post("/Company/sales/overview");
+    const data = response.data.overview;
 
-      const data = response.data.overview;
+    setOverview({
+      todayTotal: data.today.total,
+      todayComparison: data.today.comparison,
+      totalSales: data.sales.total,
+      weekSales: data.sales.week,
+      averageTicket: data.ticket.average,
+      averageTicketComparison: data.ticket.comparison,
+    });
+  } catch (error) {
+    console.error(error);
+  } finally {
+    setSkeletonLoading(false);
+  }
+};
 
-      setOverview({
-        todayTotal: data.today.total,
-        todayComparison: data.today.comparison,
-        totalSales: data.sales.total,
-        weekSales: data.sales.week,
-        averageTicket: data.ticket.average,
-        averageTicketComparison: data.ticket.comparison,
-      });
-    } catch (error) {
-      console.error("Erro ao buscar overview de vendas:", error);
-    }
-  };
+
 
   useEffect(() => {
     if (!pageLoading && isAuthenticated && companyId) {
@@ -102,45 +108,36 @@ const Sales = () => {
         </div>
 
         <section className="salesCards">
-          <SalesCard 
-            icon={<LuDollarSign size={24}/>} 
-            description="Vendas Hoje" 
-            value={formatCurrency(overview.todayTotal)} 
-            information={`${overview.todayComparison > 0 ? "+" : ""}${overview.todayComparison}% vs ontem`}
-            progress={
-              overview.todayComparison > 0
-                ? "good-progress"
-                : overview.todayComparison < 0
-                ? "bad-progress"
-                : "neutral-progress"
-            }
-          />
-          <SalesCard 
-            icon={<LuShoppingCart size={24}/>} 
-            description="Total de Vendas" 
-            value={overview.totalSales} 
-            information={overview.weekSales + " esta semana"}
-            progress={
-              overview.weekSales > 0
-                ? "good-progress"
-                : overview.weekSales < 0
-                ? "bad-progress"
-                : "neutral-progress"
-            }
-          />
-          <SalesCard 
-            icon={<LuTrendingUp size={24}/>} 
-            description="Ticket Médio" 
-            value={formatCurrency(overview.averageTicket)} 
-            information={`${overview.averageTicketComparison > 0 ? "+" : ""}${overview.averageTicketComparison}% este mês`}
-            progress={
-              overview.averageTicketComparison > 0
-                ? "good-progress"
-                : overview.averageTicketComparison < 0
-                ? "bad-progress"
-                : "neutral-progress"
-            }
-          />
+          {skeletonLoading ? (
+            [0,1,2].map(idx => (
+              <SalesCard key={idx} loading={true} />
+            ))
+          ) : (
+
+            <>
+              <SalesCard 
+                icon={<LuDollarSign size={24}/>} 
+                description="Vendas Hoje" 
+                value={formatCurrency(overview.todayTotal)} 
+                information={`${overview.todayComparison > 0 ? "+" : ""}${overview.todayComparison}% vs ontem`}
+                progress={overview.todayComparison > 0 ? "good-progress" : overview.todayComparison < 0 ? "bad-progress" : "neutral-progress"}
+              />
+              <SalesCard 
+                icon={<LuShoppingCart size={24}/>} 
+                description="Total de Vendas" 
+                value={overview.totalSales} 
+                information={overview.weekSales + " esta semana"}
+                progress={overview.weekSales > 0 ? "good-progress" : overview.weekSales < 0 ? "bad-progress" : "neutral-progress"}
+              />
+              <SalesCard 
+                icon={<LuTrendingUp size={24}/>} 
+                description="Ticket Médio" 
+                value={formatCurrency(overview.averageTicket)} 
+                information={`${overview.averageTicketComparison > 0 ? "+" : ""}${overview.averageTicketComparison}% este mês`}
+                progress={overview.averageTicketComparison > 0 ? "good-progress" : overview.averageTicketComparison < 0 ? "bad-progress" : "neutral-progress"}
+              />
+            </>
+          )}
         </section>
 
         <div className="filter-search">
