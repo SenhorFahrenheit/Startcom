@@ -1,7 +1,7 @@
 import "./Clients.css";
 import "../commonStyle.css";
 
-import formatCurrency from '../../utils/format';
+import { formatCurrency, formatDateBR, formatPhone } from '../../utils/format';
 
 import Sidebar from "../../layouts/Sidebar/Sidebar";
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
@@ -51,7 +51,6 @@ const Clients = () => {
       setLoading(true);
       const response = await api.post("/Company/clients/overview_full");
       const data = response.data;
-      console.log(data)
 
       if (data.status === "success") {
         setOverview(data.overview);
@@ -63,10 +62,10 @@ const Clients = () => {
             ? c.category[0].toUpperCase() + c.category.slice(1)
             : "Regular",
           email: c.email || "Não Informado",
-          phoneNumber: c.phone || "Não Informado",
+          phoneNumber: formatPhone(c.phone) || "Não Informado",
           city: c.address || "Não Informado",
           totalSpent: c.totalSpent,
-          lastPurchase: c.lastPurchase || "Ainda não comprou",
+          lastPurchase: formatDateBR(c.lastPurchase) || "Ainda não comprou",
         }));
 
         setClients(formattedClients);

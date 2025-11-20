@@ -1,8 +1,6 @@
 import "./Reports.css";
 import "../commonStyle.css";
 
-import formatCurrency from "../../utils/format";
-
 import Sidebar from "../../layouts/Sidebar/Sidebar";
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
 import FilterDateButton from "../../components/FilterDateButton/FilterDateButton";
@@ -20,7 +18,7 @@ import { useAuthModals } from "../../hooks/useAuthModals";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext";
 import api from "../../services/api";
-import { formatPercent } from "../../utils/format";
+import { formatCurrency, formatPercent } from "../../utils/format";
 
 const Reports = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -159,7 +157,7 @@ const Reports = () => {
 
             <section className="chart-section">
               <div className="chart-wrapper">
-                <LineSalesChart data={overview?.salesTotals || {}} />
+                <LineSalesChart data={overview?.salesTotals || {}} period={period} />
               </div>
 
               <div className="chart-wrapper">

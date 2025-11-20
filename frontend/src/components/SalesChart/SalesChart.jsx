@@ -4,7 +4,7 @@ import {
 } from "recharts";
 //import axios from "axios";
 
-import formatCurrency from '../../utils/format';
+import { formatCurrency } from '../../utils/format';
 
 import "./SalesChart.css"
 

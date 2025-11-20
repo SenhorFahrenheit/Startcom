@@ -5,7 +5,7 @@ import api from "../../services/api";
 import BaseModal from "./BaseModal";
 import Button from "../Button/Button";
 import InputDashboard from "../InputDashboard/InputDashboard";
-import formatCurrency from "../../utils/format";
+import { formatCurrency } from "../../utils/format";
 
 const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
   const [products, setProducts] = useState([]);

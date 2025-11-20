@@ -1,7 +1,7 @@
 import "../commonStyle.css";
 import "./Inventory.css";
 
-import formatCurrency from "../../utils/format";
+import { formatCurrency } from "../../utils/format";
 
 import Sidebar from "../../layouts/Sidebar/Sidebar";
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
@@ -141,7 +141,7 @@ const Inventory = () => {
           />
 
           <ProductCard
-            title="Valor Total"
+            title="Valor Investido"
             value={formatCurrency(overview.totalValue)}
             color="normal"
             icon={<LuPackage size={20} />}

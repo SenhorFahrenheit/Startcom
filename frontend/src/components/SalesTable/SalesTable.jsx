@@ -2,7 +2,7 @@ import "./SalesTable.css";
 import { useEffect, useState } from "react";
 import { LuEye } from "react-icons/lu";
 import api from "../../services/api";
-import formatCurrency from "../../utils/format";
+import {formatCurrency, formatDateBR } from "../../utils/format";
 
 const SalesTable = ({ dateFilter, statusFilter, search, refreshTrigger }) => {
   const [sales, setSales] = useState([]);
@@ -16,13 +16,19 @@ const SalesTable = ({ dateFilter, statusFilter, search, refreshTrigger }) => {
 
       if (!response.data.sales) return;
 
-      const data = response.data.sales.map((sale) => ({
-        id: sale._id,
-        client: sale.clientName,
-        date: new Date(sale.date),
-        amount: sale.total,
-        items: sale.items.reduce((acc, item) => acc + item.quantity, 0),
-      }));
+      const data = response.data.sales.map((sale) => {
+        const dateObj = new Date(sale.date);
+
+        return {
+          id: sale._id,
+          client: sale.clientName,
+          date: dateObj,
+          dateBR: formatDateBR(sale.date),
+          amount: sale.total,
+          items: sale.items.reduce((acc, item) => acc + item.quantity, 0),
+        };
+      });
+
 
       setSales(data);
     } catch (error) {
@@ -42,7 +48,7 @@ const SalesTable = ({ dateFilter, statusFilter, search, refreshTrigger }) => {
         (sale) =>
           sale.client.toLowerCase().includes(search.toLowerCase()) ||
           String(sale.id).includes(search) ||
-          sale.date.toLocaleDateString("pt-BR").includes(search)
+          sale.dateBR.includes(search)
       );
     }
 
@@ -92,7 +98,7 @@ const SalesTable = ({ dateFilter, statusFilter, search, refreshTrigger }) => {
               <tr key={sale.id}>
                 <td>#{String(sale.id).slice(-4).toUpperCase()}</td>
                 <td>{sale.client}</td>
-                <td>{sale.date.toLocaleDateString("pt-BR")}</td>
+                <td>{sale.dateBR}</td>
                 <td style={{ color: "var(--primary-color)", fontWeight: 600 }}>
                   {formatCurrency(sale.amount)}
                 </td>
