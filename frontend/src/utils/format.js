@@ -95,3 +95,16 @@ export const formatPercent = (value) => {
 
   return `${number.toFixed(2).replace(".", ",")}%`;
 };
+
+// Utility function to format dates from "YYYY-MM-DD" to "DD/MM/YYYY"
+// Example: "2025-11-01" -> "01/11/2025"
+export const formatDateBR = (value) => {
+  if (!value || typeof value !== "string") return "";
+
+  const cleaned = value.split("T")[0];
+
+  const [year, month, day] = cleaned.split("-");
+  if (!year || !month || !day) return "";
+
+  return `${day}/${month}/${year}`;
+};

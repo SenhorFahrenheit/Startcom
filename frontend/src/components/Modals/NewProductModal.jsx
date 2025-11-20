@@ -159,7 +159,7 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
           </div>
 
           <div className="input-dashboard-block">
-            <label htmlFor="price">Preço </label>
+            <label htmlFor="price">Preço de Venda</label>
             <InputDashboard name="price" id="price" />
           </div>
 
