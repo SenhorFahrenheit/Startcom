@@ -40,7 +40,10 @@ def calculate_daily_metrics(sales: List[Dict], today_start, yesterday_start):
     today_total = round(today_total, 2)
 
     if yesterday_total == 0:
-        comparison = 0.0
+        if today_total == 0:
+            comparison = 0.0
+        else:
+            comparison = 100.0
     else:
         comparison = round(((today_total - yesterday_total) / yesterday_total) * 100, 2)
 
@@ -89,7 +92,10 @@ def calculate_ticket_metrics(sales: List[Dict], month_start, last_month_start, l
     avg_last_month = round(sum(last_month_values) / len(last_month_values), 2) if last_month_values else 0
 
     if avg_last_month == 0:
-        comparison = 0.0
+        if avg_this_month == 0:
+            comparison = 0.0
+        else:
+            comparison = 100.0
     else:
         comparison = round(((avg_this_month - avg_last_month) / avg_last_month) * 100, 2)
 
