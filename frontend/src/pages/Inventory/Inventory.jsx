@@ -121,7 +121,7 @@ const Inventory = () => {
                 className="hover-dashboard"
                 onClick={openProduct}
                 height={"auto"}
-                width={160}
+                width={180}
                 label={<><LuPlus size={"1.5rem"} />Novo Produto</>}
               />
             </div>

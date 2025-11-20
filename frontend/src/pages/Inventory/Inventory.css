@@ -30,6 +30,16 @@
   .filter-block {
     flex-wrap: wrap;
   }
+}
 
+@media (max-width: 1024px) {
+    .buttons-container-inventory {
+        flex-direction: column;
+    }
+} 
 
+@media (max-width: 768px) {
+    .buttons-container-inventory {
+        width: 100%;
+    }
 }
