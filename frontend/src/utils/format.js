@@ -83,3 +83,15 @@ const formatCurrency = (value) => {
 };
 
 export default formatCurrency;
+
+// Utility function to format percentage values in Brazilian format
+// Example: 83.25 -> "83,25%"
+export const formatPercent = (value) => {
+  if (value == null || value === "") return "0%";
+
+  const number = typeof value === "number" ? value : parseFloat(value);
+
+  if (isNaN(number)) return "0%";
+
+  return `${number.toFixed(2).replace(".", ",")}%`;
+};
