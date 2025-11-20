@@ -7,6 +7,7 @@ import Sidebar from "../../layouts/Sidebar/Sidebar";
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
 import Button from "../../components/Button/Button";
 import NewProductModal from "../../components/Modals/NewProductModal";
+import ModifyProductModal from "../../components/Modals/ModifyProductModal";
 import ProductTable from "../../components/ProductTable/ProductTable";
 import ProductCard from "../../components/ProductCard/ProductCard";
 
@@ -24,7 +25,7 @@ const Inventory = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [search, setSearch] = useState("");
 
-  const { activeModal, openProduct, closeModal } = useAuthModals();
+  const { activeModal, openProduct, openModifyProduct, closeModal } = useAuthModals();
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -105,14 +106,25 @@ const Inventory = () => {
             <h1 className="title-page-section">Estoque</h1>
             <p className="description-page-section">Controle completo do seu inventário</p>
           </div>
-          <div className="button-shadown">
-            <Button
-              className="hover-dashboard"
-              onClick={openProduct}
-              height={"auto"}
-              width={160}
-              label={<><LuPlus size={"1.5rem"} />Novo Produto</>}
-            />
+          <div className="buttons-container-inventory">
+            <div className="button-shadown">
+              <Button
+                className="hover-dashboard"
+                onClick={openModifyProduct}
+                height={"auto"}
+                width={180}
+                label={<><LuPlus size={"1.5rem"} />Produto Existente</>}
+              />
+            </div>
+            <div className="button-shadown">
+              <Button
+                className="hover-dashboard"
+                onClick={openProduct}
+                height={"auto"}
+                width={160}
+                label={<><LuPlus size={"1.5rem"} />Novo Produto</>}
+              />
+            </div>
           </div>
         </div>
 
@@ -208,6 +220,12 @@ const Inventory = () => {
 
       <NewProductModal
         isOpen={activeModal === "inventory"}
+        onClose={closeModal}
+        onSuccess={() => fetchInventory()}
+      />
+
+      <ModifyProductModal
+        isOpen={activeModal === "modifyInventory"}
         onClose={closeModal}
         onSuccess={() => fetchInventory()}
       />

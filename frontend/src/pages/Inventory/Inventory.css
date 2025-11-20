@@ -4,6 +4,11 @@
     padding: 24px 0;
 }
 
+.buttons-container-inventory {
+  display: flex;
+  gap: 15px;
+}
+
 @media (max-width: 1300px) {
     .productCards {
         flex-wrap: wrap;
