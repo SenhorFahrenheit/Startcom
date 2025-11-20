@@ -52,9 +52,9 @@ const ProductTable = ({ categoryFilter, statusFilter, search }) => {
             {/*<th>Código</th>*/}
             <th>Categoria</th>
             <th>Quantidade</th>
-            <th>Preço</th>
+            <th>Preço de Venda</th>
             <th>Status</th>
-            <th>Valor Total</th>
+            <th>Valor Investido</th>
           </tr>
         </thead>
 

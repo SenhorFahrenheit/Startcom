@@ -141,7 +141,7 @@ const Inventory = () => {
           />
 
           <ProductCard
-            title="Valor Total"
+            title="Valor Investido"
             value={formatCurrency(overview.totalValue)}
             color="normal"
             icon={<LuPackage size={20} />}
