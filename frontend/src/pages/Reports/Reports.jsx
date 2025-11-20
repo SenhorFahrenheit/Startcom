@@ -157,7 +157,7 @@ const Reports = () => {
 
             <section className="chart-section">
               <div className="chart-wrapper">
-                <LineSalesChart data={overview?.salesTotals || {}} />
+                <LineSalesChart data={overview?.salesTotals || {}} period={period} />
               </div>
 
               <div className="chart-wrapper">

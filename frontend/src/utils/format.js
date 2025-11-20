@@ -106,3 +106,34 @@ export const formatDateBR = (value) => {
 
   return `${day}/${month}/${year}`;
 };
+
+export const formatMonthLabel = (value) => {
+  if (!value) return "";
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return formatDateBR(value);
+  }
+
+  const englishToBr = {
+    january: "Janeiro",
+    february: "Fevereiro",
+    march: "Março",
+    april: "Abril",
+    may: "Maio",
+    june: "Junho",
+    july: "Julho",
+    august: "Agosto",
+    september: "Setembro",
+    october: "Outubro",
+    november: "Novembro",
+    december: "Dezembro",
+  };
+
+  const lower = value.toLowerCase();
+
+  if (englishToBr[lower]) {
+    return englishToBr[lower];
+  }
+
+  return value;
+};
