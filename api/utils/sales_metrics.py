@@ -168,9 +168,13 @@ def calculate_month_revenue_metrics(sales: List[Dict], month_start, last_month_s
     last_month_total = round(last_month_total, 2)
 
     if last_month_total == 0:
-        comparison = 0.0
+        if current_month_total == 0:
+            comparison = 0.0
+        else:
+            comparison = 100.0
     else:
         comparison = round(((current_month_total - last_month_total) / last_month_total) * 100, 2)
+
 
     return {
         "total": current_month_total,
