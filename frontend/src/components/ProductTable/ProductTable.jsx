@@ -1,7 +1,7 @@
 import "./ProductTable.css";
 import { useEffect, useState } from "react";
 import { LuBarcode, LuPackage } from "react-icons/lu";
-import formatCurrency from "../../utils/format";
+import { formatCurrency } from "../../utils/format";
 import api from "../../services/api";
 
 const ProductTable = ({ categoryFilter, statusFilter, search }) => {

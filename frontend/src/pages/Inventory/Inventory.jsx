@@ -1,7 +1,7 @@
 import "../commonStyle.css";
 import "./Inventory.css";
 
-import formatCurrency from "../../utils/format";
+import { formatCurrency } from "../../utils/format";
 
 import Sidebar from "../../layouts/Sidebar/Sidebar";
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";

@@ -1,9 +1,7 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import formatCurrency from '../../utils/format';
+import { formatCurrency } from '../../utils/format';
 
 const LineSalesChart = ({ data }) => {
-  console.log("DATA RECEBIDO:", data);
-
   const formattedData = data && typeof data === "object"
     ? Object.entries(data).map(([month, value]) => ({
         month,

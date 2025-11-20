@@ -2,7 +2,7 @@ import "./Sales.css";
 import "../commonStyle.css";
 import { useState, useEffect } from "react";
 
-import formatCurrency from '../../utils/format';
+import { formatCurrency } from '../../utils/format';
 import { useAuthModals } from "../../hooks/useAuthModals";
 import NewSaleModal from "../../components/Modals/NewSaleModal";
 import Sidebar from "../../layouts/Sidebar/Sidebar";

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import formattedDate from "../../utils/formattedDate";
-import formatCurrency from '../../utils/format';
+import { formatCurrency } from '../../utils/format';
 
 import "./Dashboard.css"
 import "../commonStyle.css"

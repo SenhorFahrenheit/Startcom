@@ -69,7 +69,7 @@ export const formatPhone = (value) => {
 // Examples:
 // "1247.3" -> "R$ 1.247,30"
 // "0" -> "R$ 0,00"
-const formatCurrency = (value) => {
+export const formatCurrency = (value) => {
   if (value == null || value === "") return "R$ 0,00";
 
   const number = typeof value === "number" ? value : parseFloat(value.replace(",", "."));
@@ -81,8 +81,6 @@ const formatCurrency = (value) => {
     currency: "BRL",
   });
 };
-
-export default formatCurrency;
 
 // Utility function to format percentage values in Brazilian format
 // Example: 83.25 -> "83,25%"
