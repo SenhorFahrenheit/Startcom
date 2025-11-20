@@ -11,9 +11,6 @@ const SalesTable = ({ dateFilter, statusFilter, search, refreshTrigger }) => {
   const fetchSales = async () => {
     try {
       const response = await api.post("/Company/sales/get_all");
-
-      console.log("API response:", response.data);
-
       if (!response.data.sales) return;
 
       const data = response.data.sales.map((sale) => {
@@ -28,7 +25,6 @@ const SalesTable = ({ dateFilter, statusFilter, search, refreshTrigger }) => {
           items: sale.items.reduce((acc, item) => acc + item.quantity, 0),
         };
       });
-
 
       setSales(data);
     } catch (error) {

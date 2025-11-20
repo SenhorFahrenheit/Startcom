@@ -15,7 +15,6 @@ import { BsBoxSeam } from 'react-icons/bs';
 import { FaRegChartBar } from 'react-icons/fa';
 
 import { NavLink } from 'react-router-dom';
-import { useEffect } from 'react';
 
 import "./Home.css"
 
