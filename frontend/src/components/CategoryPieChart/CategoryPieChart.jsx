@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
-// import axios from "axios"
+import { formatPercent } from "../../utils/format";
 
 const COLORS = ["var(--primary-color)", "#A9BCD0", "#2F4858", "#91dff7ff"];
 
-const CategoryPieChart = () => {
+const CategoryPieChart = ({ data }) => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -14,54 +14,42 @@ const CategoryPieChart = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        // const res = await axios.get("http://localhost:5000/api/sales/categories");
-        const res = {
-          data: [
-            { name: "Roupas", value: 35 },
-            { name: "Calçados", value: 25 },
-            { name: "Acessórios", value: 20 },
-            { name: "Eletrônicos", value: 20 }
-          ]
-        };
-        setData(res.data);
-      } catch (error) {
-        console.error("Erro ao buscar dados:", error);
-      }
-    }
-    fetchData();
-  }, []);
+  const formattedData =
+    data && typeof data === "object"
+      ? Object.entries(data).map(([name, value]) => ({
+          name,
+          value,
+        }))
+      : [];
 
   return (
     <div className="chart">
       <h3 className="title-chart-dashboard">Categorias de Vendas</h3>
+
       <ResponsiveContainer>
         <PieChart>
           <Pie
-            data={data}
-            cx={isMobile ? "50%" : "45%"} 
+            data={formattedData}
+            cx={isMobile ? "50%" : "45%"}
             cy="45%"
             innerRadius={60}
-            outerRadius={isMobile ? "105" : "120"} 
+            outerRadius={isMobile ? "105" : "120"}
             paddingAngle={3}
             dataKey="value"
           >
-            {data.map((entry, index) => (
+            {formattedData.map((entry, index) => (
               <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
             ))}
           </Pie>
-          <Tooltip formatter={(value) => `${value}%`} />
+
+          <Tooltip formatter={(value) => `${formatPercent(value)}`} />
+
           <Legend
             layout={isMobile ? "horizontal" : "vertical"}
-            verticalAlign={isMobile ? "bottom" : "middle"} 
-            align={isMobile ? "center" : "right"}   
+            verticalAlign={isMobile ? "bottom" : "middle"}
+            align={isMobile ? "center" : "right"}
             iconType="circle"
-            formatter={(value, entry) => `${value} (${entry.payload.value}%)`}
+            formatter={(value, entry) => `${value} (${formatPercent(entry.payload.value)})`}
             wrapperStyle={{
               fontFamily: "var(--font-heading)",
               fontSize: 14,
