@@ -81,3 +81,48 @@ export const validatePhone = (phone) => {
   // Valid if it has 10 or 11 digits
   return /^\d{10,11}$/.test(cleaned);
 };
+
+// Evaluates the strength of a given password and returns UI-friendly data
+export function getPasswordStrength(password) {
+  const length = password.length;
+
+  if (length === 0) {
+    return {
+      level: "empty",
+      percentage: 0,
+      color: "#ddd",
+      text: "Por favor, insira uma senha com 8 dígitos ou mais."
+    };
+  }
+
+  // --- WEAK (0–7 chars) ---
+  if (length < 8) {
+    const percentage = Math.min((length / 8) * 33, 33); 
+    return {
+      level: "weak",
+      percentage,
+      color: "#e74c3c",
+      text: "Senha Fraca"
+    };
+  }
+
+  // --- MEDIUM (8–15 chars) ---
+  if (length <= 15) {
+    // 8 chars = 34%, 15 chars = 66%
+    const percentage = 33 + ((length - 8) / 7) * 33;
+    return {
+      level: "medium",
+      percentage,
+      color: "#f1c40f",
+      text: "Senha Média"
+    };
+  }
+
+  // --- STRONG (16+ chars) ---
+  return {
+    level: "strong",
+    percentage: 100,
+    color: "#2ecc71",
+    text: "Senha Forte"
+  };
+}

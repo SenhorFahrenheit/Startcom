@@ -66,7 +66,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                     <p className="email-sidebar">usuario@gmail.com</p>
                 </div>
             </div>
-            <button className="logout-button"><LuLogOut/> Sair</button>
+            <button className="logout-button"><LuLogOut/>Sair</button>
         </div>
     </aside>
   )

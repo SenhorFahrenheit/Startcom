@@ -51,9 +51,9 @@
   min-width: 0;
 }
 
-.inputs-row .input-with-icon .icon {
+/*.inputs-row .input-with-icon .icon {
   padding-left: 30px;
-}
+} */ 
 
 .inputs-row .input-with-icon.right {
   padding-left: 24px !important;

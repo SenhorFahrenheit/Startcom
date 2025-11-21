@@ -1,5 +1,5 @@
 // Libraries
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RiLockPasswordFill } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
@@ -17,10 +17,9 @@ import CodeVerificationModal from "../../components/Modals/CodeVerificationModal
 import { useAuthModals } from "../../hooks/useAuthModals";
 import { useLoginForm } from "../../hooks/useLoginForm";
 import { useRegisterForm } from "../../hooks/useRegisterForm";
-
-import { Controller } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
+import { Controller } from "react-hook-form";
 
 // Styles
 import "./Auth.css";
@@ -63,10 +62,27 @@ const Auth = () => {
     validateCNPJ,
     validateCPF,
     validatePhone,
+    getPasswordStrength,
     formatCNPJ,
     formatCPF,
     formatPhone,
+    watch,
   } = useRegisterForm(openAuthenticator);
+
+  const passwordValue = watch("password", "");
+  useEffect(() => {
+    const bar = document.querySelector(".password-strength-fill");
+    const label = document.querySelector(".password-strength-label");
+
+    const { level, percentage, color, text } = getPasswordStrength(passwordValue);
+
+    if (bar) {
+      bar.style.width = percentage + "%";
+      bar.style.backgroundColor = color;
+    }
+    if (label) label.textContent = text;
+  }, [passwordValue]);
+
 
   const handleLoginWGoogle = () => {
     console.log("Login with Google clicked");
@@ -270,6 +286,10 @@ const Auth = () => {
               <Input
                 {...register("password", {
                   required: "Senha é obrigatória",
+                  minLength: {
+                    value: 8,
+                    message: "A senha deve ter pelo menos 8 caracteres",
+                  },
                 })}
                 icon={<RiLockPasswordFill />}
                 type="password"
@@ -289,6 +309,13 @@ const Auth = () => {
                 type="password"
                 placeholder="Confirmar Senha"
               />
+            </div>
+
+            <div className="password-strength-wrapper">
+              <div className="password-strength-bar">
+                <div className="password-strength-fill"></div>
+              </div>
+              <p className="password-strength-label"></p>
             </div>
 
             <Button label="CADASTRAR" type="submit" />
