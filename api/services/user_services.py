@@ -4,18 +4,40 @@ from passlib.context import CryptContext
 from fastapi import HTTPException, status
 from bson import ObjectId
 from datetime import datetime, date
+from jose import jwt, JWTError
 
 from ..services.company_services import CompanyService
 from ..schemas.user_schemas import UserCreate, UserInDB
 from ..schemas.company_schemas import CompanyCreate
 from ..infra.database import AsyncIOMotorClient
-
+from fastapi_mail import ConnectionConfig, FastMail, MessageSchema
+from typing import Dict
+import os
 
 # ----------------------------------------------
 # Password hashing configuration (argon2)
 # ----------------------------------------------
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+
+conf = ConnectionConfig(
+    MAIL_USERNAME=os.getenv("SUPORT_MAIL_USERNAME"),
+    MAIL_PASSWORD=os.getenv("SUPORT_MAIL_PASSWORD"),
+    MAIL_FROM=os.getenv("MAIL_FROM"),
+    MAIL_FROM_NAME=os.getenv("MAIL_FROM_NAME"),
+    MAIL_PORT=int(os.getenv("MAIL_PORT")),
+    MAIL_SERVER=os.getenv("MAIL_SERVER"),
+    MAIL_STARTTLS=True,
+    MAIL_SSL_TLS=False,
+    USE_CREDENTIALS=True,
+    VALIDATE_CERTS=True,
+    TEMPLATE_FOLDER="api/templates"
+)
+
+
+frontend_verify_url = os.getenv("FRONTEND_VERIFY_URL")
+
+fm = FastMail(conf)
 
 class UserService:
     """
@@ -157,3 +179,86 @@ class UserService:
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Database error: {str(e)}"
             )
+        
+    async def send_verification_email(self, email: str, token: str, full_name: str | None = None):
+        """
+        Send a verification email containing a unique confirmation link.
+        """
+        verification_url = f"{frontend_verify_url}?token={token}"
+        message = MessageSchema(
+            subject="Verifique seu email - Startcom",
+            recipients=[email],
+            subtype="html",
+            template_body={"name": full_name or "", "link": verification_url}
+        )
+        await fm.send_message(message, template_name="verify_email.html")
+
+
+
+    async def find_by_email(self, email: str):
+        """
+        Find and return a user document based on the provided email.
+        """
+        user = await self.users_collection.find_one({"email": email})
+        if user:
+            user["_id"] = str(user["_id"])
+        return user
+
+
+
+    async def verify_email_token(self, token: str):
+        """
+        Validate the email verification token and activate the user's account.
+        """
+
+        algorithm = os.getenv("ALGORITHM_EMAIL_VERIFICATION")
+        secret_key = os.getenv("SECRET_KEY_EMAIL_VERIFICATION")
+
+        # 1) Decode JWT
+        try:
+            payload = jwt.decode(token, secret_key, algorithms=[algorithm])
+
+            user_id = payload.get("userId")
+            token_id = payload.get("tokenId")
+
+            if not user_id or not token_id:
+                raise HTTPException(400, "Invalid token.")
+
+        except JWTError:
+            raise HTTPException(400, "Invalid or corrupted token.")
+
+        # 2) Search user in the database
+        user = await self.users_collection.find_one({"_id": ObjectId(user_id)})
+
+        if not user:
+            raise HTTPException(400, "User not found.")
+
+        db_token = user.get("emailToken")
+
+        if not db_token:
+            raise HTTPException(400, "Expired or already used token.")
+
+        # 3) Check if token matches
+        if db_token["tokenId"] != token_id:
+            raise HTTPException(400, "Invalid token.")
+
+        # 4) Check expiration
+        if db_token["expiresAt"] < datetime.utcnow():
+            raise HTTPException(400, "Expired token.")
+
+        # 5) Mark email as verified and remove token
+        await self.users_collection.update_one(
+            {"_id": ObjectId(user_id)},
+            {
+                "$set": {
+                    "emailVerified": True,
+                    "emailVerifiedAt": datetime.utcnow()
+                },
+                "$unset": {"emailToken": ""}
+            }
+        )
+
+        return True
+
+
+
