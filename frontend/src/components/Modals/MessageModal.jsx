@@ -18,8 +18,8 @@ const MessageModal = ({ isOpen, onClose, code }) => {
       message: "Você precisa logar para acessar isso",
       action: "login",
       buttonLabel: "FAZER LOGIN",
-      icon: Lock,
-      iconColor: "#e74c3c"
+      icon: LogIn,
+      iconColor: "#017688"
     },
     default: {
       message: "Algo deu errado!",

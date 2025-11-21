@@ -1,5 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 
+import NotFound from "../pages/NotFound/NotFound";
+
 import Auth from "../pages/auth/Auth";
 import Home from "../pages/Home/Home";
 import HelpCenter from "../pages/Support/HelpCenter";
@@ -26,6 +28,7 @@ const AppRoutes = () => {
       <Route path="/contato" element={<Contact />} />
       <Route path="/whatsapp" element={<WhatsApp />} />
       <Route path="/privacidade" element={<Privacy />} />
+      <Route path="*" element={<NotFound />} />
 
       {/* Private Routes */}
       <Route

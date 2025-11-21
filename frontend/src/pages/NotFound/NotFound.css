@@ -1,0 +1,50 @@
+.notfound-wrapper {
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  font-family: var(--font-base);
+}
+
+.notfound-box {
+  display: flex;
+  flex-direction: column;
+  background-color: #FFF;
+  padding: 24px 32px;
+  border-radius: var(--border-radius);
+  align-items: center;
+  text-align: center;
+  max-width: 560px;
+  animation: fadeIn 0.5s ease;
+}
+
+.notfound-icon {
+  color: #017688;
+  background: #01768815;
+  width: 86px;
+  height: 86px;
+  border-radius: 50%;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notfound-title {
+  font-size: 4rem;
+  font-weight: 700;
+  color: #017688;
+  margin: 0;
+}
+
+.notfound-subtitle {
+  font-size: 1.1rem;
+  margin: 10px 0 25px;
+  color: #555;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
