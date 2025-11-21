@@ -1,0 +1,71 @@
+.privacy-container {
+    padding: 48px;
+    display: flex;
+    border-radius: var(--border-radius);
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    width:60%;
+    min-height: 420px;
+    height: auto;
+    font-family: var(--font-base);
+    background-color: var(--component-background-color);
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.icon-privacy {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color);
+    color: #FFFFFF;
+    border-radius: 100%;
+}
+
+.privacy-description {
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+}
+
+.privacy-category-title {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.privacy-category-description {
+    font-size: 0.95rem;
+    margin-bottom: 25px;
+}
+
+.privacy-questions {
+    width: 100%;
+    min-width: 260px;
+    height: auto;
+    background-color: #01768820;
+    border-radius: var(--border-radius);
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    gap: 20px;
+}
+
+.privacy-method-title > span {
+    font-weight: 600;
+    font-size: 0.95rem;
+}
+
+.privacy-method-description {
+    font-size: 0.9rem;
+}
+
+@media (max-width: 1024px) {
+    .privacy-container {
+        width: 90%;
+    }
+}

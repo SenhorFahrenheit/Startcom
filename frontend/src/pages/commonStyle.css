@@ -89,7 +89,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100svh;
+    min-height: 100svh;
+    padding-top: 24px;
+    padding-bottom: 24px;
     font-family: var(--font-base);
 }
 
