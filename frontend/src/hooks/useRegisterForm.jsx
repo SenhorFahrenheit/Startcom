@@ -1,11 +1,11 @@
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "react-toastify";
-import { validateCNPJ, validateCPF, validatePhone } from "../utils/validations";
+import { validateCNPJ, validateCPF, validatePhone, getPasswordStrength } from "../utils/validations";
 import { formatCNPJ, formatCPF, formatPhone } from "../utils/format";
 import { registerAPI } from "../services/api";
 
 export const useRegisterForm = (onSuccess) => {
-  const { register, handleSubmit, control } = useForm();
+  const { register, handleSubmit, control, watch  } = useForm();
 
   const onSubmit = async (data) => {
     try {
@@ -38,11 +38,13 @@ export const useRegisterForm = (onSuccess) => {
     register,
     handleSubmit,
     control,
+    watch,
     onSubmit,
     onError,
     validateCNPJ,
     validateCPF,
     validatePhone,
+    getPasswordStrength,
     formatCNPJ,
     formatCPF,
     formatPhone,
