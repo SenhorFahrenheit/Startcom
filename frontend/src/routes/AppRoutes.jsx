@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Auth from "../pages/auth/Auth";
 import Home from "../pages/Home/Home";
 import HelpCenter from "../pages/Support/HelpCenter";
+import Contact from "../pages/Support/Contact";
 
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Sales from "../pages/Sales/Sales";
@@ -20,7 +21,7 @@ const AppRoutes = () => {
       <Route path="/" element={<Home />} />
       <Route path="/login" element={<Auth />} />
       <Route path="/ajuda" element={<HelpCenter />} />
-
+      <Route path="/contato" element={<Contact />} />
 
       {/* Private Routes */}
       <Route

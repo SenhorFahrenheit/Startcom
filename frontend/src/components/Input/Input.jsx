@@ -18,11 +18,12 @@ const Input = React.forwardRef(({
   iconPosition = 'right', // "left" or "right"
   maxLength,
   type = 'text',
+  style, 
   ...rest
 }, ref) => {
   return (
     // Wrapper div to handle styling and icon positioning
-    <div className={`input-with-icon ${iconPosition}`}>
+    <div className={`input-with-icon ${iconPosition}`} style={style}>
       {/* Actual input element */}
       <input
         type={type}

@@ -1,5 +1,4 @@
-import { BookOpen } from 'lucide-react';
-import { MessageCircle } from 'lucide-react';
+import { BookOpen, MessageCircle } from 'lucide-react';
 
 import Button from '../../components/Button/Button';
 
