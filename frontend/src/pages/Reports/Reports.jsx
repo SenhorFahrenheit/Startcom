@@ -68,6 +68,7 @@ const Reports = () => {
   useEffect(() => {
     if (!pageLoading && !isAuthenticated) {
       window.location.href = "/login";
+      return;
     }
 
     if (!pageLoading && isAuthenticated && companyId) {
@@ -119,13 +120,16 @@ const Reports = () => {
           </div>
         </div>
 
-        {loading ? (
-          <p>Carregando dados...</p>
-        ) : error ? (
-          <p style={{ color: "red" }}>{error}</p>
-        ) : (
-          <>
-            <section className="reportCards">
+        <section className="reportCards">
+          {loading ? (
+            <>
+              <ReportCard loading />
+              <ReportCard loading />
+              <ReportCard loading />
+              <ReportCard loading />
+            </>
+          ) : (
+            <>
               <ReportCard
                 icon={<LuDollarSign size={24} />}
                 value={formatCurrency(overview?.monthRevenue?.total || 0)}
@@ -153,19 +157,19 @@ const Reports = () => {
                 description="Ticket médio"
                 information={`${formatPercent(overview?.ticket?.comparison) || "0,00%"} vs mês anterior`}
               />
-            </section>
+            </>
+          )}
+        </section>
 
-            <section className="chart-section">
-              <div className="chart-wrapper">
-                <LineSalesChart data={overview?.salesTotals || {}} period={period} />
-              </div>
+        <section className="chart-section">
+          <div className="chart-wrapper">
+            <LineSalesChart data={overview?.salesTotals || {}} period={period} />
+          </div>
 
-              <div className="chart-wrapper">
-                <CategoryPieChart data={overview?.categoryDistribution || {}} />
-              </div>
-            </section>
-          </>
-        )}
+          <div className="chart-wrapper">
+            <CategoryPieChart data={overview?.categoryDistribution || {}} />
+          </div>
+        </section>
 
         <section className="reports-section">
           <div>
@@ -213,10 +217,7 @@ const Reports = () => {
         </section>
       </div>
 
-      <NewReportModal
-        isOpen={activeModal === "report"}
-        onClose={closeModal}
-      />
+      <NewReportModal isOpen={activeModal === "report"} onClose={closeModal} />
     </section>
   );
 };
