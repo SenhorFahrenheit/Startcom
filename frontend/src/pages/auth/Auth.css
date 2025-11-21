@@ -7,6 +7,7 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  padding: 24px 0;
 }
 
 .container {
@@ -103,11 +104,11 @@ body {
   position: absolute;
   top: 30px;
   left: 30px;
-  transition: transform 0.5s ease;
+  transition: transform 1s ease;
 }
 
 .container.login-mode .side-panel .back-button {
-  transform: translateX(130px)
+  transform: scale(0.01);
 }
 
 .auth-login {
@@ -137,15 +138,19 @@ h2 {
 .forgot-password,
 .maintain-logged {
   width: 85%;
-  font-size: 1rem;
   font-family: var(--font-base);
   cursor: pointer;
   color: var(--quaternary-color);
 }
 
+.maintain-logged {
+  margin-top: 5px;
+}
+
 .forgot-password {
   text-align: end;
   margin-bottom: 0.9rem;
+  font-size: 14px;
 }
 
 .maintain-logged {
@@ -157,6 +162,7 @@ h2 {
   display: flex;
   gap: 5px;
   text-align: center;
+  font-size: 14px;
 }
 
 .forgot-password:hover {
@@ -188,6 +194,13 @@ h2 {
   cursor: pointer;
   transition: all 0.75s ease;
   font-weight: bold;
+}
+.CPF {
+  border-radius: 5px 0 0 5px;
+}
+
+.CNPJ {
+  border-radius: 0 5px 5px 0;
 }
 
 .CPF:focus,
@@ -292,7 +305,19 @@ h2 {
 
   .CPF,
   .CNPJ {
-    width: 48%;
+    width: 50%;
+  }
+
+  .buttons-row {
+    flex-direction: column;
+    height: 100px;
+    width: 100%;
+    gap: 0;
+  }
+
+  .button-with-icon {
+    margin: 2.5px 0;
+    height: 45px !important;
   }
 
   .forgot-password,
