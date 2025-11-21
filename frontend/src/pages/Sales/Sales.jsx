@@ -74,15 +74,11 @@ const Sales = () => {
   }
 };
 
-
-
   useEffect(() => {
     if (!pageLoading && isAuthenticated && companyId) {
       fetchOverview();
     }
   }, [pageLoading, isAuthenticated, companyId]);
-
-
 
   return (
     <section className="body-section">

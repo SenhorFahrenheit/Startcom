@@ -13,7 +13,7 @@ const SalesCard = ({ icon, description, value, information, progress, loading })
           {loading ? <Skeleton width={120} /> : information}
         </p>
       </div>
-      <div className="sales-card-icon">{loading ? <Skeleton width={24} height={24} /> : icon}</div>
+      <div className="sales-card-icon">{loading ? <Skeleton width={52} height={52} borderRadius={10} /> : icon}</div>
     </div>
   );
 };
