@@ -1,0 +1,19 @@
+<!doctype html>
+<html>
+  <body style="font-family:Arial,Helvetica,sans-serif;line-height:1.4;">
+    <div style="max-width:600px;margin:0 auto;padding:20px;">
+      <h2>Olá {{ name if name else "" }}</h2>
+      <p>Obrigado por criar uma conta no Starcom. Para ativar sua conta clique no botão abaixo:</p>
+
+      <a href="{{ link }}"
+         style="display:inline-block;padding:12px 20px;border-radius:8px;text-decoration:none;
+                background:#0ea5e9;color:#fff;font-weight:600;">
+        Verificar e-mail
+      </a>
+
+      <p style="color:#666;font-size:13px;margin-top:18px;">
+        Se você não criou essa conta, ignore este e-mail.
+      </p>
+    </div>
+  </body>
+</html>
