@@ -1,9 +1,11 @@
 import "./Privacy.css"
 import { Shield } from "lucide-react"
+import BackHome from '../../components/BackHome/BackHome';
 
 const Privacy = () => {
   return (
     <div className="support-container-wrapper">
+        <BackHome/>
         <div className="privacy-container">
             <div className="icon-privacy">
                 <Shield size={"40px"}/>

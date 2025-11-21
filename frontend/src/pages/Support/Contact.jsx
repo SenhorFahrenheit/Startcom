@@ -2,6 +2,7 @@ import "./Contact.css";
 import "../commonStyle.css";
 
 import { Mail, Send } from "lucide-react";
+import BackHome from "../../components/BackHome/BackHome";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
 
@@ -12,6 +13,7 @@ const Contact = () => {
 
   return (
     <div className="support-container-wrapper">
+      <BackHome/>
       <div className="contact-container">
         <div className="icon-contact">
           <Mail size={"40px"} />

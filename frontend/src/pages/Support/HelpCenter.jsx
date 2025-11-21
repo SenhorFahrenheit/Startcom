@@ -1,18 +1,23 @@
 import { BookOpen, MessageCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '../../components/Button/Button';
+import BackHome from '../../components/BackHome/BackHome';
 
 import "./HelpCenter.css"
 import "../commonStyle.css"
 
 const HelpCenter = () => {
 
+    const navigate = useNavigate()
+
     const handleClick = () => {
-        console.log("Fui clicado :D")
+        navigate("/contato")
     }
 
     return (
         <div className="support-container-wrapper">
+            <BackHome/>
             <div className="help-container">
                 <div className="icon-help">
                     <BookOpen size={"40px"}/>

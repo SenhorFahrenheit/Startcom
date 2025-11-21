@@ -1,6 +1,7 @@
 import { MessageCircle } from 'lucide-react';
 
 import Button from '../../components/Button/Button';
+import BackHome from '../../components/BackHome/BackHome';
 
 import "./WhatsApp.css"
 import "../commonStyle.css"
@@ -8,11 +9,15 @@ import "../commonStyle.css"
 const WhatsApp = () => {
 
     const handleClick = () => {
-        console.log("Fui clicado :D")
-    }
+        const phoneNumber = "5513996550868";
+        const message = encodeURIComponent("Olá! Preciso de suporte.");
+        const url = `https://wa.me/${phoneNumber}?text=${message}`;
+        window.open(url, "_blank");
+    };
 
     return (
         <div className="support-container-wrapper">
+            <BackHome/>
             <div className="whatsapp-container">
                 <div className="icon-whatsapp">
                     <MessageCircle size={"44px"}/>
