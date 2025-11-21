@@ -4,6 +4,7 @@ import { MessageCircle } from 'lucide-react';
 import Button from '../../components/Button/Button';
 
 import "./HelpCenter.css"
+import "../commonStyle.css"
 
 const HelpCenter = () => {
 
@@ -18,7 +19,7 @@ const HelpCenter = () => {
                     <BookOpen size={"40px"}/>
                 </div>
                 
-                <h1 className="help-title">Central de Ajuda</h1>
+                <h1 className="support-title">Central de Ajuda</h1>
                 <p className="help-subtitle">Precisa de ajuda? Estamos aqui para você!</p>
 
                 <Button

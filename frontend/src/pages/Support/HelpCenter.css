@@ -1,11 +1,3 @@
-.support-container-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 100dvh;
-    font-family: var(--font-base);
-}
-
 .help-container {
     padding: 20px;
     display: flex;
@@ -28,11 +20,6 @@
     background-color: var(--primary-color);
     color: #FFFFFF;
     border-radius: 100%;
-}
-
-.help-title {
-    font-size: 2.2rem;
-    margin-top: 10px;
 }
 
 .help-subtitle {
