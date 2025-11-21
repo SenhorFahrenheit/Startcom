@@ -1,5 +1,4 @@
 import axios from "axios";
-console.log("BACKEND:", import.meta.env.VITE_BACKEND_URL);
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_BACKEND_URL,
@@ -8,17 +7,34 @@ const api = axios.create({
   }
 });
 
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("token");
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const status = error?.response?.status;
+
+    if (status === 401) {
+      window.dispatchEvent(new Event("unauthorized"));
+
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+    }
+
+    return Promise.reject(error);
   }
-
-  return config;
-}, (error) => {
-  return Promise.reject(error);
-});
+);
 
 export const registerAPI = async (data) => {
   if (!data || typeof data !== 'object') {

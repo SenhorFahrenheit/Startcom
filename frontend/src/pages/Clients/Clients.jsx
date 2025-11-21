@@ -19,6 +19,9 @@ import { useAuth } from "../../contexts/AuthContext";
 
 import { LuPlus, LuSmile, LuUsers, LuStar, LuCalendar } from "react-icons/lu";
 
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+
 const Clients = () => {
   const { token, user, isAuthenticated, pageLoading } = useAuth();
   const companyId = user?.companyId;
@@ -98,7 +101,6 @@ const Clients = () => {
     return matchesSearch && matchesType;
   });
 
-
   const toggleSidebar = () => setSidebarOpen(prev => !prev);
 
   return (
@@ -127,7 +129,15 @@ const Clients = () => {
 
         <section className="clientCards">
           {loading ? (
-            <p>Carregando dados...</p>
+            [0, 1, 2, 3].map((idx) => (
+              <div key={idx} className="ClientCard">
+                <div className={`client-icon-card client-card-skeleton`}>
+                  <Skeleton circle width={40} height={40} />
+                </div>
+                <p className="client-value-card"><Skeleton width={60} /></p>
+                <p className="client-description-card"><Skeleton width={100} /></p>
+              </div>
+            ))
           ) : error ? (
             <p style={{ color: "red" }}>{error}</p>
           ) : (
@@ -139,6 +149,7 @@ const Clients = () => {
             </>
           )}
         </section>
+
 
         <div className="filter-search">
           <input 
@@ -164,25 +175,26 @@ const Clients = () => {
         </div>    
 
         <div className="clientInformationCards">
-          {filteredClients.length > 0 ? (
-            filteredClients.map((c, idx) => (
-              <ClientInformationCard 
-                key={idx}
-                clientName={c.clientName}
-                clientType={c.clientType}
-                email={c.email}
-                phoneNumber={c.phoneNumber}
-                city={c.city}
-                totalSpent={formatCurrency(c.totalSpent)}
-                lastPurchase={c.lastPurchase}
-              />
-            ))
-          ) : (
-            <p className="nothing-was-found" style={{marginTop: 20}}>
-              Nenhum cliente encontrado.
-            </p>
-          )}
+          {loading
+            ? [0,1,2].map((_, idx) => (
+                <ClientInformationCard key={idx} loading={true} />
+              ))
+            : filteredClients.map((c, idx) => (
+                <ClientInformationCard 
+                  key={idx}
+                  clientName={c.clientName}
+                  clientType={c.clientType}
+                  email={c.email}
+                  phoneNumber={c.phoneNumber}
+                  city={c.city}
+                  totalSpent={formatCurrency(c.totalSpent)}
+                  lastPurchase={c.lastPurchase}
+                />
+              ))
+          }
+
         </div>
+
       </div>
 
       <NewClientModal

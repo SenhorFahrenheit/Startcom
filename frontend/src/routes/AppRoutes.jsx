@@ -1,39 +1,75 @@
-// src/routes/AppRoutes.jsx
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 import Auth from "../pages/auth/Auth";
 import Home from "../pages/Home/Home";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Sales from "../pages/Sales/Sales";
 import Clients from "../pages/Clients/Clients";
-import Inventory from "../pages/Inventory/Inventory"
+import Inventory from "../pages/Inventory/Inventory";
 import Reports from "../pages/Reports/Reports";
 import Settings from "../pages/Settings/Settings";
-//import PrivateRoute from "./PrivateRoute";
+import PrivateRoute from "./PrivateRoute";
 
 const AppRoutes = () => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home/>}/>
-        <Route path="/login" element={<Auth/>}/>
-        <Route path="/painel" element={<Dashboard/>}/>
-        <Route path="/vendas" element={<Sales/>}/>
-        <Route path="/clientes" element={<Clients/>}/>
-        <Route path="/estoque" element={<Inventory/>}/>
-        <Route path="/relatorios" element={<Reports/>}/>
-        <Route path="/configuracoes" element={<Settings/>}/>
-        {/*
-        <Route
-          path="/painel"
-          element={
-            <PrivateRoute>
-              <DashboardPage />
-            </PrivateRoute>
-          }
-        />*/}
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<Auth />} />
+
+      <Route
+        path="/painel"
+        element={
+          <PrivateRoute>
+            <Dashboard />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/vendas"
+        element={
+          <PrivateRoute>
+            <Sales />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/clientes"
+        element={
+          <PrivateRoute>
+            <Clients />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/estoque"
+        element={
+          <PrivateRoute>
+            <Inventory />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/relatorios"
+        element={
+          <PrivateRoute>
+            <Reports />
+          </PrivateRoute>
+        }
+      />
+
+      <Route
+        path="/configuracoes"
+        element={
+          <PrivateRoute>
+            <Settings />
+          </PrivateRoute>
+        }
+      />
+    </Routes>
   );
 };
 
