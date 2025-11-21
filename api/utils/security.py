@@ -4,11 +4,10 @@ import os
 from datetime import datetime, timedelta, timezone
 from typing import Dict, Any
 from passlib.context import CryptContext
-from jose import JWTError, jwt
+from jose import jwt
+from jose.exceptions import JWTError, ExpiredSignatureError
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-import jwt
-from dotenv import load_dotenv
 
 # A CryptContext manages hashing algorithms. We'll use the 'argon2' algorithm.
 # This algorithm is recommended for password hashing due to its resistance to GPU-based attacks.
@@ -55,26 +54,14 @@ def create_access_token(data: Dict[str, Any], expires_delta: timedelta | None = 
     return encoded_jwt
 
 def decode_access_token(token: str) -> Dict[str, Any]:
-    """
-    Decodes a JWT token and returns its payload.
-
-    Args:
-        token: The JWT token string.
-
-    Returns:
-        The decoded payload.
-
-    Raises:
-        JWTError: If the token is invalid or expired.
-    """
     try:
-        # JWT token validation is handled by the `jwt.decode` function.
-        # It checks for expiration and signature validity.
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         return payload
-    except JWTError as e:
-        raise JWTError(f"Could not validate token: {str(e)}")
-    
+    except ExpiredSignatureError:
+        raise HTTPException(status_code=419, detail="Token expired.")
+    except JWTError:
+        raise HTTPException(status_code=401, detail="Invalid token.")
+
 
 bearer_scheme = HTTPBearer()
 
@@ -110,12 +97,12 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(b
             "companyId": companyId
         }
 
-    except jwt.ExpiredSignatureError:
+    except ExpiredSignatureError:
         raise HTTPException(
             status_code=419,
             detail="Token expired."
         )
-    except jwt.InvalidTokenError:
+    except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid token."
