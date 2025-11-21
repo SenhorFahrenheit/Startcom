@@ -1,3 +1,4 @@
+// Inventory.jsx
 import "../commonStyle.css";
 import "./Inventory.css";
 
@@ -26,7 +27,6 @@ const Inventory = () => {
   const [search, setSearch] = useState("");
 
   const { activeModal, openProduct, openModifyProduct, closeModal } = useAuthModals();
-
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const { user, token, isAuthenticated, pageLoading } = useAuth();
@@ -43,21 +43,15 @@ const Inventory = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const toggleSidebar = () => {
-    setSidebarOpen(prev => !prev);
-  };
+  const toggleSidebar = () => setSidebarOpen(prev => !prev);
 
   const fetchInventory = async () => {
     try {
       setLoading(true);
-
       const response = await api.post("/Company/inventory/overview");
-
       const data = response.data;
 
-      if (!response.data || typeof response.data !== "object") {
-        throw new Error("Resposta inválida do servidor");
-      }
+      if (!data || typeof data !== "object") throw new Error("Resposta inválida do servidor");
 
       setOverview({
         totalProducts: data.totalProducts,
@@ -77,7 +71,6 @@ const Inventory = () => {
       }));
 
       setProducts(formatted);
-
     } catch (err) {
       console.error("Erro ao buscar inventário:", err);
       setError("Erro ao carregar inventário");
@@ -87,12 +80,8 @@ const Inventory = () => {
   };
 
   useEffect(() => {
-    if (!pageLoading && !isAuthenticated) {
-      window.location.href = "/login";
-    }
-    if (!pageLoading && isAuthenticated && companyId) {
-      fetchInventory();
-    }
+    if (!pageLoading && !isAuthenticated) window.location.href = "/login";
+    if (!pageLoading && isAuthenticated && companyId) fetchInventory();
   }, [pageLoading, isAuthenticated, companyId]);
 
   return (
@@ -129,35 +118,17 @@ const Inventory = () => {
         </div>
 
         <div className="productCards">
-          <ProductCard
-            title="Total de Produtos"
-            value={overview.totalProducts}
-            color="normal"
-            icon={<LuBox size={20} />}
-          />
-
-          <ProductCard
-            title="Estoque Baixo"
-            value={overview.lowInventory}
-            extra="Atenção necessária"
-            color="warning"
-            icon={<LuTrendingDown size={20} />}
-          />
-
-          <ProductCard
-            title="Crítico"
-            value={overview.criticalInventory}
-            extra="Reposição urgente"
-            color="alert"
-            icon={<LuTriangleAlert size={20} />}
-          />
-
-          <ProductCard
-            title="Valor Investido"
-            value={formatCurrency(overview.totalValue)}
-            color="normal"
-            icon={<LuPackage size={20} />}
-          />
+          {[0, 1, 2, 3].map((idx) => (
+            <ProductCard
+              key={idx}
+              title={["Total de Produtos","Estoque Baixo","Crítico","Valor Investido"][idx]}
+              value={[overview.totalProducts, overview.lowInventory, overview.criticalInventory, formatCurrency(overview.totalValue)][idx]}
+              extra={["", "Atenção necessária", "Reposição urgente", ""][idx]}
+              color={["normal","warning","alert","normal"][idx]}
+              icon={[<LuBox size={20}/>, <LuTrendingDown size={20}/>, <LuTriangleAlert size={20}/>, <LuPackage size={20}/>][idx]}
+              loading={loading}
+            />
+          ))}
         </div>
 
         <div className="filter-search">
@@ -203,18 +174,15 @@ const Inventory = () => {
             <h3>Inventário</h3>
           </div>
 
-          {loading ? (
-            <p>Carregando inventário...</p>
-          ) : error ? (
-            <p style={{ color: "red" }}>{error}</p>
-          ) : (
-            <ProductTable
-              products={products}
-              categoryFilter={categoryFilter}
-              statusFilter={statusFilter}
-              search={search}
-            />
-          )}
+          <ProductTable
+            products={products}
+            categoryFilter={categoryFilter}
+            statusFilter={statusFilter}
+            search={search}
+            loading={loading}
+          />
+
+          {error && <p style={{ color: "red" }}>{error}</p>}
         </div>
       </div>
 
