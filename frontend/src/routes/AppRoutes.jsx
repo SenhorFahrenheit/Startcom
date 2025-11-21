@@ -5,6 +5,7 @@ import Home from "../pages/Home/Home";
 import HelpCenter from "../pages/Support/HelpCenter";
 import Contact from "../pages/Support/Contact";
 import WhatsApp from "../pages/Support/WhatsApp";
+import Privacy from "../pages/Support/Privacy";
 
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Sales from "../pages/Sales/Sales";
@@ -24,6 +25,7 @@ const AppRoutes = () => {
       <Route path="/ajuda" element={<HelpCenter />} />
       <Route path="/contato" element={<Contact />} />
       <Route path="/whatsapp" element={<WhatsApp />} />
+      <Route path="/privacidade" element={<Privacy />} />
 
       {/* Private Routes */}
       <Route

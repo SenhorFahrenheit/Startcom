@@ -7,7 +7,7 @@ const PrivateRoute = ({ children }) => {
 
   useEffect(() => {
     if (!token) {
-      open("message", { code: "unauthorized", action: "login" });
+      open("message", { code: "forbidden", action: "login" });
     }
   }, [token, open]);
 

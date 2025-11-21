@@ -7,13 +7,6 @@ const MessageModal = ({ isOpen, onClose, code }) => {
   const navigate = useNavigate();
 
   const presets = {
-    unauthorized: {
-      message: "Ops, parece que você não está logado",
-      action: "login",
-      buttonLabel: "FAZER LOGIN",
-      icon: LogIn,
-      iconColor: "#017688"
-    },
     expired: {
       message: "Sua sessão expirou, faça login novamente",
       action: "login",
@@ -22,15 +15,15 @@ const MessageModal = ({ isOpen, onClose, code }) => {
       iconColor: "#f39c12"
     },
     forbidden: {
-      message: "Você não tem permissão para acessar isso",
-      action: "home",
-      buttonLabel: "ENTENDI",
+      message: "Você precisa logar para acessar isso",
+      action: "login",
+      buttonLabel: "FAZER LOGIN",
       icon: Lock,
       iconColor: "#e74c3c"
     },
     default: {
       message: "Algo deu errado!",
-      action: "home",
+      action: " ",
       buttonLabel: "ENTENDI",
       icon: AlertCircle,
       iconColor: "#ff6b6b"

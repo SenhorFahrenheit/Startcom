@@ -25,11 +25,23 @@ api.interceptors.response.use(
   (error) => {
     const status = error?.response?.status;
 
-    if (status === 401) {
-      window.dispatchEvent(new Event("unauthorized"));
+    if (status === 403) {
+      window.dispatchEvent(
+        new CustomEvent("modal", {
+          detail: { code: "forbidden", action: "home" }
+        })
+      );
+    }
 
+    if (status === 419) {
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+
+      window.dispatchEvent(
+        new CustomEvent("modal", {
+          detail: { code: "expired", action: "login" }
+        })
+      );
     }
 
     return Promise.reject(error);
