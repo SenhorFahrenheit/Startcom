@@ -28,8 +28,8 @@ class AuthService:
         self.algorithm = os.getenv("ALGORITHM", "HS256")
 
         # Token expiration time in minutes (default: 60)
-        # self.access_token_expire_minutes = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 60))
-        self.access_token_expire_minutes = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 1))
+        self.access_token_expire_minutes = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
+        # self.access_token_expire_minutes = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 1))
 
     async def verify_password(self, plain_password, hashed_password):
         """
