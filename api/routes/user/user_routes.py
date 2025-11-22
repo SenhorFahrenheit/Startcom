@@ -57,12 +57,16 @@ async def create_user_route(user: UserCreate):
 
         created_user = await user_service.create_user(user)
 
+        user_id = created_user.id
+        user_email = created_user.email
+        user_name = created_user.name
+
         # 1. generate token
-        token, token_id, expire = create_email_token(created_user["_id"], created_user["email"])
+        token, token_id, expire = create_email_token(user_id, user_email)
 
         # 2. salvar token no usuário
         await user_service.users_collection.update_one(
-            {"_id": created_user["_id"]},
+            {"_id": ObjectId(user_id)},
             {
                 "$set": {
                     "emailToken": {
@@ -72,12 +76,12 @@ async def create_user_route(user: UserCreate):
                 }
             }
         )
-
+        print(token)
         # 3. enviar email
         await user_service.send_verification_email(
-            email=created_user["email"],
+            email=user_email,
             token=token,
-            full_name=created_user.get("fullName")
+            full_name=user_name
         )
 
         return {"status": "success", "message": "User created. Verification email sent."}
