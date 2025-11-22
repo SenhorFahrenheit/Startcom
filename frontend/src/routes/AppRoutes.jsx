@@ -29,7 +29,7 @@ const AppRoutes = () => {
       <Route path="/contato" element={<Contact />} />
       <Route path="/whatsapp" element={<WhatsApp />} />
       <Route path="/privacidade" element={<Privacy />} />
-      <Route path="/verify-email" element={<VerifyEmail />}/>
+      <Route path="/verificar-email" element={<VerifyEmail />}/>
       <Route path="*" element={<NotFound />} />
 
       {/* Private Routes */}
