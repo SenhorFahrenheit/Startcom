@@ -84,7 +84,23 @@
     color: var(--progress-neutral-color);
 }
 
+/* Support Pages */
+.support-container-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100svh;
+    padding-top: 24px;
+    padding-bottom: 24px;
+    font-family: var(--font-base);
+}
 
+.support-title {
+    font-size: 2.2rem;
+    margin-top: 10px;
+}
+
+/* General Responsiveness*/
 @media (max-width: 768px) {
     .content-page-section {
         width: 100%;

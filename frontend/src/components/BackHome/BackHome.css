@@ -1,0 +1,21 @@
+.icon-back-home {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--primary-color);
+    min-width: 56px;
+    min-height: 56px;
+    color: #FFFFFF;
+    border-radius: 100%;
+    border: none;
+    cursor: pointer;
+    transition: all ease 500ms;
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    transform: translate(24px);
+}
+
+.icon-back-home:hover {
+    filter: saturate(0.5);
+}

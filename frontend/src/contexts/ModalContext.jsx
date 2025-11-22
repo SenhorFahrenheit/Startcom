@@ -17,19 +17,14 @@ export function ModalProvider({ children }) {
   }, []);
 
   useEffect(() => {
-    const handler = () => {
-      open("message", {
-        code: "unauthorized",
-        action: "login",
-      });
+    const handler = (e) => {
+      open("message", e.detail);
     };
 
-    window.addEventListener("unauthorized", handler);
-
-    return () => {
-      window.removeEventListener("unauthorized", handler);
-    };
+    window.addEventListener("modal", handler);
+    return () => window.removeEventListener("modal", handler);
   }, [open]);
+
 
   return (
     <ModalContext.Provider value={{ activeModal, modalData, open, close }}>

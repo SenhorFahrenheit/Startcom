@@ -22,10 +22,11 @@ const Button = ({
     width,
     fontSize,
     fontWeight,
-    styles
+    styles,
+    buttonColor
 }) => {
   return (
-    <button style={{height, width, fontSize, fontWeight}}
+    <button style={{height, width, fontSize, fontWeight, background: buttonColor}}
       className={`button ${variant} ${styles}`} // Apply base and variant-specific styles
       onClick={onClick}
       type={type}

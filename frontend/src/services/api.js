@@ -25,11 +25,29 @@ api.interceptors.response.use(
   (error) => {
     const status = error?.response?.status;
 
-    if (status === 401) {
-      window.dispatchEvent(new Event("unauthorized"));
+    if (status === 403) {
+      window.dispatchEvent(
+        new CustomEvent("modal", {
+          detail: { code: "forbidden", action: "home" }
+        })
+      );
+    }
 
+    if (status === 419) {
+      sessionStorage.setItem("session_expired", "true");
+      
+      window.dispatchEvent(
+        new CustomEvent("modal", {
+          detail: { code: "expired", action: "login" }
+        })
+      );
+      
       localStorage.removeItem("token");
       localStorage.removeItem("user");
+      
+      setTimeout(() => {
+        sessionStorage.removeItem("session_expired");
+      }, 100);
     }
 
     return Promise.reject(error);

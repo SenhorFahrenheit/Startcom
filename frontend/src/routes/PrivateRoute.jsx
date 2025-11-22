@@ -6,8 +6,10 @@ const PrivateRoute = ({ children }) => {
   const { open } = useModals();
 
   useEffect(() => {
-    if (!token) {
-      open("message", { code: "unauthorized", action: "login" });
+    const sessionExpired = sessionStorage.getItem("session_expired");
+    
+    if (!token && !sessionExpired) {
+      open("message", { code: "forbidden", action: "login" });
     }
   }, [token, open]);
 

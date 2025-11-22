@@ -28,10 +28,10 @@ const Footer = () => {
                 <h3>Suporte</h3>
 
                 <ul className="list-footer">
-                    <li><NavLink to="/">Central de Ajuda</NavLink></li>
-                    <li><NavLink to="/">Contato</NavLink></li>
-                    <li><NavLink to="/">WhatsApp</NavLink></li>
-                    <li><NavLink to="/">Privacidade</NavLink></li>
+                    <li><NavLink to="/ajuda">Central de Ajuda</NavLink></li>
+                    <li><NavLink to="/contato">Contato</NavLink></li>
+                    <li><NavLink to="/whatsapp">WhatsApp</NavLink></li>
+                    <li><NavLink to="/privacidade">Privacidade</NavLink></li>
                 </ul>
             </section>
         </div>
