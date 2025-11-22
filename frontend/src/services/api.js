@@ -34,14 +34,20 @@ api.interceptors.response.use(
     }
 
     if (status === 419) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-
+      sessionStorage.setItem("session_expired", "true");
+      
       window.dispatchEvent(
         new CustomEvent("modal", {
           detail: { code: "expired", action: "login" }
         })
       );
+      
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      
+      setTimeout(() => {
+        sessionStorage.removeItem("session_expired");
+      }, 100);
     }
 
     return Promise.reject(error);
