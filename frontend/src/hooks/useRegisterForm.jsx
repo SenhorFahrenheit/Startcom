@@ -5,7 +5,7 @@ import { formatCNPJ, formatCPF, formatPhone } from "../utils/format";
 import { registerAPI } from "../services/api";
 
 export const useRegisterForm = (onSuccess) => {
-  const { register, handleSubmit, control, watch  } = useForm();
+  const { register, handleSubmit, control, watch } = useForm();
 
   const onSubmit = async (data) => {
     try {
@@ -17,11 +17,16 @@ export const useRegisterForm = (onSuccess) => {
 
       toast.success("Cadastro realizado!", { containerId: "toast-root" });
 
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
+      if (onSuccess) {
+        onSuccess(data.email);
+      }
+
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 5000);
+      
     } catch (error) {
-      toast.error("Erro ao realizar cadastro: " + error.message, {
+      toast.error("Erro ao realizar cadastro", {
         containerId: "toast-root",
       });
       return;

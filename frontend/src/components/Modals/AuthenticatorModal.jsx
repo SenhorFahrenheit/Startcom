@@ -1,74 +1,40 @@
-import { useState } from "react";
 import BaseModal from "./BaseModal";
-import CodeInput from "../CodeInput/CodeInput";
-import Button from "../Button/Button";
 import { toast } from "react-toastify";
-import verifyCodeMock from "../../services/verifyCode";
+import axios from "axios";
+import Button from "../Button/Button";
 
 /**
  * AuthenticatorModal component
- *
- * A modal for account authentication using a verification code (e.g., 2FA or signup verification).
- *
  * Props:
  * - isOpen: boolean, whether the modal is visible
  * - onClose: function, callback to close the modal
  * - email: string, email address where the verification code was sent
  */
 const AuthenticatorModal = ({ isOpen, onClose, email }) => {
-  // State to store the code entered by the user
-  const [code, setCode] = useState("");
-
-  /**
-   * Verify the entered code
-   * @param {string} fullCode - the full code entered
-   */
-  const verifyCode = async (fullCode) => {
-    // Check if the code is complete
-    if (fullCode.length < 6) {
-      toast.error("Digite o código completo!", {
-        position: "top-center",
-        theme: "light",
-        containerId: "toast-root",
-      });
-      return;
-    }
-
+  const handleSendEmail = async (email) => {
     try {
-      // Mock API call to verify the code
-      const response = await verifyCodeMock({ code: fullCode, flowType: "signup", email });
-
+      const response = await axios.post("/User/verify-email/request", { email });
+      
       // Show error if verification fails
-      if (!response.success) {
-        toast.error(response.message, {
-          position: "top-center",
+      if (!response.data?.success) {
+        toast.error("Algo falhou, mas não foi você. Tente de novo.", {
+          position: "top-right",
           containerId: "toast-root",
         });
         return;
       }
 
       // Show success message if verification succeeds
-      toast.success(response.message, {
-        position: "top-center",
+      toast.success("Email de verificação enviado com sucesso!", {
+        position: "top-right",
         containerId: "toast-root",
       });
-
-      // Reset code input and close modal
-      setCode("");
-      onClose();
-    } catch {
-      // Handle network or unexpected errors
-      toast.error("Erro ao verificar código!", {
-        position: "top-center",
+    } catch (error) {
+        toast.error("Ocorreu um erro interno.", {
+        position: "top-right",
         containerId: "toast-root",
       });
     }
-  };
-
-  // Handle form submit event
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    verifyCode(code); // Call verification with current code
   };
 
   return (
@@ -77,27 +43,14 @@ const AuthenticatorModal = ({ isOpen, onClose, email }) => {
       onClose={onClose} // Close callback
       contentLabel="Autenticar Conta" // Accessibility label
       width="320px" // Modal width
-      height="500px" // Modal height
+      height="auto" // Modal height
     >
-      <h2 className="auth-modal-title">Autenticação</h2>
+      <h2 className="auth-modal-title">Confirmação de Email</h2>
       <p className="auth-description">
-        Insira o código enviado para o e-mail informado para autenticação.
+        Confirme a sua conta acessando o link enviado por <strong>email</strong>
       </p>
 
-      <form onSubmit={handleSubmit} className="center-block">
-        <label className="input-label">Código</label>
-
-        {/* CodeInput component for entering verification code */}
-        <CodeInput
-          length={6} // Number of digits
-          value={code} // Controlled value
-          onChange={setCode} // Update state on change
-          onComplete={verifyCode} // Automatically verify when all digits entered
-        />
-
-        {/* Submit button */}
-        <Button type="submit" label={"ENVIAR"} />
-      </form>
+    <Button width={"100%"} onClick={handleSendEmail} label={"Reenviar email de verificação"}/>
     </BaseModal>
   );
 };

@@ -40,7 +40,6 @@ const Auth = () => {
 
   const [isLogin, setIsLogin] = useState(false);
   const [type, setType] = useState("cpf");
-
   // Login hook
   const {
     loginEmail,
@@ -52,6 +51,7 @@ const Auth = () => {
     handleLogin,
   } = useLoginForm();
 
+  const [registeredEmail, setRegisteredEmail] = useState("");
   // Register hook
   const {
     register,
@@ -67,7 +67,10 @@ const Auth = () => {
     formatCPF,
     formatPhone,
     watch,
-  } = useRegisterForm(openAuthenticator);
+  } = useRegisterForm((email) => {
+    setRegisteredEmail(email);
+    openAuthenticator();
+  });
 
   const passwordValue = watch("password", "");
   useEffect(() => {
@@ -347,6 +350,7 @@ const Auth = () => {
       ========================= */}
       <AuthenticatorModal
         isOpen={activeModal === "authenticator"}
+        email={registeredEmail}
         onClose={closeModal}
       />
       <ForgotPasswordModal

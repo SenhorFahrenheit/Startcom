@@ -8,6 +8,7 @@ import HelpCenter from "../pages/Support/HelpCenter";
 import Contact from "../pages/Support/Contact";
 import WhatsApp from "../pages/Support/WhatsApp";
 import Privacy from "../pages/Support/Privacy";
+import VerifyEmail from "../pages/auth/VerifyEmail";
 
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Sales from "../pages/Sales/Sales";
@@ -28,6 +29,7 @@ const AppRoutes = () => {
       <Route path="/contato" element={<Contact />} />
       <Route path="/whatsapp" element={<WhatsApp />} />
       <Route path="/privacidade" element={<Privacy />} />
+      <Route path="/verify-email" element={<VerifyEmail />}/>
       <Route path="*" element={<NotFound />} />
 
       {/* Private Routes */}
