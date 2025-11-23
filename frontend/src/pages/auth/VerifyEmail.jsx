@@ -23,29 +23,26 @@ const VerifyEmail = () => {
         return;
       }
 
-    try {
-      const token = searchParams.get("token");
+      try {
+        const response = await api.post("/User/verify-email/confirm", null, {
+          params: { token },
+        });
 
-      const response = await api.post("/User/verify-email/confirm", null, {
-        params: { token }
-      });
+        setStatus("success");
+        setMessage(response.data?.message || "Email verificado com sucesso!");
+      } catch (error) {
+        setStatus("error");
 
-      setStatus("success");
-      setMessage(response.data?.message || "Email verificado com sucesso!");
-    } catch (error) {
-      setStatus("error");
-
-      if (error.response?.status === 400) {
-        setMessage("Token inválido ou malformado.");
-      } else if (error.response?.status === 410) {
-        setMessage("Token expirado. Solicite um novo email de verificação.");
-      } else if (error.response?.status === 404) {
-        setMessage("Token não encontrado. Verifique o link enviado por email.");
-      } else {
-        setMessage("Erro inesperado ao verificar seu email.");
+        if (error.response?.status === 400) {
+          setMessage("Token inválido ou malformado.");
+        } else if (error.response?.status === 410) {
+          setMessage("Token expirado. Solicite um novo email de verificação.");
+        } else if (error.response?.status === 404) {
+          setMessage("Token não encontrado. Verifique o link enviado por email.");
+        } else {
+          setMessage("Erro inesperado ao verificar seu email.");
+        }
       }
-    }
-
     };
 
     verifyEmail();

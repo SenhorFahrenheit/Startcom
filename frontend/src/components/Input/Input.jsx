@@ -1,41 +1,53 @@
-import React from 'react';
-import './Input.css';
+import React, { useState } from "react";
+import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
 
-/**
- * Custom Input component with optional icon support
- * 
- * Props:
- * - placeholder: string, placeholder text inside the input
- * - icon: React node, optional icon element to display inside the input
- * - iconPosition: 'left' | 'right', position of the icon (default is 'right')
- * - maxLength: number, maximum number of characters allowed
- * - type: string, input type (default is 'text')
- * - ...rest: any other input props (onChange, value, etc.)
- */
-const Input = React.forwardRef(({
-  placeholder = '',
-  icon = null,
-  iconPosition = 'right', // "left" or "right"
-  maxLength,
-  type = 'text',
-  style, 
-  ...rest
-}, ref) => {
-  return (
-    // Wrapper div to handle styling and icon positioning
-    <div className={`input-with-icon ${iconPosition}`} style={style}>
-      {/* Actual input element */}
-      <input
-        type={type}
-        placeholder={placeholder}
-        maxLength={maxLength}
-        ref={ref} // forwarded ref for parent access (e.g., React Hook Form)
-        {...rest} // spread remaining props like onChange, value, etc.
-      />
-      {/* Conditionally render the icon if provided */}
-      {icon && <span className="icon">{icon}</span>}
-    </div>
-  );
-});
+import "./Input.css";
+
+const Input = React.forwardRef(
+  (
+    {
+      placeholder = "",
+      icon = null,
+      iconPosition = "right",
+      maxLength,
+      type = "text",
+      style,
+      ...rest
+    },
+    ref
+  ) => {
+    const [visible, setVisible] = useState(false);
+
+    const isPassword = type === "password";
+    const resolvedType = isPassword ? (visible ? "text" : "password") : type;
+
+    return (
+      <div className={`input-with-icon ${iconPosition}`} style={style}>
+        <input
+          type={resolvedType}
+          placeholder={placeholder}
+          maxLength={maxLength}
+          ref={ref}
+          {...rest}
+        />
+        {isPassword ? (
+          <span
+            className="icon"
+            style={{ cursor: "pointer" }}
+            onClick={() => setVisible((v) => !v)}
+          >
+            {visible ? (
+              <RiEyeFill size={20} />
+            ) : (
+              <RiEyeOffFill size={20} />
+            )}
+          </span>
+        ) : (
+          icon && <span className="icon">{icon}</span>
+        )}
+      </div>
+    );
+  }
+);
 
 export default Input;

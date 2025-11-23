@@ -55,11 +55,6 @@
   padding-left: 30px;
 } */ 
 
-.inputs-row .input-with-icon.right {
-  padding-left: 24px !important;
-}
-
-
 /* Remove the show password button on Chrome, Edge and Safari */
 input[type="password"]::-ms-reveal,
 input[type="password"]::-ms-clear {

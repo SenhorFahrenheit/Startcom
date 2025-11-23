@@ -1,6 +1,5 @@
 // Libraries
 import { useState, useEffect } from "react";
-import { RiLockPasswordFill } from "react-icons/ri";
 import { FcGoogle } from "react-icons/fc";
 import { FaApple } from "react-icons/fa";
 
@@ -116,8 +115,6 @@ const Auth = () => {
             <Input
               type="password"
               placeholder="Senha"
-              icon={<RiLockPasswordFill />}
-              iconPosition="left"
               value={loginPassword}
               onChange={(e) => setLoginPassword(e.target.value)}
             />
@@ -296,10 +293,8 @@ const Auth = () => {
                     message: "A senha deve ter pelo menos 8 caracteres",
                   },
                 })}
-                icon={<RiLockPasswordFill />}
                 type="password"
                 placeholder="Senha"
-                iconPosition="left"
               />
               <Input
                 {...register("confirmPassword", {

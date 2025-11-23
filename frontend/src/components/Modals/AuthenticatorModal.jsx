@@ -1,7 +1,8 @@
 import BaseModal from "./BaseModal";
 import { toast } from "react-toastify";
-import axios from "axios";
 import Button from "../Button/Button";
+import api from "../../services/api";
+import { useState } from "react";
 
 /**
  * AuthenticatorModal component
@@ -11,21 +12,14 @@ import Button from "../Button/Button";
  * - email: string, email address where the verification code was sent
  */
 const AuthenticatorModal = ({ isOpen, onClose, email }) => {
+  const [buttonLoading, setButtonLoading] = useState(false)
+
   const handleSendEmail = async (email) => {
     try {
-      const response = await axios.post("/User/verify-email/request", { email });
-      
-      // Show error if verification fails
-      if (!response.data?.success) {
-        toast.error("Algo falhou, mas não foi você. Tente de novo.", {
-          position: "top-right",
-          containerId: "toast-root",
-        });
-        return;
-      }
-
+      setButtonLoading(true)
+      const response = await api.post("/User/verify-email/request", null, { params: { email }});
       // Show success message if verification succeeds
-      toast.success("Email de verificação enviado com sucesso!", {
+      toast.success("Email de verificação reenviado com sucesso!", {
         position: "top-right",
         containerId: "toast-root",
       });
@@ -34,8 +28,8 @@ const AuthenticatorModal = ({ isOpen, onClose, email }) => {
         position: "top-right",
         containerId: "toast-root",
       });
-
-      console.error(error)
+    } finally {
+      setButtonLoading(false);
     }
   };
 
@@ -56,6 +50,7 @@ const AuthenticatorModal = ({ isOpen, onClose, email }) => {
       width={"100%"}
       onClick={() => handleSendEmail(email)}
       label={"Reenviar email de verificação"}
+      loading={buttonLoading}
     />
     </BaseModal>
   );
