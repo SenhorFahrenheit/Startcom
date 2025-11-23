@@ -34,6 +34,8 @@ const AuthenticatorModal = ({ isOpen, onClose, email }) => {
         position: "top-right",
         containerId: "toast-root",
       });
+
+      console.error(error)
     }
   };
 
@@ -50,7 +52,11 @@ const AuthenticatorModal = ({ isOpen, onClose, email }) => {
         Confirme a sua conta acessando o link enviado por <strong>email</strong>
       </p>
 
-    <Button width={"100%"} onClick={handleSendEmail} label={"Reenviar email de verificação"}/>
+    <Button
+      width={"100%"}
+      onClick={() => handleSendEmail(email)}
+      label={"Reenviar email de verificação"}
+    />
     </BaseModal>
   );
 };

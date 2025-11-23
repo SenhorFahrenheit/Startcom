@@ -11,6 +11,7 @@ const SelectDropdown = ({
 }) => {
   const [open, setOpen] = useState(false);
   const [selectedLabel, setSelectedLabel] = useState("");
+  const [selectedValue, setSelectedValue] = useState("");
   const wrapperRef = useRef(null);
 
   useEffect(() => {
@@ -26,6 +27,7 @@ const SelectDropdown = ({
 
   const handleSelect = (item) => {
     setSelectedLabel(item.label);
+    setSelectedValue(item.value);
     setOpen(false);
 
     onChange?.({
@@ -39,10 +41,9 @@ const SelectDropdown = ({
 
   return (
     <div style={{ width: "100%", position: "relative" }} ref={wrapperRef}>
-      <div
-        className="SelectDashboardTrigger"
-        onClick={() => setOpen(!open)}
-      >
+      <input type="hidden" name={name} value={selectedValue} />
+
+      <div className={`SelectDashboardTrigger ${open ? "selectedTrigger" : ""}`} onClick={() => setOpen(!open)}>
         <span className="SelectDashboardText">
           {selectedLabel || placeholder}
         </span>

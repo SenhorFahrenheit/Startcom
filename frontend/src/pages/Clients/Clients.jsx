@@ -59,18 +59,27 @@ const Clients = () => {
         setOverview(data.overview);
         console.log(overview)
 
-        const formattedClients = (data.overview.clients || []).map((c) => ({
-          clientName: c.name,
-          clientType: c.category
-            ? c.category[0].toUpperCase() + c.category.slice(1)
-            : "Regular",
-          email: c.email || "Não Informado",
-          phoneNumber: formatPhone(c.phone) || "Não Informado",
-          city: c.address || "Não Informado",
-          totalSpent: c.totalSpent,
-          lastPurchase: formatDateBR(c.lastPurchase) || "Ainda não comprou",
-        }));
+        const formattedClients = (data.overview.clients || [])
+          .map((c) => ({
+            clientName: c.name,
+            clientType: c.category
+              ? c.category[0].toUpperCase() + c.category.slice(1)
+              : "Regular",
+            email: c.email || "Não Informado",
+            phoneNumber: formatPhone(c.phone) || "Não Informado",
+            city: c.address || "Não Informado",
+            totalSpent: c.totalSpent,
+            lastPurchase: c.lastPurchase ? formatDateBR(c.lastPurchase) : "Ainda não comprou",
+          }))
+          .sort((a, b) => {
+            if (a.lastPurchase === "Ainda não comprou") return -1;
+            if (b.lastPurchase === "Ainda não comprou") return 1;
 
+            const da = new Date(a.lastPurchase.split("/").reverse().join("-"));
+            const db = new Date(b.lastPurchase.split("/").reverse().join("-"));
+
+            return db - da;
+          });
         setClients(formattedClients);
       } else {
         throw new Error("Resposta inválida da API");
@@ -161,7 +170,7 @@ const Clients = () => {
           />
           <div className="filters-block">
             <FilterSelect
-              label="Filtrar por tipo"
+              label="Filtrar por"
               options={[
                 { label: "Todos", value: "all" },
                 { label: "VIP", value: "vip" },

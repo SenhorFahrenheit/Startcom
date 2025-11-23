@@ -8,7 +8,7 @@
     width: 24%;
     gap: 40px;
     font-family: var(--font-heading);
-    margin-top: 30px;
+    margin-bottom: 10px;
     transition: all ease 250ms;
 }
 

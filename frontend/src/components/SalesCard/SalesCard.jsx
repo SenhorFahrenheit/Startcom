@@ -2,7 +2,6 @@ import "./SalesCard.css"
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-
 const SalesCard = ({ icon, description, value, information, progress, loading }) => {
   return (
     <div className="SalesCard">
