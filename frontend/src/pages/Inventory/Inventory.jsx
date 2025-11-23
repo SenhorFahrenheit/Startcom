@@ -144,12 +144,29 @@ const Inventory = () => {
           <div className="filters-block">
             <FilterSelect
               label="Categoria: "
-              options={[
-                { label: "Todas", value: "all" },
-                { label: "Roupas", value: "Roupas" },
-                { label: "Calçados", value: "Calçados" },
-                { label: "Acessórios", value: "Acessórios" },
-              ]}
+                options={[
+                  { label: "Todas", value: "all" },
+                  { label: "Roupas", value: "Roupas" },
+                  { label: "Calçados", value: "Calçados" },
+                  { label: "Acessórios", value: "Acessórios" },
+                  { label: "Eletrônicos", value: "Eletrônicos" },
+                  { label: "Informática", value: "Informática" },
+                  { label: "Alimentos", value: "Alimentos" },
+                  { label: "Bebidas", value: "Bebidas" },
+                  { label: "Móveis", value: "Móveis" },
+                  { label: "Decoração", value: "Decoração" },
+                  { label: "Livros", value: "Livros" },
+                  { label: "Brinquedos", value: "Brinquedos" },
+                  { label: "Esportes", value: "Esportes" },
+                  { label: "Beleza", value: "Beleza" },
+                  { label: "Saúde", value: "Saúde" },
+                  { label: "Papelaria", value: "Papelaria" },
+                  { label: "Ferramentas", value: "Ferramentas" },
+                  { label: "Autopeças", value: "Autopeças" },
+                  { label: "Pet Shop", value: "Pet Shop" },
+                  { label: "Limpeza", value: "Limpeza" },
+                  { label: "Outros", value: "Outros" }
+                ]}
               defaultValue="Todas"
               onSelect={setCategoryFilter}
             />

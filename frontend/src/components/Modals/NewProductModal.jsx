@@ -3,12 +3,14 @@ import { toast } from "react-toastify";
 import BaseModal from "./BaseModal";
 import Button from "../Button/Button";
 import InputDashboard from "../InputDashboard/InputDashboard";
+import SelectDropdown from "../SelectDropdown/SelectDropdown";
 
 import api from "../../services/api";
 import { useState } from "react";
 
 const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
   const [buttonLoading, setButtonloading] = useState(false)
+  const [category, setCategory] = useState("Roupas");
 
   const normalizePrice = (value) => {
     if (!value) return value;
@@ -91,7 +93,7 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
         costPrice: normalizePrice(data.costPrice),
         quantity: data.quantity,
         minQuantity: data.min,
-        category: data.category
+        category: category
       }
     };
 
@@ -156,30 +158,35 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
           </div>
 
           <div className="input-dashboard-block">
-            <label htmlFor="category">Categoria </label>
-            <select name="category" id="category" defaultValue="Roupas" className="InputDashboard">
-              <option>Roupas</option>
-              <option>Calçados</option>
-              <option>Acessórios</option>
-              <option>Eletrônicos</option>
-              <option>Informática</option>
-              <option>Alimentos</option>
-              <option>Bebidas</option>
-              <option>Móveis</option>
-              <option>Decoração</option>
-              <option>Livros</option>
-              <option>Brinquedos</option>
-              <option>Esportes</option>
-              <option>Beleza</option>
-              <option>Saúde</option>
-              <option>Papelaria</option>
-              <option>Ferramentas</option>
-              <option>Autopeças</option>
-              <option>Pet Shop</option>
-              <option>Limpeza</option>
-              <option>Outros</option>
-            </select>
-
+            <label htmlFor="category">Categoria</label>
+            <SelectDropdown
+              label="Categoria"
+              name="category"
+              placeholder="Selecione uma categoria"
+              items={[
+                { value: "Roupas", label: "Roupas" },
+                { value: "Calçados", label: "Calçados" },
+                { value: "Acessórios", label: "Acessórios" },
+                { value: "Eletrônicos", label: "Eletrônicos" },
+                { value: "Informática", label: "Informática" },
+                { value: "Alimentos", label: "Alimentos" },
+                { value: "Bebidas", label: "Bebidas" },
+                { value: "Móveis", label: "Móveis" },
+                { value: "Decoração", label: "Decoração" },
+                { value: "Livros", label: "Livros" },
+                { value: "Brinquedos", label: "Brinquedos" },
+                { value: "Esportes", label: "Esportes" },
+                { value: "Beleza", label: "Beleza" },
+                { value: "Saúde", label: "Saúde" },
+                { value: "Papelaria", label: "Papelaria" },
+                { value: "Ferramentas", label: "Ferramentas" },
+                { value: "Autopeças", label: "Autopeças" },
+                { value: "Pet Shop", label: "Pet Shop" },
+                { value: "Limpeza", label: "Limpeza" },
+                { value: "Outros", label: "Outros" },
+              ]}
+              onChange={(e) => setCategory(e.target.value)}
+            />
           </div>
 
           <div className="input-dashboard-block">

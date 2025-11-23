@@ -5,6 +5,7 @@ import api from "../../services/api";
 import BaseModal from "./BaseModal";
 import Button from "../Button/Button";
 import InputDashboard from "../InputDashboard/InputDashboard";
+import SelectDropdown from "../SelectDropdown/SelectDropdown";
 import { formatCurrency } from "../../utils/format";
 
 const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
@@ -248,19 +249,25 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
 
           <div className="input-dashboard-block">
             <label htmlFor="product">Produto</label>
-            <select
+            <SelectDropdown
+              label="Produto"
               name="product"
-              id="product"
-              className="InputDashboard"
-              onChange={handleProductChange}
-            >
-              <option value="">Selecione um produto</option>
-              {products.map((product) => (
-                <option key={product._id} value={product._id}>
-                  {product.name}
-                </option>
-              ))}
-            </select>
+              placeholder="Selecione um produto"
+              items={products.map((p) => ({
+                value: p._id,
+                label: p.name,
+                price: p.price,
+              }))}
+              onChange={(e) => {
+                const product = products.find((p) => p._id === e.target.value);
+
+                if (product) {
+                  priceRef.current.value = formatCurrency(product.price);
+                }
+              }}
+            />
+
+
           </div>
 
           <div className="input-dashboard-block">
