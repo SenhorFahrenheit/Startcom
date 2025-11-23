@@ -1,6 +1,7 @@
 .dropdown {
   position: relative;
   display: inline-block;
+  margin: 0 auto;
   min-width: 150px;
   flex-shrink: 0;
 }
