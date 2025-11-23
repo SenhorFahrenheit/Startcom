@@ -49,6 +49,7 @@ const Auth = () => {
     keepLogged,
     setKeepLogged,
     handleLogin,
+    buttonLoadingLogin,
   } = useLoginForm();
 
   const [registeredEmail, setRegisteredEmail] = useState("");
@@ -67,6 +68,7 @@ const Auth = () => {
     formatCPF,
     formatPhone,
     watch,
+    buttonLoading,
   } = useRegisterForm((email) => {
     setRegisteredEmail(email);
     openAuthenticator();
@@ -157,7 +159,7 @@ const Auth = () => {
               </label>
             </div>
 
-            <Button label="ENTRAR" type="submit" />
+            <Button label="ENTRAR" width="160px" loading={buttonLoadingLogin} type="submit" />
           </form>
         </div>
 
@@ -321,7 +323,7 @@ const Auth = () => {
               <p className="password-strength-label"></p>
             </div>
 
-            <Button label="CADASTRAR" type="submit" />
+            <Button label="CADASTRAR" width="160px" loading={buttonLoading} type="submit" />
           </form>
         </div>
 

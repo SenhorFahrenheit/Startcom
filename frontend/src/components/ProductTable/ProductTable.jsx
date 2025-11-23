@@ -1,28 +1,12 @@
 import "./ProductTable.css";
 import { useEffect, useState } from "react";
-import { LuBarcode, LuPackage } from "react-icons/lu";
+import { LuPackage } from "react-icons/lu";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { formatCurrency } from "../../utils/format";
-import api from "../../services/api";
 
-const ProductTable = ({ categoryFilter, statusFilter, search, loading }) => {
-  const [products, setProducts] = useState([]);
+const ProductTable = ({ products, categoryFilter, statusFilter, search, loading }) => {
   const [filteredProducts, setFilteredProducts] = useState([]);
-
-  useEffect(() => {
-    async function fetchProducts() {
-      try {
-        const response = await api.post("/Company/inventory/overview"); 
-        setProducts(response.data.products || []);
-      } catch (err) {
-        console.error("Erro ao buscar produtos:", err);
-        setProducts([]);
-      }
-    }
-
-    fetchProducts();
-  }, []);
 
   useEffect(() => {
     let result = [...products];

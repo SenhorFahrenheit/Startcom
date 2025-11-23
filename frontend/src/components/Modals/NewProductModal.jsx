@@ -3,10 +3,26 @@ import { toast } from "react-toastify";
 import BaseModal from "./BaseModal";
 import Button from "../Button/Button";
 import InputDashboard from "../InputDashboard/InputDashboard";
+import SelectDropdown from "../SelectDropdown/SelectDropdown";
 
 import api from "../../services/api";
+import { useState } from "react";
 
 const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
+  const [buttonLoading, setButtonloading] = useState(false)
+  const [category, setCategory] = useState("Roupas");
+
+  const normalizePrice = (value) => {
+    if (!value) return value;
+
+    return value
+      .replace(/^R\$\s*/i, "")
+      .replace(/\s+/g, "")
+      .replace(",", ".")
+      .trim();
+  };
+
+
   const newProduct = async (e) => {
     e.preventDefault();
 
@@ -33,19 +49,17 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
       hasError = true;
     }
 
-    if (!data.quantity.trim()) {
+    if (!data.quantity || data.quantity === "0") {
       toast.error("O campo Quantidade não pode estar vazio!", {
         position: "top-right",
-        theme: "light",
         containerId: "toast-root",
       });
       hasError = true;
     }
 
-    if (!data.min.trim()) {
+    if (!data.min || data.min === "0") {
       toast.error("O campo Mínimo não pode estar vazio!", {
         position: "top-right",
-        theme: "light",
         containerId: "toast-root",
       });
       hasError = true;
@@ -75,27 +89,49 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
       product: {
         name: data.name,
         description: data.description,
-        price: data.price,
-        costPrice: data.costPrice,
+        price: normalizePrice(data.price),
+        costPrice: normalizePrice(data.costPrice),
         quantity: data.quantity,
         minQuantity: data.min,
-        category: data.category
+        category: category
       }
     };
 
     try {
+      setButtonloading(true)
       const response = await api.post("/Company/inventory/create", body);
       toast.success("Produto registrado com sucesso!", { position: "top-right", containerId: "toast-root" });
       onClose();
+      if (onSuccess) {
+        onSuccess(response.data);
+      }
     } catch (error) {
-      toast.error(`Erro: ${error.response?.data?.message || error.message}`, {
-        position: "top-right",
-        theme: "light",
-        containerId: "toast-root",
-      });
-    }
+        const status = error.response?.status;
 
-    onClose();
+        if (status === 409) {
+          toast.error("Já existe um produto com esse nome.", {
+            position: "top-right",
+            containerId: "toast-root",
+          });
+        } else if(status === 422) {
+          toast.error("A quantidade ou o preço informado é inválido.", {
+            position: "top-right",
+            containerId: "toast-root",
+          });
+        } else if (status === 500) {
+          toast.error("Erro interno no servidor. Tenta de novo mais tarde.", {
+            position: "top-right",
+            containerId: "toast-root",
+          });
+        } else {
+          toast.error("Algo deu errado. Tente novamente.", {
+            position: "top-right",
+            containerId: "toast-root",
+          });
+        }
+      } finally {
+        setTimeout(() => setButtonloading(false), 1500)
+      }
   };
 
   return (
@@ -122,30 +158,35 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
           </div>
 
           <div className="input-dashboard-block">
-            <label htmlFor="category">Categoria </label>
-            <select name="category" id="category" defaultValue="Roupas" className="InputDashboard">
-              <option>Roupas</option>
-              <option>Calçados</option>
-              <option>Acessórios</option>
-              <option>Eletrônicos</option>
-              <option>Informática</option>
-              <option>Alimentos</option>
-              <option>Bebidas</option>
-              <option>Móveis</option>
-              <option>Decoração</option>
-              <option>Livros</option>
-              <option>Brinquedos</option>
-              <option>Esportes</option>
-              <option>Beleza</option>
-              <option>Saúde</option>
-              <option>Papelaria</option>
-              <option>Ferramentas</option>
-              <option>Autopeças</option>
-              <option>Pet Shop</option>
-              <option>Limpeza</option>
-              <option>Outros</option>
-            </select>
-
+            <label htmlFor="category">Categoria</label>
+            <SelectDropdown
+              label="Categoria"
+              name="category"
+              placeholder="Selecione uma categoria"
+              items={[
+                { value: "Roupas", label: "Roupas" },
+                { value: "Calçados", label: "Calçados" },
+                { value: "Acessórios", label: "Acessórios" },
+                { value: "Eletrônicos", label: "Eletrônicos" },
+                { value: "Informática", label: "Informática" },
+                { value: "Alimentos", label: "Alimentos" },
+                { value: "Bebidas", label: "Bebidas" },
+                { value: "Móveis", label: "Móveis" },
+                { value: "Decoração", label: "Decoração" },
+                { value: "Livros", label: "Livros" },
+                { value: "Brinquedos", label: "Brinquedos" },
+                { value: "Esportes", label: "Esportes" },
+                { value: "Beleza", label: "Beleza" },
+                { value: "Saúde", label: "Saúde" },
+                { value: "Papelaria", label: "Papelaria" },
+                { value: "Ferramentas", label: "Ferramentas" },
+                { value: "Autopeças", label: "Autopeças" },
+                { value: "Pet Shop", label: "Pet Shop" },
+                { value: "Limpeza", label: "Limpeza" },
+                { value: "Outros", label: "Outros" },
+              ]}
+              onChange={(e) => setCategory(e.target.value)}
+            />
           </div>
 
           <div className="input-dashboard-block">
@@ -169,7 +210,7 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
           </div>
         </div>
         <div className="button-shadown">
-          <Button height={45} width={200} type="submit" label="Salvar Produto" />
+          <Button height={45} width={200} loading={buttonLoading} type="submit" label="Salvar Produto" />
         </div>
       </form>
     </BaseModal>

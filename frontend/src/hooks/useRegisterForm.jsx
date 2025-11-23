@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { toast } from "react-toastify";
 import { validateCNPJ, validateCPF, validatePhone, getPasswordStrength } from "../utils/validations";
@@ -6,9 +7,11 @@ import { registerAPI } from "../services/api";
 
 export const useRegisterForm = (onSuccess) => {
   const { register, handleSubmit, control, watch } = useForm();
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   const onSubmit = async (data) => {
     try {
+      setButtonLoading(true)
       const response = await registerAPI(data);
 
       if (!response) {
@@ -26,10 +29,18 @@ export const useRegisterForm = (onSuccess) => {
       // }, 5000);
       
     } catch (error) {
-      toast.error("Erro ao realizar cadastro", {
+      if (error.response && error.response.status === 409) {
+        toast.error("Já existe uma conta com esse CPF/CNPJ ou email.", {
+          containerId: "toast-root",
+        });
+        return;
+      }
+
+      toast.error("Não foi possível concluir o cadastro. Tente novamente.", {
         containerId: "toast-root",
       });
-      return;
+    } finally {
+      setButtonLoading(false)
     }
   };
 
@@ -53,5 +64,6 @@ export const useRegisterForm = (onSuccess) => {
     formatCNPJ,
     formatCPF,
     formatPhone,
+    buttonLoading,
   };
 };

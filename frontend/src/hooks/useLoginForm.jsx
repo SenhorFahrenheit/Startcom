@@ -12,6 +12,8 @@ export const useLoginForm = (onSuccess) => {
   const [loginPassword, setLoginPassword] = useState("");
   const [keepLogged, setKeepLogged] = useState(false);
 
+  const [buttonLoadingLogin, setButtonLoadingLogin] = useState(false);
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -26,6 +28,7 @@ export const useLoginForm = (onSuccess) => {
     const data = { email: loginEmail, password: loginPassword, keepLogged };
 
     try {
+      setButtonLoadingLogin(true)
       const response = await loginAPI(data);
 
       if (!response) {
@@ -43,12 +46,21 @@ export const useLoginForm = (onSuccess) => {
       }, 1000);
 
     } catch (error) {
-      toast.error("Erro ao realizar login: " + error.message, {
-        position: "top-center",
-        containerId: "toast-root",
-      });
-      return;
-    }
+        if (error.response && error.response.status === 401) {
+          toast.error("E-mail ou senha incorretos.", {
+            position: "top-right",
+            containerId: "toast-root",
+          });
+          return;
+        }
+
+        toast.error("Erro ao realizar login. Tente novamente.", {
+          position: "top-right",
+          containerId: "toast-root",
+        });
+    } finally {
+      setTimeout(() => setButtonLoadingLogin(false), 1500);
+    } 
   };
 
   return {
@@ -59,5 +71,6 @@ export const useLoginForm = (onSuccess) => {
     keepLogged,
     setKeepLogged,
     handleLogin,
+    buttonLoadingLogin,
   };
 };

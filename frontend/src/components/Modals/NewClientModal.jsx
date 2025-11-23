@@ -9,6 +9,7 @@ import InputDashboard from "../InputDashboard/InputDashboard";
 import { formatPhone } from "../../utils/format";
 
 const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
+  const [buttonLoading, setButtonLoading] = useState(false);
   const [telefone, setTelefone] = useState("");
 
   const handleTelefoneChange = (e) => {
@@ -52,6 +53,7 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
     };
 
     try {
+      setButtonLoading(true);
       const response = await api.post("/Company/clients/create", body);
 
       toast.success("Cliente registrado com sucesso!", { position: "top-right", containerId: "toast-root" });
@@ -62,13 +64,28 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
         onSuccess(response.data);
       }
     } catch (error) {
-      toast.error(`Erro: ${error.response?.data?.message || error.message}`, {
-        position: "top-right",
-        theme: "light",
-        containerId: "toast-root",
-      });
-    }
-  };
+        const status = error.response?.status;
+
+        if (status === 409) {
+          toast.error("Já existe um cliente com esse nome ou email.", {
+            position: "top-right",
+            containerId: "toast-root",
+          });
+        } else if (status === 500) {
+          toast.error("Erro interno no servidor. Tente novamente depois.", {
+            position: "top-right",
+            containerId: "toast-root",
+          });
+        } else {
+          toast.error("Falha ao registrar o cliente.", {
+            position: "top-right",
+            containerId: "toast-root",
+          });
+        }
+      } finally {
+        setTimeout(() => setButtonLoading(false), 1500)
+      }
+    };
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} contentLabel="Cadastrar Novo Cliente" width="420px" height="390px" showCloseButton={true}>
@@ -107,7 +124,7 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
         </div>
 
         <div className="button-shadown">
-          <Button height={45} width={200} type="submit" label="Salvar Cliente" />
+          <Button height={45} width={200} loading={buttonLoading} type="submit" label="Salvar Cliente" />
         </div>
       </form>
     </BaseModal>

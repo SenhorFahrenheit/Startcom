@@ -1,38 +1,36 @@
 import './Button.css';
+import { ImSpinner8 } from "react-icons/im";
 
-/**
- * Button component
- *
- * A reusable button component with optional styling variants.
- *
- * Props:
- * - label: string, text displayed inside the button
- * - onClick: function, callback fired when the button is clicked
- * - type: string, button type attribute (default: "button")
- * - disabled: boolean, whether the button is disabled (default: false)
- * - variant: string, optional CSS class to define button style (e.g., primary, secondary)
- */
 const Button = ({ 
-    label, 
-    onClick, 
-    type = "button", 
-    disabled = false, 
-    variant,
-    height,
-    width,
-    fontSize,
-    fontWeight,
-    styles,
-    buttonColor
+  label, 
+  onClick, 
+  type = "button", 
+  disabled = false, 
+  variant,
+  height,
+  width,
+  fontSize,
+  fontWeight,
+  styles,
+  buttonColor,
+  loading = false, // NOVO
 }) => {
   return (
-    <button style={{height, width, fontSize, fontWeight, background: buttonColor}}
-      className={`button ${variant} ${styles}`} // Apply base and variant-specific styles
+    <button
+      style={{ height, width, fontSize, fontWeight, background: buttonColor }}
+      className={`button ${variant} ${styles}`}
       onClick={onClick}
       type={type}
-      disabled={disabled} // Disable button if needed
+      disabled={disabled || loading}
     >
-      {label} {/* Render button text */}
+      {loading ? (
+        <span className="button-loading">
+          <ImSpinner8 className="spin" />
+          {label}
+        </span>
+      ) : (
+        label
+      )}
     </button>
   );
 };

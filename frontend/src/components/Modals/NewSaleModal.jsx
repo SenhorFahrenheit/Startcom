@@ -5,9 +5,11 @@ import api from "../../services/api";
 import BaseModal from "./BaseModal";
 import Button from "../Button/Button";
 import InputDashboard from "../InputDashboard/InputDashboard";
+import SelectDropdown from "../SelectDropdown/SelectDropdown";
 import { formatCurrency } from "../../utils/format";
 
 const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
+  const [buttonLoading, setButtonLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [clients, setClients] = useState([]);
   const [filteredClients, setFilteredClients] = useState([]);
@@ -104,6 +106,7 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
     if (!data.client?.trim()) {
       toast.error("O campo Cliente não pode estar vazio!", {
         position: "top-right",
+        theme: "light",
         containerId: "toast-root",
       });
       hasError = true;
@@ -112,6 +115,7 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
     if (!data.product) {
       toast.error("Selecione um produto!", {
         position: "top-right",
+        theme: "light",
         containerId: "toast-root",
       });
       hasError = true;
@@ -120,6 +124,7 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
     if (!data.quantity) {
       toast.error("Selecione uma quantidade válida!", {
         position: "top-right",
+        theme: "light",
         containerId: "toast-root",
       });
       hasError = true;
@@ -128,6 +133,7 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
     if (!data.price?.trim()) {
       toast.error("O campo Valor não pode estar vazio!", {
         position: "top-right",
+        theme: "light",
         containerId: "toast-root",
       });
       hasError = true;
@@ -149,6 +155,7 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
     };
 
     try {
+      setButtonLoading(true);
       await api.post("/Company/sales/create_sale", payload);
 
       toast.success("Venda registrada com sucesso!", {
@@ -159,11 +166,22 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
       onClose();
       onSuccess?.();
     } catch (error) {
-      console.error("Erro ao registrar venda:", error);
-      toast.error("Erro ao registrar venda!", {
-        position: "top-right",
-        containerId: "toast-root",
-      });
+        const status = error.response?.status;
+        const backendMsg = error.response?.data?.message;
+
+        if (status === 422) {
+          toast.error("A quantidade informada é inválida.", {
+            position: "top-right",
+            containerId: "toast-root",
+          });
+        } else {
+          toast.error(backendMsg || "Não foi possível registrar a venda.", {
+            position: "top-right",
+            containerId: "toast-root",
+          });
+        }
+      } finally {
+          setTimeout(() => setButtonLoading(false), 1500)
     }
   };
 
@@ -231,19 +249,25 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
 
           <div className="input-dashboard-block">
             <label htmlFor="product">Produto</label>
-            <select
+            <SelectDropdown
+              label="Produto"
               name="product"
-              id="product"
-              className="InputDashboard"
-              onChange={handleProductChange}
-            >
-              <option value="">Selecione um produto</option>
-              {products.map((product) => (
-                <option key={product._id} value={product._id}>
-                  {product.name}
-                </option>
-              ))}
-            </select>
+              placeholder="Selecione um produto"
+              items={products.map((p) => ({
+                value: p._id,
+                label: p.name,
+                price: p.price,
+              }))}
+              onChange={(e) => {
+                const product = products.find((p) => p._id === e.target.value);
+
+                if (product) {
+                  priceRef.current.value = formatCurrency(product.price);
+                }
+              }}
+            />
+
+
           </div>
 
           <div className="input-dashboard-block">
@@ -264,7 +288,7 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
         </div>
 
         <div className="button-shadown">
-          <Button height={45} width={200} type="submit" label="Salvar Venda" />
+          <Button height={45} width={200} loading={buttonLoading} type="submit" label="Salvar Venda" />
         </div>
       </form>
     </BaseModal>
