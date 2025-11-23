@@ -1,7 +1,6 @@
 .ClientInformationCard {
     width: 32%;
     background-color: var(--component-background-color);
-    margin-top: 30px;
     padding: 24px;
     box-shadow: var(--primary-shadow-color);
     border: var(--border-color);
@@ -125,6 +124,5 @@
 @media (max-width: 1024px) {
     .ClientInformationCard {
         width: 100%;
-        margin: 15px 0;
     }
 }

@@ -78,6 +78,8 @@ const SalesTable = ({ dateFilter, statusFilter, search, refreshTrigger }) => {
       return true;
     });
 
+    result.sort((a, b) => b.date - a.date);
+
     setFilteredSales(result);
   }, [sales, dateFilter, statusFilter, search]);
 

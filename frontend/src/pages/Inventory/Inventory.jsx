@@ -136,14 +136,14 @@ const Inventory = () => {
             style={{ fontSize: 14, paddingLeft: 16 }}
             className="InputDashboard"
             type="text"
-            placeholder="Buscar produtos por nome, código..."
+            placeholder="Buscar produtos por nome"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
 
           <div className="filters-block">
             <FilterSelect
-              label="Categoria: "
+              label="Categoria "
                 options={[
                   { label: "Todas", value: "all" },
                   { label: "Roupas", value: "Roupas" },
