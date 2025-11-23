@@ -2,11 +2,12 @@
     display: flex;
     justify-content: space-between;
     padding: 24px 0;
+    margin: 20px 0;
 }
 
 .buttons-container-inventory {
   display: flex;
-  gap: 15px;
+  gap: 5px;
 }
 
 @media (max-width: 1300px) {

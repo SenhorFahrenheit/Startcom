@@ -95,6 +95,16 @@ const Reports = () => {
           </div>
 
           <div className="report-buttons">
+            <div className="button-shadown">
+              <Button
+                className="hover-dashboard"
+                onClick={openReport}
+                height={"auto"}
+                width={160}
+                label={<><LuChartColumn size={"1.5rem"} />Novo Relatório</>}
+              />
+            </div>
+
             <div className="filter-date">
               <FilterDateButton
                 options={[
@@ -105,16 +115,6 @@ const Reports = () => {
                 ]}
                 defaultValue="Últimos 6 meses"
                 onSelect={handleSelectPeriod}
-              />
-            </div>
-
-            <div className="button-shadown">
-              <Button
-                className="hover-dashboard"
-                onClick={openReport}
-                height={"auto"}
-                width={160}
-                label={<><LuChartColumn size={"1.5rem"} />Novo Relatório</>}
               />
             </div>
           </div>
