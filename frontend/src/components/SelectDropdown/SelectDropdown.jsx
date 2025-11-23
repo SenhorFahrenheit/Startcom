@@ -43,10 +43,7 @@ const SelectDropdown = ({
     <div style={{ width: "100%", position: "relative" }} ref={wrapperRef}>
       <input type="hidden" name={name} value={selectedValue} />
 
-      <div
-        className="SelectDashboardTrigger"
-        onClick={() => setOpen(!open)}
-      >
+      <div className={`SelectDashboardTrigger ${open ? "selectedTrigger" : ""}`} onClick={() => setOpen(!open)}>
         <span className="SelectDashboardText">
           {selectedLabel || placeholder}
         </span>

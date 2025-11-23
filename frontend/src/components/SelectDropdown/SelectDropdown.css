@@ -16,9 +16,8 @@
   background: white;
 }
 
-.SelectDashboardTrigger:focus,
-.SelectDashboardTrigger:focus-visible {
-  border: 3px solid #000000;
+.selectedTrigger {
+  border: 2px solid #000000;
 }
 
 .SelectDashboardIcon {
