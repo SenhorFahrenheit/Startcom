@@ -5,8 +5,11 @@ import Button from "../Button/Button";
 import InputDashboard from "../InputDashboard/InputDashboard";
 
 import api from "../../services/api";
+import { useState } from "react";
 
 const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
+  const [buttonLoading, setButtonloading] = useState(false)
+
   const newProduct = async (e) => {
     e.preventDefault();
 
@@ -84,18 +87,37 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
     };
 
     try {
+      setButtonloading(true)
       const response = await api.post("/Company/inventory/create", body);
       toast.success("Produto registrado com sucesso!", { position: "top-right", containerId: "toast-root" });
       onClose();
     } catch (error) {
-      toast.error(`Erro: ${error.response?.data?.message || error.message}`, {
-        position: "top-right",
-        theme: "light",
-        containerId: "toast-root",
-      });
-    }
+        const status = error.response?.status;
 
-    onClose();
+        if (status === 409) {
+          toast.error("Já existe um produto com esse nome.", {
+            position: "top-right",
+            containerId: "toast-root",
+          });
+        } else if(status === 422) {
+          toast.error("A quantidade ou o preço informado é inválido.", {
+            position: "top-right",
+            containerId: "toast-root",
+          });
+        } else if (status === 500) {
+          toast.error("Erro interno no servidor. Tenta de novo mais tarde.", {
+            position: "top-right",
+            containerId: "toast-root",
+          });
+        } else {
+          toast.error("Algo deu errado. Tente novamente.", {
+            position: "top-right",
+            containerId: "toast-root",
+          });
+        }
+      } finally {
+        setTimeout(() => setButtonloading(false), 1500)
+      }
   };
 
   return (
@@ -169,7 +191,7 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
           </div>
         </div>
         <div className="button-shadown">
-          <Button height={45} width={200} type="submit" label="Salvar Produto" />
+          <Button height={45} width={200} loading={buttonLoading} type="submit" label="Salvar Produto" />
         </div>
       </form>
     </BaseModal>

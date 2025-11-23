@@ -17,13 +17,26 @@
     transition: all ease 250ms;
 }
 
-.button:hover {
-  /* Sem nada por enquanto por não ter cor de HOVER ainda colocada nos wireframes. */
+.spin {
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.button-loading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .button:disabled {
   cursor: not-allowed;
+  filter: saturate(0.45);
 }
+
 
 .quaternary {
     background-color: var(--quaternary-color);

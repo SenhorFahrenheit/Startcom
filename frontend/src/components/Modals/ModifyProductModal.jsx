@@ -8,6 +8,7 @@ import Button from "../Button/Button";
 import InputDashboard from "../InputDashboard/InputDashboard";
 
 const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
+  const [buttonLoading, setButtonLoading] = useState(false)
   const [products, setProducts] = useState([]);
   const quantityRef = useRef();
   
@@ -51,6 +52,7 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
     if (!data.addQuantity?.trim()) {
       toast.error("O campo Adicionar não pode estar vazio!", {
         position: "top-right",
+        theme: "light",
         containerId: "toast-root",
       });
       hasError = true;
@@ -73,6 +75,7 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
     }
 
     try {
+        setButtonLoading(true)
         await api.post("/Company/inventory/increase_inventory", payload)
              
         toast.success("Quantidade adicionada com sucesso!", {
@@ -82,16 +85,23 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
             
         onClose();
         onSuccess?.();
-    } catch (error) {
-        console.error("Erro ao buscar produtos:", error);
-        toast.error("Erro ao adicionar a quantidade de produto!", {
-            position: "top-right",
-            containerId: "toast-root",
-        });
-    }
+      } catch (error) {
+          const status = error.response?.status;
 
-
-    onClose();
+          if (status === 422) {
+            toast.error("A quantidade informada é inválida.", {
+              position: "top-right",
+              containerId: "toast-root",
+            });
+          } else {
+            toast.error("Erro ao adicionar quantidade ao produto.", {
+              position: "top-right",
+              containerId: "toast-root",
+            });
+          }
+        } finally {
+          setTimeout(() => setButtonLoading(false), 1500)
+        }
   };
 
   return (
@@ -146,7 +156,7 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
           </div>
         </div>
         <div className="button-shadown">
-          <Button height={45} width={200} type="submit" label="Adicionar Produto" />
+          <Button height={45} width={200} loading={buttonLoading} type="submit" label="Adicionar Produto" />
         </div>
       </form>
     </BaseModal>
