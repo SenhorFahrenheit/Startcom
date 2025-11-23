@@ -6,7 +6,7 @@
   border: var(--border-color);
   border-radius: var(--border-radius);
   font-family: var(--font-base);
-  font-size: 1rem;
+  font-size: 0.9rem;
   padding: 0 5px;
   display: flex;
   align-items: center;
