@@ -47,19 +47,17 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
       hasError = true;
     }
 
-    if (!data.quantity.trim()) {
+    if (!data.quantity || data.quantity === "0") {
       toast.error("O campo Quantidade não pode estar vazio!", {
         position: "top-right",
-        theme: "light",
         containerId: "toast-root",
       });
       hasError = true;
     }
 
-    if (!data.min.trim()) {
+    if (!data.min || data.min === "0") {
       toast.error("O campo Mínimo não pode estar vazio!", {
         position: "top-right",
-        theme: "light",
         containerId: "toast-root",
       });
       hasError = true;
@@ -102,6 +100,9 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
       const response = await api.post("/Company/inventory/create", body);
       toast.success("Produto registrado com sucesso!", { position: "top-right", containerId: "toast-root" });
       onClose();
+      if (onSuccess) {
+        onSuccess(response.data);
+      }
     } catch (error) {
         const status = error.response?.status;
 

@@ -45,11 +45,12 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
 
   const newValueProduct = async (e) => {
     e.preventDefault();
+    let hasError = false;
 
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
 
-    if (!data.addQuantity?.trim()) {
+    if (!data.addQuantity || data.addQuantity === "0") {
       toast.error("O campo Adicionar não pode estar vazio!", {
         position: "top-right",
         theme: "light",
@@ -66,6 +67,8 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
       hasError = true;
     }
 
+    if (hasError) return;
+
     const selectedProduct = products.find(p => p._id === data.product);
     const productName = selectedProduct ? selectedProduct.name : null;
 
@@ -76,7 +79,7 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
 
     try {
         setButtonLoading(true)
-        await api.post("/Company/inventory/increase_inventory", payload)
+        const response = await api.post("/Company/inventory/increase_inventory", payload)
              
         toast.success("Quantidade adicionada com sucesso!", {
             position: "top-right",
@@ -84,7 +87,9 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
         });
             
         onClose();
-        onSuccess?.();
+        if (onSuccess) {
+          onSuccess(response.data);
+        }
       } catch (error) {
           const status = error.response?.status;
 
