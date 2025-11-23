@@ -10,6 +10,17 @@ import { useState } from "react";
 const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
   const [buttonLoading, setButtonloading] = useState(false)
 
+  const normalizePrice = (value) => {
+    if (!value) return value;
+
+    return value
+      .replace(/^R\$\s*/i, "")
+      .replace(/\s+/g, "")
+      .replace(",", ".")
+      .trim();
+  };
+
+
   const newProduct = async (e) => {
     e.preventDefault();
 
@@ -78,8 +89,8 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
       product: {
         name: data.name,
         description: data.description,
-        price: data.price,
-        costPrice: data.costPrice,
+        price: normalizePrice(data.price),
+        costPrice: normalizePrice(data.costPrice),
         quantity: data.quantity,
         minQuantity: data.min,
         category: data.category
