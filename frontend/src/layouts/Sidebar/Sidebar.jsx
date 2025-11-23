@@ -35,17 +35,17 @@ const Sidebar = ({ isOpen, onClose }) => {
                 <NavLink to="/painel" className={({ isActive }) => isActive ? "active" : ""}>
                     <FaChartColumn size={20} /> Dashboard
                 </NavLink>
-
-                <NavLink to="/vendas" className={({ isActive }) => isActive ? "active" : ""}>
-                    <FiShoppingCart size={20} /> Vendas
-                </NavLink>
-
+                
                 <NavLink to="/clientes" className={({ isActive }) => isActive ? "active" : ""}>
                     <GoPeople size={20} /> Clientes
                 </NavLink>
-
+                
                 <NavLink to="/estoque" className={({ isActive }) => isActive ? "active" : ""}>
                     <BsBoxSeam size={20} /> Estoque
+                </NavLink>
+
+                <NavLink to="/vendas" className={({ isActive }) => isActive ? "active" : ""}>
+                    <FiShoppingCart size={20} /> Vendas
                 </NavLink>
 
                 <NavLink to="/relatorios" className={({ isActive }) => isActive ? "active" : ""}>

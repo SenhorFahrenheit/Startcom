@@ -18,12 +18,23 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
   }, [isOpen]);
 
   const fetchProducts = async () => {
-    try {
-      const response = await api.post("/Company/inventory/full");
-      if (response.data?.status === "success" && response.data?.products) {
-        setProducts(response.data.products);
-      }
-    } catch (error) {
+      try {
+        const response = await api.post("/Company/inventory/full");
+        const list = response.data?.products || [];
+
+        if (list.length === 0) {
+          toast.error("Você não possui produtos cadastrados para modificar.", {
+            position: "top-right",
+            containerId: "toast-root",
+          });
+
+          onClose();
+          return;
+        }
+
+        setProducts(list);
+
+      } catch (error) {
       console.error("Erro ao buscar produtos:", error);
       toast.error("Erro ao carregar produtos!", {
         position: "top-right",

@@ -27,11 +27,21 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
 
   const fetchProducts = async () => {
     try {
-      const response = await api.post("/Company/inventory/full");
+    const response = await api.post("/Company/inventory/full");
 
-      if (response.data?.status === "success" && response.data?.products) {
-        setProducts(response.data.products);
-      }
+    const list = response.data?.products || [];
+    setProducts(list);
+
+    if (list.length === 0) {
+      toast.error("Você não possui produtos cadastrados para realizar uma venda.", {
+        position: "top-right",
+        containerId: "toast-root",
+      });
+
+      onClose(); 
+      return;
+    }
+
     } catch (error) {
       console.error("Erro ao buscar produtos:", error);
       toast.error("Erro ao carregar produtos!", {
