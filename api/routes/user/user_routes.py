@@ -1,9 +1,13 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from api.services.user_services import UserService
 from api.schemas.user_schemas import UserCreate, UserCreatedResponse
 from ...infra.database import mongo
 from ...utils.email_token import create_email_token
 from bson import ObjectId
+from ...utils.security import get_current_user
+from ...infra.database import get_database_client
+from ...schemas.company_schemas import CompanyData, CompanyUpdate
+from ...services.company_services import CompanyService
 
 # Create a router instance to group all user-related routes
 router = APIRouter()
@@ -199,4 +203,69 @@ async def confirm_email_verification(token: str):
     except Exception as e:
         raise HTTPException(500, str(e))
 
+@router.get("/my-company")
+async def get_my_company(
+    db_client=Depends(get_database_client),
+    current_user=Depends(get_current_user),
+):
 
+    company_service = CompanyService(db_client) 
+
+
+    try:
+        company_id = current_user.get("companyId")
+
+        if not company_id:
+            raise HTTPException(
+                status_code=404,
+                detail="User has no company assigned"
+            )
+
+        data = await company_service.get_company_public_info(company_id)
+
+        return data
+
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(500, str(e))
+
+
+@router.put("/my-company")
+async def update_my_company(
+    update_data: CompanyUpdate,
+    db_client=Depends(get_database_client),
+    current_user=Depends(get_current_user),
+):
+    """
+    Atualiza as informações da empresa do usuário.
+    """
+    company_service = CompanyService(db_client)
+
+    try:
+        company_id = current_user.get("companyId")
+
+        if not company_id:
+            raise HTTPException(
+                status_code=404,
+                detail="User has no company assigned"
+            )
+
+        updated = await company_service.update_company_public_info(
+            company_id=company_id,
+            name=update_data.name,
+            cpf_cnpj=update_data.cpf_cnpj,
+            email=update_data.email,
+            telephone=update_data.telephone,
+            address=update_data.address
+        )
+
+        return {
+            "companyId": company_id,
+            **updated
+        }
+
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(500, str(e))

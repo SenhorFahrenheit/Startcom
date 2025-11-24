@@ -26,7 +26,7 @@ class CompanyService:
             CompanyInDB: The created company document.
         """
         try:
-            # ✅ Validate if user exists
+            # Validate if user exists
             owner = await self.user_collection.find_one({"_id": ObjectId(company_data.ownerId)})
             if not owner:
                 raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Owner user not found")
@@ -43,7 +43,7 @@ class CompanyService:
                 "sales": []
             }
 
-            # ✅ Insert into DB
+            # Insert into DB
             result = await self.company_collection.insert_one(company_doc)
             created_company = await self.company_collection.find_one({"_id": result.inserted_id})
 
@@ -54,3 +54,94 @@ class CompanyService:
 
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
+
+    async def get_company_public_info(self, company_id: str) -> dict:
+        try:
+            company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
+
+            if not company:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Company not found"
+                )
+
+            owner = await self.user_collection.find_one({"_id": company["ownerId"]})
+
+            if not owner:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Owner user not found"
+                )
+
+            return {
+                "name": company.get("name", "") or "",
+                "cpf_cnpj": company.get("taxId", "") or "",
+                "email": owner.get("email", "") or "",
+                "phone_number": owner.get("phone_number", "") or "",
+                "address": company.get("address", "") or "",
+            }
+
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+
+
+    async def update_company_public_info(
+        self,
+        company_id: str,
+        name: str = "",
+        cpf_cnpj: str = "",
+        email: str = "",
+        telephone: str = "",
+        address: str = ""
+    ) -> dict:
+        try:
+            company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
+
+            if not company:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Company not found"
+                )
+
+            owner_id = company["ownerId"]
+
+            # Atualizar COMPANY
+            update_company = {
+                "name": name,
+                "taxId": cpf_cnpj,
+                "address": address,
+                "updatedAt": datetime.utcnow()
+            }
+
+            await self.company_collection.update_one(
+                {"_id": ObjectId(company_id)},
+                {"$set": update_company}
+            )
+
+            # Atualizar USER (email e telephone)
+            update_user = {
+                "email": email,
+                "telephone": telephone,
+                "updatedAt": datetime.utcnow()
+            }
+
+            await self.user_collection.update_one(
+                {"_id": owner_id},
+                {"$set": update_user}
+            )
+
+            # Buscar dados atualizados para retorno
+            updated_company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
+            updated_owner = await self.user_collection.find_one({"_id": owner_id})
+
+            return {
+                "name": updated_company.get("name", "") or "",
+                "cpf_cnpj": updated_company.get("taxId", "") or "",
+                "email": updated_owner.get("email", "") or "",
+                "phone_number": updated_owner.get("phone_number", "") or "",
+                "address": updated_company.get("address", "") or "",
+            }
+
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+

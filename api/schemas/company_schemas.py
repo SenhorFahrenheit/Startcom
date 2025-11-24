@@ -23,3 +23,18 @@ class CompanyInDB(CompanyBase):
     class Config:
         json_encoders = {ObjectId: str}
         allow_population_by_field_name = True
+
+class CompanyData(BaseModel):
+    name: str = Field(..., description="Company name")
+    email: str = Field(..., description="Email associated with the company owner")
+    cpf_cnpj: str = Field(..., description= "CPF or CNPJ of the company owner")
+    telephone: str = Field(..., description="Telephone number of the company owner")
+    address : str = Field(..., description="Address of the company owner")
+
+class CompanyUpdate(BaseModel):
+    name: str = ""
+    cpf_cnpj: str = ""
+    email: str = ""
+    telephone: str = ""
+    address: str = ""
+
