@@ -9,6 +9,7 @@ import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
 import Button from "../../components/Button/Button";
 import NewProductModal from "../../components/Modals/NewProductModal";
 import ModifyProductModal from "../../components/Modals/ModifyProductModal";
+import DeleteProductModal from "../../components/Modals/DeleteProductModal";
 import ProductTable from "../../components/ProductTable/ProductTable";
 import ProductCard from "../../components/ProductCard/ProductCard";
 
@@ -25,8 +26,17 @@ const Inventory = () => {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [search, setSearch] = useState("");
+  const [selectedProduct, setSelectedProduct] = useState(null);
+ 
+  const {
+    activeModal,
+    openProduct,
+    openModifyProduct,
+    openDeleteInventory,
+    closeModal
+  } = useAuthModals(setSelectedProduct);
 
-  const { activeModal, openProduct, openModifyProduct, closeModal } = useAuthModals();
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const { user, token, isAuthenticated, pageLoading } = useAuth();
@@ -197,7 +207,9 @@ const Inventory = () => {
             statusFilter={statusFilter}
             search={search}
             loading={loading}
+            openDeleteInventory={openDeleteInventory}
           />
+
 
           {error && <p style={{ color: "red" }}>{error}</p>}
         </div>
@@ -212,6 +224,13 @@ const Inventory = () => {
       <ModifyProductModal
         isOpen={activeModal === "modifyInventory"}
         onClose={closeModal}
+        onSuccess={() => fetchInventory()}
+      />
+
+      <DeleteProductModal
+        isOpen={activeModal === "deleteProduct"}
+        onClose={closeModal}
+        product={selectedProduct}
         onSuccess={() => fetchInventory()}
       />
     </section>

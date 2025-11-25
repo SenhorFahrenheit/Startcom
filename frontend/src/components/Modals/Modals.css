@@ -156,6 +156,22 @@
   color: #2a2a2a;
 }
 
+/* DeleteClientModal Settings */
+
+.delete-client-description {
+  margin-bottom: 20px;
+  font-size: 15px;
+  line-height: 1.4;
+  font-family: var(--font-base);
+}
+
+.modal-buttons-row {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 @media (max-width: 550px) {
   .modal-content {
     width: 90% !important;
