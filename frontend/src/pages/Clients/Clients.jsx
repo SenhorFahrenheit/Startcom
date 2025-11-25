@@ -49,6 +49,19 @@ const Clients = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const handleEdit = (id) => {
+    //console.log("Editar cliente", id);
+  };
+
+  const handleDelete = async (id) => {
+    /*try {
+      await api.delete(`/Client/delete/${id}`);
+      setClients(prev => prev.filter(c => c.id !== id));
+    } catch (err) {
+      console.error(err);
+    }*/
+  };
+
   const fetchOverviewAndClients = async () => {
     try {
       setLoading(true);
@@ -61,17 +74,15 @@ const Clients = () => {
 
         const formattedClients = (data.overview.clients || [])
           .map((c) => ({
+            id: c.id,
             clientName: c.name,
-            clientType: c.category
-              ? c.category[0].toUpperCase() + c.category.slice(1)
-              : "Regular",
+            clientType: c.category ? c.category[0].toUpperCase() + c.category.slice(1) : "Regular",
             email: c.email || "Não Informado",
             phoneNumber: formatPhone(c.phone) || "Não Informado",
             city: c.address || "Não Informado",
             totalSpent: c.totalSpent,
             lastPurchase: c.lastPurchase ? formatDateBR(c.lastPurchase) : "Ainda não comprou",
-          }))
-          .sort((a, b) => {
+          })).sort((a, b) => {
             if (a.lastPurchase === "Ainda não comprou") return -1;
             if (b.lastPurchase === "Ainda não comprou") return 1;
 
@@ -189,17 +200,20 @@ const Clients = () => {
                 <ClientInformationCard key={idx} loading={true} />
               ))
             : filteredClients.map((c, idx) => (
-                <ClientInformationCard 
-                  key={idx}
-                  clientName={c.clientName}
-                  clientType={c.clientType}
-                  email={c.email}
-                  phoneNumber={c.phoneNumber}
-                  city={c.city}
-                  totalSpent={formatCurrency(c.totalSpent)}
-                  lastPurchase={c.lastPurchase}
-                />
-              ))
+              <ClientInformationCard
+                key={idx}
+                _id={c.id}
+                clientName={c.clientName}
+                clientType={c.clientType}
+                email={c.email}
+                phoneNumber={c.phoneNumber}
+                city={c.city}
+                totalSpent={formatCurrency(c.totalSpent)}
+                lastPurchase={c.lastPurchase}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+              />
+            ))
           }
 
         </div>

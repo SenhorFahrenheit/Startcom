@@ -1,23 +1,41 @@
-import "./ClientInformationCard.css"
-import { LuMail, LuPhone, LuMapPin } from "react-icons/lu"
-import Skeleton from "react-loading-skeleton"
-import "react-loading-skeleton/dist/skeleton.css"
+import "./ClientInformationCard.css";
+import { LuMail, LuPhone, LuMapPin, LuTrash2, LuPencil } from "react-icons/lu";
+import { Ellipsis } from 'lucide-react';
 
-const ClientInformationCard = ({clientName, clientType, email, phoneNumber, city, totalSpent, lastPurchase, loading}) => {
-  
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+import { useState } from "react";
+
+const ClientInformationCard = ({
+  _id,
+  clientName,
+  clientType,
+  email,
+  phoneNumber,
+  city,
+  totalSpent,
+  lastPurchase,
+  loading,
+  onEdit,
+  onDelete
+}) => {
+
+  const [openMenu, setOpenMenu] = useState(false);
+
   const iconLetters = (name) => {
     if (!name) return "";
     const words = name.trim().split(/\s+/);
-    const initials = words.map(word => word[0].toUpperCase());
-    return initials.slice(0, 3).join('');
-  }
-  
+    return words.map(w => w[0].toUpperCase()).slice(0, 3).join("");
+  };
+
   return (
     <div className="ClientInformationCard">
+      <div className="client-header">
         <div className="client-name-type-information">
           <div className="client-letters-icon">
             {loading ? <Skeleton circle width={50} height={50} /> : iconLetters(clientName)}
           </div>
+
           <div className="cliient-name-type">
             <p>{loading ? <Skeleton width={120} /> : clientName}</p>
             <div className={`${clientType}`}>
@@ -26,28 +44,56 @@ const ClientInformationCard = ({clientName, clientType, email, phoneNumber, city
           </div>
         </div>
 
-        <div className="client-information-part">
-          <div className="client-information-part-item">
-            <LuMail/> {loading ? <Skeleton width={150} /> : email}
-          </div>
-          <div className="client-information-part-item">
-            <LuPhone/> {loading ? <Skeleton width={120} /> : phoneNumber}
-          </div>
-          <div className="client-information-part-item">
-            <LuMapPin/> {loading ? <Skeleton width={100} /> : city}
-          </div>
-        </div>
+        {!loading && (
+          <div className="dropdown-container">
+            <button
+              className="dropdown-trigger"
+              onClick={() => setOpenMenu(prev => !prev)}
+            >
+              <Ellipsis />
+            </button>
 
-        <div className="line-client-part"></div>
+            {openMenu && (
+              <div className="dropdown-menu">
+                <button
+                  className="dropdown-item edit"
+                  onClick={() => { setOpenMenu(false); onEdit(_id); }}
+                >
+                  <LuPencil />
+                </button>
 
-        <div className="total-spent">
-          <p>Total gasto</p> {loading ? <Skeleton width={80} /> : totalSpent}
-        </div>
-        <div className="last-purchase">
-          <p>Última compra</p> {loading ? <Skeleton width={100} /> : lastPurchase}
-        </div>
+                <button
+                  className="dropdown-item delete"
+                  onClick={() => { setOpenMenu(false); onDelete(_id); }}
+                >
+                  <LuTrash2 />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+
+      </div>
+
+      <div className="client-information-part">
+        <div className="client-information-part-item"><LuMail />{loading ? <Skeleton width={150} /> : email}</div>
+        <div className="client-information-part-item"><LuPhone />{loading ? <Skeleton width={120} /> : phoneNumber}</div>
+        <div className="client-information-part-item"><LuMapPin />{loading ? <Skeleton width={100} /> : city}</div>
+      </div>
+
+      <div className="line-client-part"></div>
+
+      <div className="total-spent">
+        <p>Total gasto</p>
+        {loading ? <Skeleton width={80} /> : totalSpent}
+      </div>
+
+      <div className="last-purchase">
+        <p>Última compra</p>
+        {loading ? <Skeleton width={100} /> : lastPurchase}
+      </div>
     </div>
-  )
-}
+  );
+};
 
-export default ClientInformationCard
+export default ClientInformationCard;

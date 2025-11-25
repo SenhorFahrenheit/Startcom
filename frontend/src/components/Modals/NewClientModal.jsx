@@ -5,7 +5,7 @@ import api from "../../services/api";
 import BaseModal from "./BaseModal";
 import Button from "../Button/Button";
 import InputDashboard from "../InputDashboard/InputDashboard";
-
+import InfoToolTip from "../InfoTooltip/InfoTooltip"
 import { formatPhone } from "../../utils/format";
 
 const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
@@ -88,7 +88,7 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
     };
 
   return (
-    <BaseModal isOpen={isOpen} onClose={onClose} contentLabel="Cadastrar Novo Cliente" width="420px" height="390px" showCloseButton={true}>
+    <BaseModal isOpen={isOpen} onClose={onClose} contentLabel="Cadastrar Novo Cliente" width={"auto"} height={"auto"} showCloseButton={true}>
       <h2 className="dashboard-modal-title">Registrar Novo Cliente</h2>
 
       <form className="form-dashboard" onSubmit={newClient}>
@@ -96,21 +96,25 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
           <div className="input-dashboard-block">
             <label htmlFor="nome">Nome</label>
             <InputDashboard name="nome" id="nome" />
+            <InfoToolTip text="Nome completo do cliente. Ajuda a identificar quem é a pessoa. Ex.: Maria da Silva"/>
           </div>
 
           <div className="input-dashboard-block">
             <label htmlFor="email">Email</label>
             <InputDashboard type="email" name="email" id="email" />
+            <InfoToolTip text="Email para contato e envio de mensagens. Ex.: maria.silva@gmail.com"/>
           </div>
 
           <div className="input-dashboard-block">
             <label htmlFor="telefone">Telefone</label>
             <InputDashboard type="tel" maxLength={14} name="telefone" id="telefone" value={telefone} onChange={handleTelefoneChange} />
+            <InfoToolTip text="Telefone ou celular do cliente. Use o número principal. Ex.: (11) 91234-5678"/>
           </div>
 
           <div className="input-dashboard-block">
             <label htmlFor="cidade">Cidade</label>
             <InputDashboard type="text" name="cidade" id="cidade" />
+            <InfoToolTip text="Cidade onde o cliente mora. Ex.: São Paulo"/>
           </div>
 
           {/*<div className="input-dashboard-block">

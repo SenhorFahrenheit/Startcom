@@ -4,20 +4,34 @@ import { validateCNPJ, validateCPF, validatePhone } from "../utils/validations";
 import { formatCNPJ, formatCPF, formatPhone } from "../utils/format";
 
 export const useSettingForm = (onSuccess) => {
-  const { register, handleSubmit, reset, control } = useForm({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    control,
+    setValue,
+    watch,
+  } = useForm({
     defaultValues: {
-      nameBusiness: "Minha Empresa",
-      CNPJorCPF: "04.027.724/0001-80",
-      email: "contato@minhaempresa.com",
-      telefone: "(11) 98765-4321",
-      address: "Rua Exemplo, 123, São Paulo - SP",
+      nameBusiness: "",
+      CNPJorCPF: "",
+      email: "",
+      telefone: "",
+      address: "",
     },
   });
 
-  const onSubmit = (data) => {
-    console.log("Configuração:", data);
-    toast.success("Configurações alteradas!", { containerId: "toast-root" });
-    if (onSuccess) onSuccess(data);
+  const onSubmit = async (data) => {
+    try {
+      await updateMyCompanyAPI(data);
+
+      toast.success("Configurações atualizadas!", { containerId: "toast-root" });
+
+      if (onSuccess) onSuccess(data);
+    } catch (err) {
+      console.error(err);
+      toast.error("Erro ao atualizar dados", { containerId: "toast-root" });
+    }
   };
 
   const onError = (errors) => {
@@ -33,6 +47,8 @@ export const useSettingForm = (onSuccess) => {
     onError,
     reset,
     control,
+    setValue,
+    watch,
     validateCNPJ,
     validateCPF,
     validatePhone,

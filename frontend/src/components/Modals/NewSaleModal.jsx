@@ -6,6 +6,7 @@ import BaseModal from "./BaseModal";
 import Button from "../Button/Button";
 import InputDashboard from "../InputDashboard/InputDashboard";
 import SelectDropdown from "../SelectDropdown/SelectDropdown";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
 import { formatCurrency } from "../../utils/format";
 
 const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
@@ -219,6 +220,7 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
               onBlur={handleBlur}
               autoComplete="off"
             />
+            <InfoTooltip text="Nome do cliente para quem você está vendendo o produto. Ex.: Carlos"/>
 
             {showSuggestions && filteredClients.length > 0 && (
               <ul
@@ -232,7 +234,7 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
                   borderRadius: "8px",
                   zIndex: 10,
                   maxHeight: "160px",
-                  width: "360px",
+                  width: "330px",
                   overflowY: "auto",
                   listStyle: "none",
                   padding: "5px 0",
@@ -276,13 +278,13 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
                 }
               }}
             />
-
-
+            <InfoTooltip text="Produto que está sendo vendido. Ex.: Camiseta Azul"/>
           </div>
 
           <div className="input-dashboard-block">
             <label htmlFor="quantity">Quantidade</label>
             <InputDashboard name="quantity" id="quantity" />
+            <InfoTooltip text="Quantidade do produto que está sendo vendida. Ex.: 2"/>
           </div>
 
           <div className="input-dashboard-block">
@@ -294,6 +296,7 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
               id="price"
               ref={priceRef}
             />
+            <InfoTooltip text="Preço de venda do produto selecionado."/>
           </div>
         </div>
 

@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import { useState } from "react";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 import BaseModal from "./BaseModal";
 import Button from "../Button/Button";
@@ -49,6 +50,7 @@ const NewReportModal = ({ isOpen, onClose }) => {
               placeholder={topic}
               onChange={(e) => setTopic(e.target.value)}
             />
+            <InfoTooltip text="Tópico do relatório que você deseja gerar. Ex.: Vendas, Clientes ou Estoque."/>
           </div>
 
           <div className="input-dashboard-block">
@@ -62,6 +64,7 @@ const NewReportModal = ({ isOpen, onClose }) => {
               placeholder={format}
               onChange={(e) => setFormat(e.target.value)}
             />
+            <InfoTooltip text="Formato do arquivo do relatório. Ex.: PDF ou EXCEL."/>
           </div>
 
           <div className="input-dashboard-block">
@@ -76,6 +79,7 @@ const NewReportModal = ({ isOpen, onClose }) => {
               placeholder={period}
               onChange={(e) => setPeriod(e.target.value)}
             />
+            <InfoTooltip text="Período que o relatório irá abranger. Ex.: Última semana, Último mês ou Último ano."/>
           </div>
         </div>
 

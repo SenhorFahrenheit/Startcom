@@ -1,0 +1,38 @@
+.info-tooltip-container {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-base);
+}
+
+.info-icon {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--primary-color)
+}
+
+.info-icon:hover {
+  color: #222;
+}
+
+.info-tooltip-box {
+  position: absolute;
+  top: -20px;
+  left: -230px;
+  width: 220px;
+  background: #fff;
+  color: #333;
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 1.35;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.15);
+  z-index: 999;
+  animation: fadeInTooltip 0.15s ease-out;
+}
+
+@keyframes fadeInTooltip {
+  from { opacity: 0; transform: translateY(-2px); }
+  to { opacity: 1; transform: translateY(0); }
+}

@@ -2,7 +2,15 @@ import { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { formatPercent } from "../../utils/format";
 
-const COLORS = ["var(--primary-color)", "#A9BCD0", "#2F4858", "#91dff7ff"];
+const COLORS = [
+  "var(--primary-color)",
+  "#03A0B9",
+  "#025965",
+  "#00C2D1",
+  "#89E7F0",
+  "#01454E"
+];
+
 
 const CategoryPieChart = ({ data }) => {
   const [isMobile, setIsMobile] = useState(false);

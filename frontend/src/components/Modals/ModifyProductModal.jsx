@@ -6,6 +6,7 @@ import BaseModal from "./BaseModal";
 import Button from "../Button/Button";
 import InputDashboard from "../InputDashboard/InputDashboard";
 import SelectDropdown from "../SelectDropdown/SelectDropdown";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -107,7 +108,7 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
   };
 
   return (
-    <BaseModal isOpen={isOpen} onClose={onClose} contentLabel="Adicionar Produto" width="620px" height="350px" showCloseButton>
+    <BaseModal isOpen={isOpen} onClose={onClose} contentLabel="Adicionar Produto" width="620px" height={"auto"} showCloseButton>
       <h2 className="dashboard-modal-title">Adicionar Quantidade de Produto</h2>
 
       <form className="form-dashboard" onSubmit={newValueProduct}>
@@ -120,6 +121,7 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
               placeholder="Selecione um produto"
               onChange={handleSelectProduct}
             />
+            <InfoTooltip text="Produto ao qual você deseja adicionar mais unidades. Ex: Camiseta Azul"/>
           </div>
 
           <div className="input-dashboard-block">
@@ -132,11 +134,13 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
               ref={quantityRef}
               value={selectedProduct ? selectedProduct.quantity : ""}
             />
+            <InfoTooltip text="Quantidade atual disponível no estoque para o produto selecionado."/>
           </div>
 
           <div className="input-dashboard-block">
             <label htmlFor="addQuantity">Adicionar</label>
             <InputDashboard id="addQuantity" name="addQuantity" type="number" />
+            <InfoTooltip text="Número de unidades que você deseja adicionar ao estoque do produto selecionado. Ex.: 10"/>
           </div>
         </div>
 

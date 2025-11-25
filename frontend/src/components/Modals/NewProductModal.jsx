@@ -4,6 +4,7 @@ import BaseModal from "./BaseModal";
 import Button from "../Button/Button";
 import InputDashboard from "../InputDashboard/InputDashboard";
 import SelectDropdown from "../SelectDropdown/SelectDropdown";
+import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 import api from "../../services/api";
 import { useState } from "react";
@@ -140,7 +141,7 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
       onClose={onClose}
       contentLabel="Cadastrar Nova Venda"
       width="500px"
-      height="550px"
+      height={"auto"}
       showCloseButton={true}
     >
       <h2 className="dashboard-modal-title">Registrar Novo Produto</h2>
@@ -148,13 +149,15 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
       <form className="form-dashboard" onSubmit={newProduct}>
         <div className="align-dashboard-form">
           <div className="input-dashboard-block">
-            <label htmlFor="name">Nome </label>
+            <label htmlFor="name">Nome</label>
             <InputDashboard name="name" id="name" />
+            <InfoTooltip text="Nome do produto para identificar no estoque. Ex.: Camiseta Azul"/>
           </div>
 
           <div className="input-dashboard-block">
-            <label htmlFor="description">Descrição </label>
+            <label htmlFor="description">Descrição</label>
             <InputDashboard name="description" id="description"/>
+            <InfoTooltip text="Um resumo rápido do produto. Ex.: Camiseta 100% algodão tamanho M"/>
           </div>
 
           <div className="input-dashboard-block">
@@ -187,26 +190,31 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
               ]}
               onChange={(e) => setCategory(e.target.value)}
             />
+            <InfoTooltip text="Tipo do produto. Ajuda a organizar o estoque. Ex.: Roupas, Eletrônicos"/>
           </div>
 
           <div className="input-dashboard-block">
-            <label htmlFor="quantity">Quantidade </label>
+            <label htmlFor="quantity">Quantidade</label>
             <InputDashboard type="number" name="quantity" id="quantity" />
+            <InfoTooltip text="Quanto você tem desse produto agora. Ex.: 12"/>
           </div>
 
           <div className="input-dashboard-block">
-            <label htmlFor="min">Quantidade Mínima </label>
+            <label htmlFor="min">Quantidade Mínima</label>
             <InputDashboard type="number" name="min" id="min" />
+            <InfoTooltip text="Quantidade mínima antes de avisar que está acabando. Ex.: 3"/>
           </div>
 
           <div className="input-dashboard-block">
             <label htmlFor="price">Preço de Venda</label>
             <InputDashboard name="price" id="price" />
+            <InfoTooltip text="Quanto você cobra do cliente. Ex.: 59,90"/>
           </div>
 
           <div className="input-dashboard-block">
             <label htmlFor="costPrice">Preço de Custo</label>
             <InputDashboard name="costPrice" id="costPrice" />
+            <InfoTooltip text="Quanto você pagou no produto. Ex.: 32,50"/>
           </div>
         </div>
         <div className="button-shadown">

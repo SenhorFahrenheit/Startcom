@@ -188,7 +188,7 @@ const Inventory = () => {
 
         <div className="recent-sells">
           <div className="recentSells-title">
-            <h3>Inventário</h3>
+            <h3>Estoque</h3>
           </div>
 
           <ProductTable
