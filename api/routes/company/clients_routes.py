@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, status
 from ...infra.database import get_database_client
-from ...schemas.client_schemas import ClientCreateRequest, ClientUpdateRequest
+from bson import ObjectId
+from ...schemas.client_schemas import ClientCreateRequest, ClientUpdateRequest, ClientDeleteRequest
 from ...services.client_services import ClientService
 from fastapi import HTTPException
 from ...utils.helper_functions import serialize_mongo
@@ -328,6 +329,88 @@ async def update_client_route(
             "status": "success",
             "message": "Client updated successfully."
         }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Unexpected error: {str(e)}"
+        )
+
+@router.delete("/delete", status_code=status.HTTP_200_OK)
+async def delete_client_route(
+    body: ClientDeleteRequest,
+    db_client=Depends(get_database_client),
+    current_user=Depends(get_current_user)
+):
+    """
+    Delete a client from the authenticated user's company.
+
+    ## Authentication
+    Requires a valid **JWT token** in the `Authorization` header:
+    ```
+    Authorization: Bearer <access_token>
+    ```
+
+    ## Description
+    Removes a client from the company's `clients` array permanently.
+    The client is identified by its unique ID provided in the request body.
+
+    ## Request Body
+    ```json
+    {
+      "client_id": "69019f25b407b09e0d09cff6"
+    }
+    ```
+
+    ## Responses
+
+    ### 200 OK
+    ```json
+    {
+      "status": "success",
+      "message": "Client deleted successfully."
+    }
+    ```
+
+    ### 400 Bad Request
+    ```json
+    {"detail": "Invalid client_id format."}
+    ```
+
+    ### 404 Not Found
+    ```json
+    {"detail": "Client not found in this company."}
+    ```
+
+    ### 401 Unauthorized
+    ```json
+    {"detail": "Invalid or missing token"}
+    ```
+
+    ### 500 Internal Server Error
+    ```json
+    {"detail": "Unexpected error: <error_message>"}
+    ```
+    """
+    try:
+        service = ClientService(db_client)
+        company_id = current_user["companyId"]
+        client_id = body.client_id
+
+        # Validate client_id format
+        if not ObjectId.is_valid(client_id):
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid client_id format.")
+
+        # Verify client exists
+        existing_client = await service.get_client_by_id(company_id, client_id)
+        if not existing_client:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Client not found in this company.")
+
+        # Delete client
+        await service.delete_client(company_id, client_id)
+
+        return {"status": "success", "message": "Client deleted successfully."}
     except HTTPException:
         raise
     except Exception as e:

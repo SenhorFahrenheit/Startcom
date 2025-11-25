@@ -273,3 +273,25 @@ class ClientService:
             return None
         except Exception:
             return None
+    
+    async def delete_client(self, company_id: str, client_id: str) -> None:
+        """
+        Deletes a client from the company's embedded 'clients' array.
+        Raises HTTPException on failure.
+        """
+        # Validate ObjectIds
+        if not ObjectId.is_valid(client_id):
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid client_id format.")
+        if not ObjectId.is_valid(company_id):
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid company_id format.")
+
+        result = await self.company_collection.update_one(
+            {"_id": ObjectId(company_id), "clients._id": ObjectId(client_id)},
+            {
+                "$pull": {"clients": {"_id": ObjectId(client_id)}},
+                "$set": {"updatedAt": datetime.utcnow()}
+            }
+        )
+
+        if result.modified_count == 0:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Failed to delete client.")

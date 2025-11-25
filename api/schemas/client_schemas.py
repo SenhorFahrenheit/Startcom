@@ -66,3 +66,14 @@ class ClientUpdateRequest(BaseModel):
             }
         }
 
+
+class ClientDeleteRequest(BaseModel):
+    client_id: str = Field(..., min_length=24, max_length=24, description="MongoDB ObjectId")
+
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "client_id": "69019f25b407b09e0d09cff6"
+            }
+        }
+
