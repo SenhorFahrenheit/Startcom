@@ -45,25 +45,25 @@ const ClientInformationCard = ({
         </div>
 
         {!loading && (
-          <div className="dropdown-container">
+          <div className="dropdown-container-client">
             <button
-              className="dropdown-trigger"
+              className="dropdown-trigger-client"
               onClick={() => setOpenMenu(prev => !prev)}
             >
               <Ellipsis />
             </button>
 
             {openMenu && (
-              <div className="dropdown-menu">
+              <div className="dropdown-menu-client">
                 <button
-                  className="dropdown-item edit"
+                  className="dropdown-item-client edit"
                   onClick={() => { setOpenMenu(false); onEdit(_id); }}
                 >
                   <LuPencil />
                 </button>
 
                 <button
-                  className="dropdown-item delete"
+                  className="dropdown-item-client delete"
                   onClick={() => { setOpenMenu(false); onDelete(_id); }}
                 >
                   <LuTrash2 />

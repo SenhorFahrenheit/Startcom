@@ -95,7 +95,7 @@ const SalesTable = ({ dateFilter, statusFilter, search, refreshTrigger }) => {
             <th>Data</th>
             <th>Valor</th>
             <th>Itens</th>
-            <th>Ações</th>
+            <th>Ação</th>
           </tr>
         </thead>
         <tbody>

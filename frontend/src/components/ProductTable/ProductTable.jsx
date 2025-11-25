@@ -1,6 +1,6 @@
 import "./ProductTable.css";
 import { useEffect, useState } from "react";
-import { LuPackage } from "react-icons/lu";
+import { LuPackage, LuTrash2 } from "react-icons/lu";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { formatCurrency } from "../../utils/format";
@@ -41,6 +41,7 @@ const ProductTable = ({ products, categoryFilter, statusFilter, search, loading 
             <th>Preço de Venda</th>
             <th>Status</th>
             <th>Valor Investido</th>
+            <th>Ação</th>
           </tr>
         </thead>
 
@@ -62,6 +63,7 @@ const ProductTable = ({ products, categoryFilter, statusFilter, search, loading 
                   <td className="product-price-item"><Skeleton width={70} /></td>
                   <td><Skeleton width={70} height={18} borderRadius={10} /></td>
                   <td className="product-totalValue-item"><Skeleton width={80} /></td>
+                  <td><Skeleton width={40}/></td>
                 </tr>
               ))
             : filteredProducts.map((product) => (
@@ -100,6 +102,12 @@ const ProductTable = ({ products, categoryFilter, statusFilter, search, loading 
 
                   <td className="product-totalValue-item">
                     {formatCurrency(product.totalValue)}
+                  </td>
+
+                  <td>
+                    <button className="delete-btn">
+                        <LuTrash2 color="red"/>
+                    </button>
                   </td>
                 </tr>
               ))

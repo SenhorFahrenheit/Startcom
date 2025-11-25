@@ -81,11 +81,11 @@
     color: #F59E0B;
 }
 
-.dropdown-container {
+.dropdown-container-client {
     position: relative;
 }
 
-.dropdown-trigger {
+.dropdown-trigger-client {
     background: none;
     border: none;
     cursor: pointer;
@@ -93,35 +93,35 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 6px;
+    border-radius: var(--border-radius);
     color: var(--quaternary-color);
     transition: all ease 150ms;
 }
 
-.dropdown-trigger:hover {
+.dropdown-trigger-client:hover {
     background-color: #f3f4f6;
 }
 
-.dropdown-trigger svg {
+.dropdown-trigger-client svg {
     width: 20px;
     height: 20px;
 }
 
-.dropdown-menu {
+.dropdown-menu-client {
     position: absolute;
-    top: 100%;
-    right: 0;
+    top: 90%;
+    right: -5px;
     margin-top: 4px;
     background-color: white;
     border: 1px solid #e5e7eb;
     border-radius: var(--border-radius);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    max-width: 60px;
+    max-width: 100px;
     z-index: 10;
     overflow: hidden;
 }
 
-.dropdown-item {
+.dropdown-item-client {
     width: 100%;
     padding: 10px 12px;
     border: none;
@@ -137,24 +137,24 @@
     text-align: left;
 }
 
-.dropdown-item svg {
+.dropdown-item-client svg {
     width: 16px;
     height: 16px;
 }
 
-.dropdown-item.edit {
+.dropdown-item-client.edit {
     color: var(--primary-color);
 }
 
-.dropdown-item.edit:hover {
+.dropdown-item-client.edit:hover {
     background-color: #01768820;
 }
 
-.dropdown-item.delete {
+.dropdown-item-client.delete {
     color: #ef4444;
 }
 
-.dropdown-item.delete:hover {
+.dropdown-item-client.delete:hover {
     background-color: #ef444420;
 }
 

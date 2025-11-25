@@ -24,7 +24,6 @@ export function AuthProvider({ children }) {
     setPageLoading(false);
   }, []);
 
-
   const isAuthenticated = !!token;
 
   const login = (tokenValue, userData = null) => {
@@ -32,10 +31,12 @@ export function AuthProvider({ children }) {
     localStorage.setItem("token", tokenValue);
 
     if (userData) {
-      setUser(userData);
-      localStorage.setItem("user", JSON.stringify(userData));
+      const finalUser = { ...userData };
+      setUser(finalUser);
+      localStorage.setItem("user", JSON.stringify(finalUser));
     }
   };
+
 
   const logout = () => {
     setToken(null);

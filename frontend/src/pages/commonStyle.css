@@ -28,6 +28,7 @@
   flex: 1;
   background-color: #FFFFFF;
   padding: 32px;
+  margin-left: 256px;
 }
 
 .title-page-section {
@@ -104,6 +105,7 @@
 @media (max-width: 768px) {
     .content-page-section {
         width: 100%;
+        margin-left: 0;
     }
 
     .align-heading {

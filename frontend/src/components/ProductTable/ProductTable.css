@@ -151,6 +151,13 @@
     font-weight: 600;
 }
 
+.delete-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
 .Normal { background-color: #f0fdf4; color: #059669; border: 1px solid #05966940; }
 .Baixo { background-color: #fffbeb; color: #f59e0b; border: 1px solid #f59e0b40; }
 .Crítico { background-color: #FEE2E2; color: #DC2626; border: 1px solid #e42b0140; }

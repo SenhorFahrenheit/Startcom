@@ -4,13 +4,13 @@ html, body {
 
 aside {
     width: 256px;
-    min-height: 100%;
+    min-height: 100vh;
     background-color: var(--primary-layout-background-color);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    position: relative;
+    position: fixed;
 }
 
 .sidebar-main {
@@ -45,7 +45,7 @@ aside {
   }
 
   .sidebar-header {
-    justify-content: center; /* logo centralizada */
+    justify-content: center;
   }
 
   .close-sidebar {

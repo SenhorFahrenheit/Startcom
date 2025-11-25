@@ -37,7 +37,12 @@ export const useLoginForm = (onSuccess) => {
 
       const token = response.access_token.access_token;
       const companyId = response.access_token.company_id;
-      login(token, { companyId });
+
+      login(token, {
+        companyId,
+        email: loginEmail,
+      });
+
 
       toast.success("Login realizado!", { containerId: "toast-root" });
 
