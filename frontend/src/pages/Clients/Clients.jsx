@@ -79,7 +79,7 @@ const Clients = () => {
             clientName: c.name,
             clientType: c.category ? c.category[0].toUpperCase() + c.category.slice(1) : "Regular",
             email: c.email || "Não Informado",
-            phoneNumber: formatPhone(c.phone) || "Não Informado",
+            phoneNumber: formatPhone(c.phone?.replace(/^\+55/, "")) || "Não Informado",
             city: c.address || "Não Informado",
             totalSpent: c.totalSpent,
             lastPurchase: c.lastPurchase ? formatDateBR(c.lastPurchase) : "Ainda não comprou",
