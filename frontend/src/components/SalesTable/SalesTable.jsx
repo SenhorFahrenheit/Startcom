@@ -1,6 +1,6 @@
 import "./SalesTable.css";
 import { useEffect, useState } from "react";
-import { LuEye } from "react-icons/lu";
+import { Eye, EyeOff } from 'lucide-react';
 import api from "../../services/api";
 import { formatCurrency, formatDateBR } from "../../utils/format";
 import Skeleton from "react-loading-skeleton";
@@ -10,6 +10,27 @@ const SalesTable = ({ dateFilter, statusFilter, search, refreshTrigger }) => {
   const [sales, setSales] = useState([]);
   const [filteredSales, setFilteredSales] = useState([]);
   const [skeletonLoading, setSkeletonLoading] = useState(true);
+  const [blurredRows, setBlurredRows] = useState(() => {
+    const saved = localStorage.getItem("blurredSales");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const blurSale = (id) => {
+    setBlurredRows((prev) =>
+      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
+    );
+  };
+
+  useEffect(() => {
+    const saved = localStorage.getItem("blurredSales");
+    if (saved) {
+      setBlurredRows(JSON.parse(saved));
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("blurredSales", JSON.stringify(blurredRows));
+  }, [blurredRows]);
 
   const fetchSales = async () => {
     try {
@@ -112,7 +133,7 @@ const SalesTable = ({ dateFilter, statusFilter, search, refreshTrigger }) => {
               ))
             : filteredSales.length > 0
             ? filteredSales.map((sale) => (
-                <tr key={sale.id}>
+                <tr key={sale.id} className={blurredRows.includes(sale.id) ? "blurred-row" : ""}>
                   <td>#{String(sale.id).slice(-4).toUpperCase()}</td>
                   <td>{sale.client}</td>
                   <td>{sale.dateBR}</td>
@@ -121,11 +142,19 @@ const SalesTable = ({ dateFilter, statusFilter, search, refreshTrigger }) => {
                   </td>
                   <td>{sale.items} itens</td>
                   <td>
-                    <button className="view-btn">
-                      <LuEye color="var(--primary-color)" />
+                    <button
+                      className={`view-btn ${blurredRows.includes(sale.id) ? "view-btn-blurred" : ""}`}
+                      onClick={() => blurSale(sale.id)}
+                    >
+                      {blurredRows.includes(sale.id) ? (
+                        <EyeOff color="var(--primary-color)" />
+                      ) : (
+                        <Eye color="var(--primary-color)" />
+                      )}
                     </button>
                   </td>
                 </tr>
+
               ))
             : (
               <tr>

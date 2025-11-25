@@ -69,3 +69,18 @@
   cursor: pointer;
   font-size: 16px;
 }
+
+.blurred-row {
+  position: relative;
+}
+
+.blurred-row td {
+  filter: blur(3px);
+  opacity: 0.5;
+  transition: 0.2s;
+}
+
+.blurred-row td:last-child {
+  filter: none !important;
+  opacity: 1 !important;
+}
