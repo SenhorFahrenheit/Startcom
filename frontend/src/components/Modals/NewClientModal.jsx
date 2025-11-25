@@ -107,7 +107,7 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
 
           <div className="input-dashboard-block">
             <label htmlFor="telefone">Telefone</label>
-            <InputDashboard type="tel" maxLength={14} name="telefone" id="telefone" value={telefone} onChange={handleTelefoneChange} />
+            <InputDashboard type="tel" maxLength={15} name="telefone" id="telefone" value={telefone} onChange={handleTelefoneChange} />
             <InfoToolTip text="Telefone ou celular do cliente. Use o número principal. Ex.: (11) 91234-5678"/>
           </div>
 
