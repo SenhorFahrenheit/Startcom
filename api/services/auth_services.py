@@ -81,6 +81,8 @@ class AuthService:
         return {
             "access_token": token,
             "token_type": "bearer",
-            "company_id": companyId
+            "company_id": companyId,
+            "email": user["email"],
+            "name": user["name"]
         }
 

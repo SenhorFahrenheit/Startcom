@@ -26,7 +26,9 @@ async def login_route(login_data: LoginRequest):
     ```json
     {
       "access_token": "<jwt_token>",
-      "token_type": "bearer"
+      "token_type": "bearer",
+      "email": "emailexample@gmail.com",
+      "name: ": "username"
     }
     ```
 
@@ -40,8 +42,10 @@ async def login_route(login_data: LoginRequest):
 
     try:
         # Call the AuthService to authenticate the user
-        token = await auth_service.login(login_data.email, login_data.password)
-        return {"access_token": token, "token_type": "bearer"}
+        # token, email, name = await auth_service.login(login_data.email, login_data.password)
+        result = await auth_service.login(login_data.email, login_data.password)
+        token = result["access_token"]
+        return {"access_token": token, "token_type": "bearer", "email": result['email'], "name: ": result['name']}
     except Exception as e:
         # In case of failed login, raise an HTTP 401 Unauthorized
         raise HTTPException(status_code=401, detail=str(e))
