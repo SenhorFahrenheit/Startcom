@@ -15,6 +15,15 @@ const SalesTable = ({ dateFilter, statusFilter, search, refreshTrigger }) => {
     return saved ? JSON.parse(saved) : [];
   });
 
+  const hideAll = () => {
+    const allIds = filteredSales.map(sale => sale.id);
+    setBlurredRows(allIds);
+  };
+
+  const showAll = () => {
+    setBlurredRows([]);
+  };
+
   const blurSale = (id) => {
     setBlurredRows((prev) =>
       prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
@@ -108,6 +117,17 @@ const SalesTable = ({ dateFilter, statusFilter, search, refreshTrigger }) => {
 
   return (
     <div className="sales-table-container">
+      <div className="sales-actions">
+        {blurredRows.length === filteredSales.length && filteredSales.length > 0 ? (
+          <button className="show-hide-btn" onClick={showAll}>
+            Revelar Vendas
+          </button>
+        ) : (
+          <button className="show-hide-btn" onClick={hideAll}>
+            Ocultar Vendas
+          </button>
+        )}
+      </div>
       <table className="sales-table">
         <thead>
           <tr>

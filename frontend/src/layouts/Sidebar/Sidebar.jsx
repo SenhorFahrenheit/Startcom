@@ -68,16 +68,11 @@ const Sidebar = ({ isOpen, onClose }) => {
 
       <div className="account-block">
         <div className="account-view">
-          {/*<div className="circle-img">
-            {user?.name ? user.name[0].toUpperCase() : "U"}
-          </div>*/}
-
           <div className="circle-img">
-            {user?.email ? user.email[0].toUpperCase() : "U"}
+            {user?.name ? user.name[0].toUpperCase() : "U"}
           </div>
-
           <div className="user-info">
-            {/*<p className="user-name-sidebar">{user?.name || "Usuário"}</p>*/}
+            <p className="user-name-sidebar">{user?.name || "Usuário"}</p>
             <p className="email-sidebar">{user?.email || "usuario@gmail.com"}</p>
           </div>
         </div>

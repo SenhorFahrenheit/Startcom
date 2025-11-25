@@ -1,16 +1,6 @@
 import { useState } from "react";
 
-/**
- * Hook to control authentication modals
- * 
- * activeModal can have the following values:
- * - "authenticator"
- * - "forgot"
- * - "code"
- * - "password"
- * - null (no modal is open)
- */
-export function useAuthModals() {
+export function useAuthModals(selectedProductSetter) {
   const [activeModal, setActiveModal] = useState(null);
 
   const openAuthenticator = () => setActiveModal("authenticator");
@@ -24,6 +14,16 @@ export function useAuthModals() {
   const openReport = () => setActiveModal("report");
 
   const openModifyProduct = () => setActiveModal("modifyInventory");
+  const openModifyClient = () => setActiveModal("modifyClient");
+
+  const openDeleteClient = () => setActiveModal("deleteClient");
+
+  const openDeleteInventory = (product) => {
+    if (selectedProductSetter) {
+      selectedProductSetter(product);
+    }
+    setActiveModal("deleteProduct");
+  };
 
   const closeModal = () => setActiveModal(null);
 
@@ -35,9 +35,12 @@ export function useAuthModals() {
     openPassword,
     openSale,
     openProduct,
-    openModifyProduct,
     openClient,
     openReport,
+    openModifyProduct,
+    openModifyClient,
+    openDeleteClient,
+    openDeleteInventory,
     closeModal,
   };
 }

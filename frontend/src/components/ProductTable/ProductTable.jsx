@@ -5,7 +5,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { formatCurrency } from "../../utils/format";
 
-const ProductTable = ({ products, categoryFilter, statusFilter, search, loading }) => {
+const ProductTable = ({ products, categoryFilter, statusFilter, search, loading, openDeleteInventory }) => {
   const [filteredProducts, setFilteredProducts] = useState([]);
 
   useEffect(() => {
@@ -105,8 +105,8 @@ const ProductTable = ({ products, categoryFilter, statusFilter, search, loading 
                   </td>
 
                   <td>
-                    <button className="delete-btn">
-                        <LuTrash2 color="red"/>
+                    <button className="delete-btn" onClick={() => openDeleteInventory(product)}>
+                      <LuTrash2 color="red" />
                     </button>
                   </td>
                 </tr>

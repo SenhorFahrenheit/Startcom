@@ -35,12 +35,14 @@ export const useLoginForm = (onSuccess) => {
         throw new Error("Resposta de login inválida.");
       }
 
-      const token = response.access_token.access_token;
-      const companyId = response.access_token.company_id;
+      const token = response.access_token;
+      const companyId = response.companyId;
+      const name = response.name;
 
       login(token, {
         companyId,
         email: loginEmail,
+        name: name,
       });
 
 

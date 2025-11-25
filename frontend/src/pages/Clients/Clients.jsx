@@ -8,6 +8,8 @@ import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
 import Button from "../../components/Button/Button";
 
 import NewClientModal from "../../components/Modals/NewClientModal";
+import ModifyClientModal from "../../components/Modals/ModifyClientModal";
+import DeleteClientModal from "../../components/Modals/DeleteClientModal";
 import ClientInformationCard from "../../components/ClientInformationCard/ClientInformationCard";
 import ClientCard from "../../components/ClientCard/ClientCard";
 import FilterSelect from "../../components/FilterSelect/FilterSelect";
@@ -32,7 +34,7 @@ const Clients = () => {
         }
   }, [pageLoading, isAuthenticated]);
 
-  const { activeModal, openClient, closeModal } = useAuthModals();
+  const { activeModal, openClient, openModifyClient, openDeleteClient, closeModal } = useAuthModals();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [search, setSearch] = useState("");
@@ -48,18 +50,18 @@ const Clients = () => {
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [editingClient, setEditingClient] = useState(null);
 
   const handleEdit = (id) => {
-    //console.log("Editar cliente", id);
+    const found = clients.find(c => c.id === id);
+    setEditingClient(found);
+    openModifyClient();
   };
 
-  const handleDelete = async (id) => {
-    /*try {
-      await api.delete(`/Client/delete/${id}`);
-      setClients(prev => prev.filter(c => c.id !== id));
-    } catch (err) {
-      console.error(err);
-    }*/
+  const handleDelete = (id) => {
+    const found = clients.find(c => c.id === id);
+    setEditingClient(found);
+    openDeleteClient();
   };
 
   const fetchOverviewAndClients = async () => {
@@ -70,7 +72,6 @@ const Clients = () => {
 
       if (data.status === "success") {
         setOverview(data.overview);
-        console.log(overview)
 
         const formattedClients = (data.overview.clients || [])
           .map((c) => ({
@@ -239,7 +240,28 @@ const Clients = () => {
         setClients(prevClients => [clientFormatted, ...prevClients]);
         fetchOverviewAndClients();
       }}
+      />
 
+      <ModifyClientModal
+        isOpen={activeModal === "modifyClient"}
+        onClose={() => {
+          setEditingClient(null);
+          closeModal();
+        }}
+        clientData={editingClient}
+        onSuccess={() => {
+          fetchOverviewAndClients();
+        }}
+      />
+
+      <DeleteClientModal
+        isOpen={activeModal === "deleteClient"}
+        onClose={closeModal}
+        onSuccess={(deletedClientId) => {
+          setClients(prev => prev.filter(c => c.id !== deletedClientId));
+          fetchOverviewAndClients();
+        }}
+        clientData={editingClient}
       />
     </section>
   )
