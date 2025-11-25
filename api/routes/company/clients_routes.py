@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status
 from ...infra.database import get_database_client
-from ...schemas.client_schemas import ClientCreateRequest
+from ...schemas.client_schemas import ClientCreateRequest, ClientUpdateRequest
 from ...services.client_services import ClientService
 from fastapi import HTTPException
 from ...utils.helper_functions import serialize_mongo
@@ -227,3 +227,111 @@ async def get_client_names(
 
     service = ClientService(db_client)
     return await service.get_all_client_names(company_id)
+
+@router.put("/update_client", status_code=status.HTTP_200_OK)
+async def update_client_route(
+    body: ClientUpdateRequest,
+    db_client=Depends(get_database_client),
+    current_user=Depends(get_current_user)
+):
+    """
+    Update client information in the authenticated user's company.
+
+    ## Authentication
+    Requires a valid **JWT token** in the `Authorization` header:
+    ```
+    Authorization: Bearer <access_token>
+    ```
+
+    ## Description
+    Updates an existing client's information. Only the fields provided in the request body will be updated.
+    **Note:** The `category` field cannot be modified.
+
+    ## Request Body
+    ```json
+    {
+      "client_id": "69019f25b407b09e0d09cff6",
+      "name": "John Doe Updated",
+      "email": "john.updated@example.com",
+      "phone": "+5511999999999",
+      "address": "Rua Central, 456"
+    }
+    ```
+
+    ## Responses
+
+    ### 200 OK
+    ```json
+    {
+      "status": "success",
+      "message": "Client updated successfully."
+    }
+    ```
+
+    ### 400 Bad Request
+    ```json
+    {"detail": "Invalid client_id format."}
+    ```
+
+    ### 404 Not Found
+    ```json
+    {"detail": "Client not found in this company."}
+    ```
+
+    ### 409 Conflict
+    ```json
+    {"detail": "A client with the same name and email already exists in this company."}
+    ```
+
+    ### 401 Unauthorized
+    ```json
+    {"detail": "Invalid or missing token"}
+    ```
+
+    ### 500 Internal Server Error
+    ```json
+    {"detail": "Failed to update client."}
+    ```
+    """
+    try:
+        service = ClientService(db_client)
+        company_id = current_user["companyId"]
+        client_id = body.client_id
+
+        # Verify client exists
+        existing_client = await service.get_client_by_id(company_id, client_id)
+        if not existing_client:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Client not found in this company."
+            )
+
+        # Check for duplicate name and email if they are being updated
+        if body.name or body.email:
+            new_name = body.name or existing_client.get("name")
+            new_email = body.email or existing_client.get("email")
+            
+            existing_by_name = await service.get_client_by_name(company_id, new_name)
+            existing_by_email = await service.get_client_by_email(company_id, new_email)
+
+            # Allow if it's the same client being updated
+            if (existing_by_name and str(existing_by_name.get("_id")) != client_id) or \
+               (existing_by_email and str(existing_by_email.get("_id")) != client_id):
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="A client with the same name and email already exists in this company."
+                )
+
+        await service.update_client(company_id, client_id, body)
+
+        return {
+            "status": "success",
+            "message": "Client updated successfully."
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Unexpected error: {str(e)}"
+        )

@@ -46,3 +46,23 @@ class ClientNamesResponse(BaseModel):
     status: str = Field(..., description="Operation result status")
     clients: list[str] = Field(..., description="List of all client names")
 
+
+class ClientUpdateRequest(BaseModel):
+    client_id: str
+    name: Optional[str] = None
+    email: Optional[str] = None
+    phone: Optional[str] = None
+    address: Optional[str] = None
+    # category: Optional[str] = None
+    class Config:
+        json_schema_extra = {
+            "example": {
+                "client_id": "69019f25b407b09e0d09cff6",
+                "name": "John Doe Updated",
+                "email": "john.updated@example.com",
+                "phone": "+5511999999999",
+                "address": "Rua Central, 456",
+                # "category": "VIP"
+            }
+        }
+

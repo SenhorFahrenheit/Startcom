@@ -203,3 +203,73 @@ class ClientService:
         sales = company.get("sales", [])
         total = sum(float(s.get("total", 0)) for s in sales if s.get("clientId") == client_id)
         return round(total, 2)
+
+    async def update_client(self, company_id: str, client_id: str, body) -> None:
+        """
+        Update a client inside the company's embedded 'clients' array.
+        The update is based on company_id and client_id and the fields provided in body.
+        IMPORTANT: category must not be changed/updated here.
+        """
+        # Validate ObjectIds
+        if not ObjectId.is_valid(client_id):
+            raise HTTPException(status_code=400, detail="Invalid client_id format.")
+        if not ObjectId.is_valid(company_id):
+            raise HTTPException(status_code=400, detail="Invalid company_id format.")
+        
+        # Prepare set operations for provided fields (ignore None)
+        set_ops = {}
+        if getattr(body, "name", None) is not None:
+            set_ops["clients.$[elem].name"] = body.name
+        if getattr(body, "email", None) is not None:
+            set_ops["clients.$[elem].email"] = body.email
+        if getattr(body, "phone", None) is not None:
+            set_ops["clients.$[elem].phone"] = body.phone
+        if getattr(body, "address", None) is not None:
+            set_ops["clients.$[elem].address"] = body.address
+
+        # Always update company's updatedAt
+        set_ops["updatedAt"] = datetime.utcnow()
+
+        # If no client-updatable fields provided, still touch updatedAt in company
+        if len(set_ops) == 1 and "updatedAt" in set_ops:
+            result = await self.company_collection.update_one(
+                {"_id": ObjectId(company_id), "clients._id": ObjectId(client_id)},
+                {"$set": {"updatedAt": set_ops["updatedAt"]}}
+            )
+            if result.modified_count == 0:
+                raise HTTPException(status_code=500, detail="Failed to update client.")
+            return
+
+        # Perform array update with arrayFilters to target the specific client
+        result = await self.company_collection.update_one(
+            {"_id": ObjectId(company_id)},
+            {"$set": set_ops},
+            array_filters=[{"elem._id": ObjectId(client_id)}]
+        )
+
+        if result.modified_count == 0:
+            raise HTTPException(status_code=500, detail="Failed to update client.")
+
+    async def get_client_by_id(self, company_id: str, client_id: str):
+        """
+        Searches for a client by ID inside a specific company's embedded 'clients' array.
+        Returns the client if found, None otherwise.
+        """
+        try:
+            # Validate if client_id is a valid ObjectId
+            if not ObjectId.is_valid(client_id):
+                return None
+                
+            company = await self.company_collection.find_one(
+                {
+                    "_id": ObjectId(company_id),
+                    "clients._id": ObjectId(client_id)
+                },
+                {"clients.$": 1}
+            )
+
+            if company and "clients" in company and len(company["clients"]) > 0:
+                return company["clients"][0]
+            return None
+        except Exception:
+            return None
