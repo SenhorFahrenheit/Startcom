@@ -84,3 +84,23 @@
   filter: none !important;
   opacity: 1 !important;
 }
+
+.sales-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.show-hide-btn {
+  padding: 6px 12px;
+  background-color: var(--primary-color);
+  border: none;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.show-hide-btn:hover {
+  opacity: .9;
+}
