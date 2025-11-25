@@ -8,6 +8,7 @@ import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
 import Button from "../../components/Button/Button";
 
 import NewClientModal from "../../components/Modals/NewClientModal";
+import ModifyClientModal from "../../components/Modals/ModifyClientModal";
 import ClientInformationCard from "../../components/ClientInformationCard/ClientInformationCard";
 import ClientCard from "../../components/ClientCard/ClientCard";
 import FilterSelect from "../../components/FilterSelect/FilterSelect";
@@ -32,7 +33,7 @@ const Clients = () => {
         }
   }, [pageLoading, isAuthenticated]);
 
-  const { activeModal, openClient, closeModal } = useAuthModals();
+  const { activeModal, openClient, openModifyClient, closeModal } = useAuthModals();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const [search, setSearch] = useState("");
@@ -48,10 +49,14 @@ const Clients = () => {
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [editingClientId, setEditingClientId] = useState(null);
+
 
   const handleEdit = (id) => {
-    //console.log("Editar cliente", id);
+    setEditingClientId(id);
+    openModifyClient();
   };
+
 
   const handleDelete = async (id) => {
     /*try {
@@ -239,7 +244,18 @@ const Clients = () => {
         setClients(prevClients => [clientFormatted, ...prevClients]);
         fetchOverviewAndClients();
       }}
+      />
 
+      <ModifyClientModal
+        isOpen={activeModal === "modifyClient"}
+        onClose={() => {
+          setEditingClientId(null);
+          closeModal();
+        }}
+        clientId={editingClientId}
+        onSuccess={() => {
+          fetchOverviewAndClients();
+        }}
       />
     </section>
   )

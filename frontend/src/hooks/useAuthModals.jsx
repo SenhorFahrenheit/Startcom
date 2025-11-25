@@ -24,6 +24,7 @@ export function useAuthModals() {
   const openReport = () => setActiveModal("report");
 
   const openModifyProduct = () => setActiveModal("modifyInventory");
+  const openModifyClient = () => setActiveModal("modifyClient");
 
   const closeModal = () => setActiveModal(null);
 
@@ -36,6 +37,7 @@ export function useAuthModals() {
     openSale,
     openProduct,
     openModifyProduct,
+    openModifyClient,
     openClient,
     openReport,
     closeModal,
