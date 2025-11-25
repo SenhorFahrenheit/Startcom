@@ -24,7 +24,9 @@ const ModifyClientModal = ({ isOpen, onClose, onSuccess, clientData }) => {
 
   useEffect(() => {
     if (clientData && isOpen) {
-      const formattedPhone = formatPhone(clientData.phoneNumber || "");
+      let rawPhone = clientData.phoneNumber || "";
+      rawPhone = rawPhone.replace(/^\+55/, "");
+      const formattedPhone = formatPhone(rawPhone);
 
       setNome(clientData.clientName || "");
       setEmail(clientData.email || "");
@@ -49,88 +51,69 @@ const ModifyClientModal = ({ isOpen, onClose, onSuccess, clientData }) => {
       cidade !== initialData.cidade
     );
 
+    const modifyClient = async (e) => {
+      e.preventDefault();
 
-  const modifyClient = async (e) => {
-    e.preventDefault();
+      const formData = new FormData(e.target);
+      const data = Object.fromEntries(formData.entries());
 
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData.entries());
+      let hasError = false;
 
-    let hasError = false;
+      if (!data.nome.trim()) {
+        toast.error("O campo Nome não pode estar vazio!", { containerId: "toast-root" });
+        hasError = true;
+      }
+      if (!data.email.trim()) {
+        toast.error("O campo Email não pode estar vazio!", { containerId: "toast-root" });
+        hasError = true;
+      }
+      if (!data.telefone.trim()) {
+        toast.error("O campo telefone não pode estar vazio!", { containerId: "toast-root" });
+        hasError = true;
+      }
+      if (!data.cidade.trim()) {
+        toast.error("O campo cidade não pode estar vazio!", { containerId: "toast-root" });
+        hasError = true;
+      }
 
-    if (!data.nome.trim()) {
-      toast.error("O campo Nome não pode estar vazio!", { position: "top-right", theme: "light", containerId: "toast-root" });
-      hasError = true;
-    }
-    if (!data.email.trim()) {
-      toast.error("O campo Email não pode estar vazio!", { position: "top-right", theme: "light", containerId: "toast-root" });
-      hasError = true;
-    }
-    if (!data.telefone.trim()) {
-      toast.error("O campo telefone não pode estar vazio!", { position: "top-right", theme: "light", containerId: "toast-root" });
-      hasError = true;
-    }
-    if (!data.cidade.trim()) {
-      toast.error("O campo cidade não pode estar vazio!", { position: "top-right", theme: "light", containerId: "toast-root" });
-      hasError = true;
-    }
+      if (hasError) return;
 
-    if (hasError) return;
+      const body = {
+        client_id: clientData.id,
+        name: data.nome,
+        email: data.email,
+        phone: "+55" + data.telefone.replace(/\D/g, ""),
+        address: data.cidade 
+      };
 
-    const body = {
-      name: data.nome,
-      email: data.email,
-      phone: data.telefone.replace(/\D/g, ""),
-      city: data.cidade,
-      category: (data.tipo || "Regular").toLowerCase()
+      try {
+        setButtonLoading(true);
+
+        const response = await api.put("/Company/clients/update_client", body);
+
+        toast.success("Cliente atualizado com sucesso!", {
+          containerId: "toast-root",
+        });
+
+        onClose();
+        if (onSuccess) onSuccess(response.data);
+
+      } catch (error) {
+        const status = error.response?.status;
+
+        if (status === 409) {
+          toast.error("Já existe um cliente com esse nome ou email.", { containerId: "toast-root" });
+        } else if (status === 404) {
+          toast.error("Cliente não encontrado.", { containerId: "toast-root" });
+        } else if (status === 400) {
+          toast.error("ID de cliente inválido.", { containerId: "toast-root" });
+        } else {
+          toast.error("Falha ao atualizar o cliente.", { containerId: "toast-root" });
+        }
+      } finally {
+        setTimeout(() => setButtonLoading(false), 1500);
+      }
     };
-
-    try {
-      setButtonLoading(true);
-
-      const response = await api.put(
-        `/Company/clients/${clientData.clientId}`,
-        body
-      );
-
-      toast.success("Cliente atualizado com sucesso!", {
-        position: "top-right",
-        containerId: "toast-root",
-      });
-
-      onClose();
-
-      if (onSuccess) {
-        onSuccess(response.data);
-      }
-    } catch (error) {
-      const status = error.response?.status;
-
-      if (status === 409) {
-        toast.error("Já existe um cliente com esse nome ou email.", {
-          position: "top-right",
-          containerId: "toast-root",
-        });
-      } else if (status === 404) {
-        toast.error("Cliente não encontrado.", {
-          position: "top-right",
-          containerId: "toast-root",
-        });
-      } else if (status === 500) {
-        toast.error("Erro interno no servidor. Tente novamente depois.", {
-          position: "top-right",
-          containerId: "toast-root",
-        });
-      } else {
-        toast.error("Falha ao atualizar o cliente.", {
-          position: "top-right",
-          containerId: "toast-root",
-        });
-      }
-    } finally {
-      setTimeout(() => setButtonLoading(false), 1500);
-    }
-  };
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} contentLabel="Cadastrar Novo Cliente" width="430px" height={"auto"} showCloseButton={true}>
