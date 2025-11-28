@@ -44,7 +44,7 @@ const SalesTable = ({ dateFilter, statusFilter, search, refreshTrigger }) => {
   const fetchSales = async () => {
     try {
       setSkeletonLoading(true);
-      const response = await api.post("/Company/sales/get_all");
+      const response = await api.get("/Company/sales/get_all");
       if (!response.data.sales) return;
 
       const data = response.data.sales.map((sale) => {

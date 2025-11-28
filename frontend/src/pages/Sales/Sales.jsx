@@ -56,7 +56,7 @@ const Sales = () => {
   const fetchOverview = async () => {
   try {
     setSkeletonLoading(true);
-    const response = await api.post("/Company/sales/overview");
+    const response = await api.get("/Company/sales/overview");
     const data = response.data.overview;
 
     setOverview({

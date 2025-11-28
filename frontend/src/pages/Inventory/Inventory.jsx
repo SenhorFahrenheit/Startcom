@@ -58,7 +58,7 @@ const Inventory = () => {
   const fetchInventory = async () => {
     try {
       setLoading(true);
-      const response = await api.post("/Company/inventory/overview");
+      const response = await api.get("/Company/inventory/overview");
       const data = response.data;
 
       if (!data || typeof data !== "object") throw new Error("Resposta inválida do servidor");
