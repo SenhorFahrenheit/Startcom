@@ -51,8 +51,7 @@ async def create_sale_route(
     return {"status": "success", "message": "Sale created successfully."}
 
 
-
-@router.post("/get_all", status_code=status.HTTP_200_OK)
+@router.get("/get_all", status_code=status.HTTP_200_OK)
 async def get_all_sales_route(
     db_client=Depends(get_database_client),
     current_user=Depends(get_current_user)
@@ -150,8 +149,7 @@ async def get_all_sales_route(
     }
 
 
-
-@router.post("/overview", status_code=status.HTTP_200_OK)
+@router.get("/overview", status_code=status.HTTP_200_OK)
 async def get_sales_overview_route(
     db_client=Depends(get_database_client),
     current_user=Depends(get_current_user)

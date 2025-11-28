@@ -9,8 +9,7 @@ from ...utils.security import get_current_user
 
 router = APIRouter(prefix="/clients", tags=["Clients"])
 
-
-@router.post("/overview_full", status_code=status.HTTP_200_OK)
+@router.get("/overview_full", status_code=status.HTTP_200_OK)
 async def get_clients_overview_full(
     db_client=Depends(get_database_client),
     current_user=Depends(get_current_user)
@@ -178,7 +177,7 @@ async def create_client_route(
         "message": "Client created successfully."
     }
 
-@router.post("/names", status_code=status.HTTP_200_OK)
+@router.get("/names", status_code=status.HTTP_200_OK)
 async def get_client_names(
     db_client=Depends(get_database_client),
     current_user=Depends(get_current_user)

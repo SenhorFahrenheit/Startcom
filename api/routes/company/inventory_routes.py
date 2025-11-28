@@ -11,8 +11,7 @@ from ...services.inventory_services import InventoryService
 
 router = APIRouter(prefix="/inventory", tags=["Inventory"])
 
-
-@router.post("/full", status_code=status.HTTP_200_OK)
+@router.get("/full", status_code=status.HTTP_200_OK)
 async def get_inventory_full_route(
     db_client=Depends(get_database_client),
     current_user=Depends(get_current_user)
@@ -73,8 +72,7 @@ async def get_inventory_full_route(
 
     return await service.get_inventory_full(company_id)
 
-
-@router.post("/overview", response_model=InventoryOverviewResponse, status_code=status.HTTP_200_OK)
+@router.get("/overview", response_model=InventoryOverviewResponse, status_code=status.HTTP_200_OK, summary="Get Inventory Overview")
 async def inventory_overview_route(
     db_client=Depends(get_database_client),
     current_user=Depends(get_current_user)
