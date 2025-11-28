@@ -58,4 +58,7 @@ class InventoryAddProduct(BaseModel):
     name: str = Field(..., description="Name of the product to increase stock")
     amount: int = Field(..., gt=0, description="How many units to add")
 
+class DeleteProductRequest(BaseModel):
+    productId: str = Field(..., description="ID of the product to be deleted")
+
 

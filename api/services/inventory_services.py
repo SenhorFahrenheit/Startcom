@@ -1,9 +1,8 @@
-from bson import ObjectId
-from fastapi import HTTPException
+from fastapi import HTTPException, status
+from bson import ObjectId, errors as bson_errors
 from ..utils.helper_functions import serialize_mongo
 from ..utils.helper_functions import serialize_doc
 from datetime import datetime
-from fastapi import status
 from ..schemas.inventory_schemas import InventoryItemInDB, InventoryCreate
 
 class InventoryService:
@@ -229,5 +228,51 @@ class InventoryService:
 
     
         return
+    
+    async def delete_product(self, company_id: str, product_id: str):
+        """
+        Delete a product from the company's inventory subarray by its id.
 
-        
+        Steps:
+        - Validate product id
+        - Ensure company exists
+        - Pull the inventory item with matching _id from the company's inventory array
+        - Update company's updatedAt timestamp
+
+        Raises:
+            400 - Invalid product id
+            404 - Company not found
+            404 - Product not found
+            500 - Unexpected errors
+        """
+        try:
+            oid = ObjectId(product_id)
+        except (bson_errors.InvalidId, TypeError):
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid product id")
+
+        # Ensure company exists
+        company = await self.company_collection.find_one({"_id": ObjectId(company_id)}, {"inventory": 1})
+        if not company:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Company not found")
+
+        try:
+            # Only match the company document if it contains the inventory item with the given _id.
+            result = await self.company_collection.update_one(
+                {"_id": ObjectId(company_id), "inventory._id": oid},
+                {
+                    "$pull": {"inventory": {"_id": oid}},
+                    "$set": {"updatedAt": datetime.utcnow()}
+                }
+            )
+
+             # If no document matched the filter, the product wasn't found in the array
+            if result.matched_count == 0:
+                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Product not found")
+
+            return None
+        except HTTPException:
+            raise
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
+

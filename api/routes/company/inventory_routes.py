@@ -4,7 +4,8 @@ from ...utils.security import get_current_user
 from ...schemas.inventory_schemas import (
     InventoryOverviewResponse,
     InventoryCreateRequest,
-    InventoryAddProduct
+    InventoryAddProduct,
+    DeleteProductRequest
 )
 from ...services.inventory_services import InventoryService
 
@@ -250,4 +251,64 @@ async def increase_inventory_product(
     return {
         "status": "success",
         "message": "Product quantity increased successfully"
+    }
+
+@router.post("/delete_product", status_code=status.HTTP_200_OK)
+async def delete_inventory_product(
+    body: DeleteProductRequest,
+    db_client=Depends(get_database_client),
+    current_user=Depends(get_current_user)
+):
+    """
+    Delete a product from the authenticated company's inventory.
+
+    ## Authentication
+    Requires a valid **JWT token** in the `Authorization` header:
+    ```
+    Authorization: Bearer <access_token>
+    ```
+
+    ## Description
+    Removes a product from the company's inventory by product id.
+    The endpoint expects the product identifier in the request body and
+    will return a success message when deletion completes.
+
+    ## Request Example
+    ```json
+    {
+      "productId": "69019f25b407b09e0d09d000"
+    }
+    ```
+
+    ## Successful Response
+    ```json
+    {
+      "status": "success",
+      "message": "Product deleted successfully."
+    }
+    ```
+
+    ### 401 Unauthorized
+    ```json
+    {"detail": "Invalid or missing token"}
+    ```
+
+    ### 404 Not Found
+    ```json
+    {"detail": "Product not found"}
+    ```
+
+    ### 500 Internal Server Error
+    ```json
+    {"detail": "Unexpected error: <error_message>"}
+    ```
+    """
+    service = InventoryService(db_client)
+    company_id = current_user["companyId"]
+
+    await service.delete_product(company_id, body.productId)
+
+    return {
+        "status": "success",
+        "message": "Product deleted successfully."
     }
