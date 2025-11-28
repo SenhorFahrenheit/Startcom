@@ -253,7 +253,7 @@ async def increase_inventory_product(
         "message": "Product quantity increased successfully"
     }
 
-@router.post("/delete_product", status_code=status.HTTP_200_OK)
+@router.delete("/delete_product", status_code=status.HTTP_200_OK)
 async def delete_inventory_product(
     body: DeleteProductRequest,
     db_client=Depends(get_database_client),
