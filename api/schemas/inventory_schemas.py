@@ -16,8 +16,9 @@ class InventoryCountRequest(BaseModel):
 
 
 class ProductOverview(BaseModel):
+    productId: str = Field(..., description="Product id as string")
     name: str
-    category: str
+    category: Optional[str] = None
     quantity: int
     minQuantity: int
     unitPrice: float

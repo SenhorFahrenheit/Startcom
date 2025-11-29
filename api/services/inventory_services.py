@@ -97,6 +97,7 @@ class InventoryService:
 
         formatted_products = []
         for p in inventory:
+            id = p.get("_id")
             name = p.get("name")
             category = p.get("category", "Outros") or "Outros"
             quantity = int(p.get("quantity", 0))
@@ -117,7 +118,7 @@ class InventoryService:
             total_value = round(quantity * cost_price, 2)
 
             formatted_products.append({
-                "productId": str(p.get("_id")),
+                "productId": id.__str__(),
                 "name": name,
                 "category": category,
                 "quantity": quantity,
