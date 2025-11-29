@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from api.services.user_services import UserService
-from api.schemas.user_schemas import UserCreate, UserCreatedResponse
+from api.schemas.user_schemas import UserCreate, UserCreatedResponse, ContactFormRequest
 from ...infra.database import mongo
 from ...utils.email_token import create_email_token
 from bson import ObjectId
@@ -269,3 +269,43 @@ async def update_my_company(
         raise e
     except Exception as e:
         raise HTTPException(500, str(e))
+
+@router.post("/contact", status_code=status.HTTP_200_OK)
+async def send_contact_form(
+    body: ContactFormRequest
+):
+    """
+    Send a contact form message to Startcom support.
+
+    ## Description
+    Public endpoint (no auth). Receives visitor name, email and message,
+    and forwards the content to the support mailbox.
+
+    ## Request Example
+    ```json
+    {
+      "name": "Jane Doe",
+      "email": "jane@example.com",
+      "message": "I need help with my account..."
+    }
+    ```
+
+    ## Successful Response
+    ```json
+    {
+      "status": "success",
+      "message": "Contact form sent successfully."
+    }
+    ```
+
+    ## Possible Errors
+    - 400 — Invalid request body (email format, missing fields).
+    - 500 — Failed to send email.
+    """
+    try:
+        await user_service.send_contact_email(body.name, body.email, body.message)
+        return {"status": "success", "message": "Contact form sent successfully."}
+    except HTTPException as e:
+        raise e
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
