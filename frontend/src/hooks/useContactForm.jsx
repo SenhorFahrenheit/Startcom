@@ -10,13 +10,14 @@ export const useContactForm = () => {
   // Handles form submission
   const onSubmit = async (data) => {
     try {
-      // Sends form data to API
-      await api.post("rota/aleatoria/", data);
-
+      const response = await api.post("/User/contact", data);
       // Success toast
-      toast.success("Mensagem enviada! Aguarde nosso retorno.", {
-        containerId: "toast-root",
-      });
+
+      if (response.data.status === "success") {
+        toast.success("Mensagem enviada! Aguarde nosso retorno.", {
+          containerId: "toast-root",
+        });
+      }
     } catch (error) {
       // Error toast on request failure
       toast.error("Erro ao enviar mensagem: " + error.message, {

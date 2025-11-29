@@ -30,7 +30,7 @@ const DeleteProductModal = ({
       setButtonLoading(true)
 
       await api.delete(
-        "/Company/inventory/delete_product/",
+        "/Company/inventory/delete_product",
         {
           data: {
             productId: product.productId,

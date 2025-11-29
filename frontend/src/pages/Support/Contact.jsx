@@ -2,66 +2,37 @@
 import "./Contact.css";
 import "../commonStyle.css";
 import { Mail, Send } from "lucide-react";
-import { toast } from "react-toastify";
 
 // Components
 import BackHome from "../../components/BackHome/BackHome";
 import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
 
-// Hooks & Services
+// Hook
 import { useContactForm } from "../../hooks/useContactForm";
-import api from "../../services/api";
 
 const Contact = () => {
-  // Form hook
   const { register, handleSubmit, onSubmit, onError } = useContactForm();
-
-  // Handles submission to backend
-  const handleMessageSubmit = async (data) => {
-    try {
-      const response = await api.post("/User/contact/", data);
-      console.log(response, data);
-
-      if (response.status === 200) {
-        toast.success("Mensagem enviada com sucesso!", {
-          position: "top-right",
-          containerId: "toast-root",
-        });
-      }
-    } catch (error) {
-      console.error(error);
-      toast.error("Falha ao enviar a mensagem. Tente novamente mais tarde.", {
-        position: "top-right",
-        containerId: "toast-root",
-      });
-    }
-  };
 
   return (
     <div className="support-container-wrapper">
-      {/* Back navigation */}
       <BackHome />
 
       <div className="contact-container">
-        {/* Icon */}
         <div className="icon-contact">
-          <Mail size={"40px"} />
+          <Mail size={40} />
         </div>
 
-        {/* Page title */}
         <h1 className="support-title">Entre em Contato</h1>
         <p className="contact-subtitle">
           Envie sua mensagem e responderemos em breve
         </p>
 
-        {/* Contact form */}
         <form
           className="contact-form"
           style={{ width: "100%" }}
           onSubmit={handleSubmit(onSubmit, onError)}
         >
-          {/* Name input */}
           <Input
             type="text"
             placeholder="Seu Nome"
@@ -73,17 +44,18 @@ const Contact = () => {
               backgroundColor: "transparent",
               border: "1px solid #e1ddddff",
             }}
-            {...register("name", { required: "O nome é obrigatório." })}
+            {...register("name", {
+              required: "O nome é obrigatório.",
+            })}
           />
 
-          {/* Email input */}
           <Input
             type="email"
             placeholder="Seu e-mail"
             style={{
               height: "50px",
               borderRadius: "var(--border-radius)",
-              margin: "5px 0",
+              margin: "5px 0 5px",
               width: "90%",
               backgroundColor: "transparent",
               border: "1px solid #e1ddddff",
@@ -97,7 +69,6 @@ const Contact = () => {
             })}
           />
 
-          {/* Message textarea */}
           <textarea
             placeholder="Sua Mensagem..."
             rows="6"
@@ -105,29 +76,26 @@ const Contact = () => {
             style={{
               margin: "5px 0 10px",
               width: "90%",
-              border: "1px solid #e1ddddff",
-              borderRadius: "var(--border-radius)",
             }}
-            {...register("message", { required: "A mensagem não pode estar vazia." })}
+            {...register("message", {
+              required: "A mensagem não pode estar vazia.",
+            })}
           />
 
-          {/* Submit button */}
           <Button
-            onSubmit={handleSubmit(handleMessageSubmit, onError)}
             type="submit"
             height="50px"
             width="90%"
             fontSize="1.05rem"
             label={
               <>
-                <Send size={"1.25rem"} />
+                <Send size="1.25rem" />
                 Falar com Suporte
               </>
             }
           />
         </form>
 
-        {/* Contact info */}
         <p className="contact-method">
           <span>E-mail: </span>StartComLTDA@gmail.com
         </p>
