@@ -81,6 +81,7 @@ const Inventory = () => {
       });
 
       const formatted = (data.products || []).map(p => ({
+        productId: p.productId,
         name: p.name,
         category: p.category,
         quantity: p.quantity,
