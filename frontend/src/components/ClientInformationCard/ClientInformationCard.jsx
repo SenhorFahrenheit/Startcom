@@ -36,8 +36,8 @@ const ClientInformationCard = ({
             {loading ? <Skeleton circle width={50} height={50} /> : iconLetters(clientName)}
           </div>
 
-          <div className="cliient-name-type">
-            <p>{loading ? <Skeleton width={120} /> : clientName}</p>
+          <div className="client-name-type">
+            <p className="text-nowrap-ellipses">{loading ? <Skeleton width={120} /> : clientName}</p>
             <div className={`${clientType}`}>
               {loading ? <Skeleton width={60} /> : clientType}
             </div>

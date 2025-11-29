@@ -40,10 +40,17 @@
     gap: 10px;
 }
 
-.cliient-name-type {
+.client-name-type {
     display: flex;
     flex-direction: column;
     gap: 5px;
+}
+
+.text-nowrap-ellipses {
+    max-width: 180px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .client-name-type-information > div > p {

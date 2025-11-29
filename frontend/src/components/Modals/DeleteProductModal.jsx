@@ -13,8 +13,9 @@ const DeleteProductModal = ({ isOpen, onClose, onSuccess, product }) => {
   const deleteProduct = async () => {
     try {
       setButtonLoading(true);
+      console.table(product)
+      await api.delete(`/Company/inventory/delete_product/`, { data: { productId: product.productId }});
 
-      await api.delete(`/Company/inventory/${product.productId}`);
 
       toast.success("Produto excluído com sucesso!", {
         position: "top-right",
@@ -26,6 +27,7 @@ const DeleteProductModal = ({ isOpen, onClose, onSuccess, product }) => {
 
     } catch (error) {
       const status = error.response?.status;
+      console.log(error)
 
       if (status === 404) {
         toast.error("Produto não encontrado.", {

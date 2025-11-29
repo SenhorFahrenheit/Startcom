@@ -13,7 +13,7 @@ const Button = ({
   fontWeight,
   styles,
   buttonColor,
-  loading = false, // NOVO
+  loading = false,
 }) => {
   return (
     <button

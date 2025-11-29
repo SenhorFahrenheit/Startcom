@@ -17,13 +17,13 @@ export function useAuthModals(selectedProductSetter) {
   const openModifyClient = () => setActiveModal("modifyClient");
 
   const openDeleteClient = () => setActiveModal("deleteClient");
-
   const openDeleteInventory = (product) => {
     if (selectedProductSetter) {
       selectedProductSetter(product);
     }
     setActiveModal("deleteProduct");
   };
+  const openDeleteAccountModal = () => setActiveModal("deleteAccount");
 
   const closeModal = () => setActiveModal(null);
 
@@ -41,6 +41,7 @@ export function useAuthModals(selectedProductSetter) {
     openModifyClient,
     openDeleteClient,
     openDeleteInventory,
+    openDeleteAccountModal,
     closeModal,
   };
 }

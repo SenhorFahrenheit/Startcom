@@ -48,10 +48,11 @@
     justify-content: space-between;
 }
 
-.setting-save-changes {
+.setting-changes {
     display: flex;
     justify-content: end;
     margin: 24px 0 0;
+    gap: 10px;
 }
 
 .setting-save-changes > button {

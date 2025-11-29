@@ -7,9 +7,31 @@ import Button from "../../components/Button/Button";
 import Input from "../../components/Input/Input";
 
 import { useContactForm } from "../../hooks/useContactForm";
+import api from "../../services/api";
+import { toast } from "react-toastify";
 
 const Contact = () => {
   const { register, handleSubmit, onSubmit, onError } = useContactForm();
+
+  const handleMessageSubmit = async (data) => {
+    try {
+      const response = await api.post("/User/contact/", data);
+      console.log(response)
+      console.log(data)
+      if (response.status === 200) {
+        toast.success("Mensagem enviada com sucesso!", {
+          position: "top-right",
+          containerId: "toast-root",
+        });
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error("Falha ao enviar a mensagem. Tente novamente mais tarde.", {
+        position: "top-right",
+        containerId: "toast-root",
+      });
+    }
+  }
 
   return (
     <div className="support-container-wrapper">
@@ -71,6 +93,7 @@ const Contact = () => {
           ></textarea>
 
           <Button
+            onSubmit={handleSubmit(handleMessageSubmit, onError)}
             type="submit"
             height="50px"
             width={"90%"}
