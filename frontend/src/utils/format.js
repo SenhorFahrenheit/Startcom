@@ -107,13 +107,18 @@ export const formatDateBR = (value) => {
   return `${day}/${month}/${year}`;
 };
 
+// Utility function to format month labels
+// Converts English month names to Portuguese or formats dates
+// Example: "january" -> "Janeiro", "2025-11-01" -> "01/11/2025"
 export const formatMonthLabel = (value) => {
-  if (!value) return "";
+  if (!value) return ""; // Return empty string if no value
 
+  // Check if value is in YYYY-MM-DD format
   if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
-    return formatDateBR(value);
+    return formatDateBR(value); // Format date to Brazilian format
   }
 
+  // Map English month names to Portuguese
   const englishToBr = {
     january: "Janeiro",
     february: "Fevereiro",
@@ -129,11 +134,11 @@ export const formatMonthLabel = (value) => {
     december: "Dezembro",
   };
 
-  const lower = value.toLowerCase();
+  const lower = value.toLowerCase(); // Convert input to lowercase
 
   if (englishToBr[lower]) {
-    return englishToBr[lower];
+    return englishToBr[lower]; // Return translated month
   }
 
-  return value;
+  return value; // Return original value if no match
 };

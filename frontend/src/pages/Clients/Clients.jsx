@@ -1,45 +1,50 @@
-import "./Clients.css";
-import "../commonStyle.css";
+import "./Clients.css"; // Page-specific styles
+import "../commonStyle.css"; // Global/common styles
 
-import { formatCurrency, formatDateBR, formatPhone } from '../../utils/format';
+import { formatCurrency, formatDateBR, formatPhone } from '../../utils/format'; // Utility functions for formatting
 
-import Sidebar from "../../layouts/Sidebar/Sidebar";
-import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
-import Button from "../../components/Button/Button";
+import Sidebar from "../../layouts/Sidebar/Sidebar"; // Sidebar layout
+import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile"; // Mobile header layout
+import Button from "../../components/Button/Button"; // Reusable button component
 
-import NewClientModal from "../../components/Modals/NewClientModal";
-import ModifyClientModal from "../../components/Modals/ModifyClientModal";
-import DeleteClientModal from "../../components/Modals/DeleteClientModal";
-import ClientInformationCard from "../../components/ClientInformationCard/ClientInformationCard";
-import ClientCard from "../../components/ClientCard/ClientCard";
-import FilterSelect from "../../components/FilterSelect/FilterSelect";
+import NewClientModal from "../../components/Modals/NewClientModal"; // Modal to create a new client
+import ModifyClientModal from "../../components/Modals/ModifyClientModal"; // Modal to modify existing client
+import DeleteClientModal from "../../components/Modals/DeleteClientModal"; // Modal to delete a client
+import ClientInformationCard from "../../components/ClientInformationCard/ClientInformationCard"; // Card displaying client details
+import ClientCard from "../../components/ClientCard/ClientCard"; // Overview card component
+import FilterSelect from "../../components/FilterSelect/FilterSelect"; // Dropdown filter component
 
-import { useState, useEffect } from "react";
-import { useAuthModals } from "../../hooks/useAuthModals";
-import api from "../../services/api";
-import { useAuth } from "../../contexts/AuthContext";
+import { useState, useEffect } from "react"; // React hooks
+import { useAuthModals } from "../../hooks/useAuthModals"; // Custom hook for modal state
+import api from "../../services/api"; // API service for requests
+import { useAuth } from "../../contexts/AuthContext"; // Authentication context
 
-import { LuPlus, LuSmile, LuUsers, LuStar, LuCalendar } from "react-icons/lu";
+import { LuPlus, LuSmile, LuUsers, LuStar, LuCalendar } from "react-icons/lu"; // Icons
 
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
+import Skeleton from "react-loading-skeleton"; // Loading skeleton
+import "react-loading-skeleton/dist/skeleton.css"; // Skeleton styles
 
 const Clients = () => {
+  // Auth and user info
   const { token, user, isAuthenticated, pageLoading } = useAuth();
   const companyId = user?.companyId;
 
+  // Redirect to login if not authenticated
   useEffect(() => {
     if (!pageLoading && !isAuthenticated) {
         window.location.href = "/login";
     }
   }, [pageLoading, isAuthenticated]);
 
+  // Modal state handlers
   const { activeModal, openClient, openModifyClient, openDeleteClient, closeModal } = useAuthModals();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false); // Sidebar toggle
 
+  // Filters and search state
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
 
+  // Overview statistics
   const [overview, setOverview] = useState({
     total: 0,
     vip: 0,
@@ -47,23 +52,26 @@ const Clients = () => {
     averageSatisfaction: 0,
   });
 
-  const [clients, setClients] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [editingClient, setEditingClient] = useState(null);
+  const [clients, setClients] = useState([]); // Clients list
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
+  const [editingClient, setEditingClient] = useState(null); // Client being edited
 
+  // Open modify client modal
   const handleEdit = (id) => {
     const found = clients.find(c => c.id === id);
     setEditingClient(found);
     openModifyClient();
   };
 
+  // Open delete client modal
   const handleDelete = (id) => {
     const found = clients.find(c => c.id === id);
     setEditingClient(found);
     openDeleteClient();
   };
 
+  // Fetch overview stats and client list from API
   const fetchOverviewAndClients = async () => {
     try {
       setLoading(true);
@@ -73,6 +81,7 @@ const Clients = () => {
       if (data.status === "success") {
         setOverview(data.overview);
 
+        // Format client data for display
         const formattedClients = (data.overview.clients || [])
           .map((c) => ({
             id: c.id,
@@ -83,7 +92,8 @@ const Clients = () => {
             city: c.address || "Não Informado",
             totalSpent: c.totalSpent,
             lastPurchase: c.lastPurchase ? formatDateBR(c.lastPurchase) : "Ainda não comprou",
-          })).sort((a, b) => {
+          }))
+          .sort((a, b) => {
             if (a.lastPurchase === "Ainda não comprou") return -1;
             if (b.lastPurchase === "Ainda não comprou") return 1;
 
@@ -103,13 +113,14 @@ const Clients = () => {
     }
   };
 
+  // Fetch data after auth and page load
   useEffect(() => {
     if (!pageLoading && isAuthenticated && companyId) {
       fetchOverviewAndClients();
     }
   }, [pageLoading, isAuthenticated, companyId]);
 
-
+  // Filter clients by search and type
   const filteredClients = clients.filter(c => {
     const matchesSearch =
       c.clientName?.toLowerCase().includes(search.toLowerCase()) ||
@@ -122,20 +133,21 @@ const Clients = () => {
     return matchesSearch && matchesType;
   });
 
+  // Toggle sidebar
   const toggleSidebar = () => setSidebarOpen(prev => !prev);
 
   return (
     <section className="body-section">
-      <HeaderMobile onToggleSidebar={toggleSidebar} />
-      <Sidebar isOpen={sidebarOpen} onClose={toggleSidebar} />
+      <HeaderMobile onToggleSidebar={toggleSidebar} /> {/* Mobile header */}
+      <Sidebar isOpen={sidebarOpen} onClose={toggleSidebar} /> {/* Sidebar */}
 
       <div className="content-page-section">
         <div className="align-heading">
           <div>
-            <h1 className="title-page-section">Clientes</h1>
+            <h1 className="title-page-section">Clientes</h1> {/* Page title */}
             <p className="description-page-section">
               Gerencie sua base de clientes e relacionamentos
-            </p>
+            </p> {/* Page description */}
           </div>
           <div className="button-shadown">
             <Button 
@@ -144,12 +156,13 @@ const Clients = () => {
               height={"auto"} 
               width={160} 
               label={<><LuPlus size={"1.5rem"}/>Novo Cliente</>} 
-            />
+            /> {/* Open new client modal */}
           </div>
         </div>
 
         <section className="clientCards">
           {loading ? (
+            // Loading skeleton for overview cards
             [0, 1, 2, 3].map((idx) => (
               <div key={idx} className="ClientCard">
                 <div className={`client-icon-card client-card-skeleton`}>
@@ -160,7 +173,7 @@ const Clients = () => {
               </div>
             ))
           ) : error ? (
-            <p style={{ color: "red" }}>{error}</p>
+            <p style={{ color: "red" }}>{error}</p> // Show API error
           ) : (
             <>
               <ClientCard icon={<LuUsers size={24}/>} value={overview.total} description="Total de Clientes" color="blue"/>
@@ -171,7 +184,6 @@ const Clients = () => {
           )}
         </section>
 
-
         <div className="filter-search">
           <input 
             style={{ fontSize: 14, paddingLeft: 16 }} 
@@ -179,7 +191,7 @@ const Clients = () => {
             type="text" 
             placeholder="Buscar por nome, email, telefone..." 
             onChange={(e) => setSearch(e.target.value)}
-          />
+          /> {/* Search input */}
           <div className="filters-block">
             <FilterSelect
               label="Filtrar por"
@@ -191,7 +203,7 @@ const Clients = () => {
               ]}
               defaultValue="Todos"
               onSelect={(val) => setTypeFilter(val)}
-            />
+            /> {/* Client type filter */}
           </div>
         </div>    
 
@@ -199,7 +211,7 @@ const Clients = () => {
           {loading
             ? [0,1,2].map((_, idx) => (
                 <ClientInformationCard key={idx} loading={true} />
-              ))
+              )) // Loading skeleton for client cards
             : filteredClients.map((c, idx) => (
               <ClientInformationCard
                 key={idx}
@@ -213,14 +225,14 @@ const Clients = () => {
                 lastPurchase={c.lastPurchase}
                 onEdit={handleEdit}
                 onDelete={handleDelete}
-              />
+              /> // Render filtered client cards
             ))
           }
-
         </div>
 
       </div>
 
+      {/* Modals */}
       <NewClientModal
         isOpen={activeModal === "client"}
         onClose={closeModal}
@@ -238,7 +250,7 @@ const Clients = () => {
         };
 
         setClients(prevClients => [clientFormatted, ...prevClients]);
-        fetchOverviewAndClients();
+        fetchOverviewAndClients(); // Refresh data
       }}
       />
 
@@ -250,7 +262,7 @@ const Clients = () => {
         }}
         clientData={editingClient}
         onSuccess={() => {
-          fetchOverviewAndClients();
+          fetchOverviewAndClients(); // Refresh data
         }}
       />
 
@@ -259,7 +271,7 @@ const Clients = () => {
         onClose={closeModal}
         onSuccess={(deletedClientId) => {
           setClients(prev => prev.filter(c => c.id !== deletedClientId));
-          fetchOverviewAndClients();
+          fetchOverviewAndClients(); // Refresh data
         }}
         clientData={editingClient}
       />
@@ -267,4 +279,4 @@ const Clients = () => {
   )
 }
 
-export default Clients;
+export default Clients; // Export component

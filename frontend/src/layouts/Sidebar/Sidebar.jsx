@@ -13,59 +13,57 @@ import { FaRegClipboard } from 'react-icons/fa';
 import { LuSettings } from 'react-icons/lu';
 import { LuLogOut, LuX } from 'react-icons/lu';
 
+// Sidebar component with navigation and account info
 const Sidebar = ({ isOpen, onClose }) => {
-  
   const { logout, user } = useAuth();
   const navigate = useNavigate();
 
+  // Handles user logout and redirects to login page
   const handleLogout = () => {
     logout();
     navigate("/login");
-  }
+  };
 
   return (
     <aside className={isOpen ? "open" : ""}>
+      {/* Sidebar header with logo and close button */}
       <div className="sidebar-header">
         <div className="logo-sidebar logo">
-            <img src={Logo} alt="StartCom Logo" />
+          <img src={Logo} alt="StartCom Logo" />
         </div>
         <button className="close-sidebar" onClick={onClose}>
           <LuX size={24} color="#fff" />
         </button>
       </div>
 
+      {/* Main navigation */}
       <div className="sidebar-main">
         <nav className="nav-sidebar">
           <NavLink to="/" className={({ isActive }) => isActive ? "active" : ""}>
             <BiHomeAlt size={22} /> Início
           </NavLink>
-
           <NavLink to="/painel" className={({ isActive }) => isActive ? "active" : ""}>
             <FaChartColumn size={20} /> Dashboard
           </NavLink>
-
           <NavLink to="/clientes" className={({ isActive }) => isActive ? "active" : ""}>
             <GoPeople size={20} /> Clientes
           </NavLink>
-
           <NavLink to="/estoque" className={({ isActive }) => isActive ? "active" : ""}>
             <BsBoxSeam size={20} /> Estoque
           </NavLink>
-
           <NavLink to="/vendas" className={({ isActive }) => isActive ? "active" : ""}>
             <FiShoppingCart size={20} /> Vendas
           </NavLink>
-
           <NavLink to="/relatorios" className={({ isActive }) => isActive ? "active" : ""}>
             <FaRegClipboard size={20} /> Relatórios
           </NavLink>
-
           <NavLink to="/configuracoes" className={({ isActive }) => isActive ? "active" : ""}>
             <LuSettings size={20} /> Configurações
           </NavLink>
         </nav>
       </div>
 
+      {/* Account info and logout button */}
       <div className="account-block">
         <div className="account-view">
           <div className="circle-img">

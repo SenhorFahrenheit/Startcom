@@ -5,17 +5,24 @@ import { validateCNPJ, validateCPF, validatePhone, getPasswordStrength } from ".
 import { formatCNPJ, formatCPF, formatPhone } from "../utils/format";
 import { registerAPI } from "../services/api";
 
+// Hook to manage user registration form
 export const useRegisterForm = (onSuccess) => {
+  // React Hook Form instance
   const { register, handleSubmit, control, watch } = useForm();
+
+  // Loading state for submit button
   const [buttonLoading, setButtonLoading] = useState(false);
 
+  // Handles form submission
   const onSubmit = async (data) => {
     try {
-      setButtonLoading(true)
+      setButtonLoading(true);
+
+      // Call registration API
       const response = await registerAPI(data);
 
       if (!response) {
-        throw new Error("Resposta de cadastro inválida.");
+        throw new Error("Invalid registration response.");
       }
 
       toast.success("Cadastro realizado!", { containerId: "toast-root" });
@@ -24,11 +31,8 @@ export const useRegisterForm = (onSuccess) => {
         onSuccess(data.email);
       }
 
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 5000);
-      
     } catch (error) {
+      // Handle duplicate account error
       if (error.response && error.response.status === 409) {
         toast.error("Já existe uma conta com esse CPF/CNPJ ou email.", {
           containerId: "toast-root",
@@ -36,14 +40,16 @@ export const useRegisterForm = (onSuccess) => {
         return;
       }
 
+      // Generic error
       toast.error("Não foi possível concluir o cadastro. Tente novamente.", {
         containerId: "toast-root",
       });
     } finally {
-      setButtonLoading(false)
+      setButtonLoading(false);
     }
   };
 
+  // Handles validation errors
   const onError = (errors) => {
     Object.values(errors).forEach((err) =>
       toast.error(err.message, { containerId: "toast-root" })

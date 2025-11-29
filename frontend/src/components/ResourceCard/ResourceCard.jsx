@@ -1,13 +1,27 @@
-import "./ResourceCard.css"
+import "./ResourceCard.css";
 
-const ResourceCard = ({icon, title, description}) => {
+/**
+ * Displays a resource card with icon and text
+ */
+const ResourceCard = ({ icon, title, description }) => {
   return (
     <div className="card">
-        <div className="icon-circle">{icon}</div>
-        <h3 className="title-card">{title}</h3>
-        <p className="description-card">{description}</p>
-    </div>
-  )
-}
+      {/* Resource icon */}
+      <div className="icon-circle">
+        {icon}
+      </div>
 
-export default ResourceCard
+      {/* Resource title */}
+      <h3 className="title-card">
+        {title}
+      </h3>
+
+      {/* Resource description */}
+      <p className="description-card">
+        {description}
+      </p>
+    </div>
+  );
+};
+
+export default ResourceCard;

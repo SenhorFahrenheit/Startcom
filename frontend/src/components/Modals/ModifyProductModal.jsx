@@ -8,35 +8,46 @@ import InputDashboard from "../InputDashboard/InputDashboard";
 import SelectDropdown from "../SelectDropdown/SelectDropdown";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
+/**
+ * ModifyProductModal component
+ * Modal responsible for increasing product stock quantity.
+ */
 const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
   const [buttonLoading, setButtonLoading] = useState(false);
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
+
+  // Reference to display current product quantity
   const quantityRef = useRef();
 
+  /**
+   * Fetch product list when modal opens
+   */
   useEffect(() => {
     if (isOpen) fetchProducts();
   }, [isOpen]);
 
+  /**
+   * Load all products from API
+   */
   const fetchProducts = async () => {
-      try {
-        const response = await api.get("/Company/inventory/full");
-        const list = response.data?.products || [];
+    try {
+      const response = await api.get("/Company/inventory/full");
+      const list = response.data?.products || [];
 
-        if (list.length === 0) {
-          toast.error("Você não possui produtos cadastrados para modificar.", {
-            position: "top-right",
-            containerId: "toast-root",
-          });
+      // Close modal if no products are available
+      if (list.length === 0) {
+        toast.error("Você não possui produtos cadastrados para modificar.", {
+          position: "top-right",
+          containerId: "toast-root",
+        });
+        onClose();
+        return;
+      }
 
-          onClose();
-          return;
-        }
-
-        setProducts(list);
-
-      } catch (error) {
-      console.error("Erro ao buscar produtos:", error);
+      setProducts(list);
+    } catch (error) {
+      console.error("Error fetching products:", error);
       toast.error("Erro ao carregar produtos!", {
         position: "top-right",
         containerId: "toast-root",
@@ -44,12 +55,19 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
     }
   };
 
+  /**
+   * Handle product selection
+   * Sets selected product and current quantity
+   */
   const handleSelectProduct = ({ target }) => {
     const product = products.find(p => p._id === target.value);
     setSelectedProduct(product || null);
     quantityRef.current.value = product ? product.quantity : "";
   };
 
+  /**
+   * Submit new quantity to be added to inventory
+   */
   const newValueProduct = async (e) => {
     e.preventDefault();
     let hasError = false;
@@ -57,6 +75,7 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
 
+    // Validate added quantity
     if (!data.addQuantity || data.addQuantity === "0") {
       toast.error("O campo Adicionar não pode estar vazio!", {
         position: "top-right",
@@ -65,6 +84,7 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
       hasError = true;
     }
 
+    // Validate selected product
     if (!selectedProduct) {
       toast.error("Selecione um produto!", {
         position: "top-right",
@@ -82,15 +102,23 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
 
     try {
       setButtonLoading(true);
-      const response = await api.post("/Company/inventory/increase_inventory", payload);
+
+      const response = await api.post(
+        "/Company/inventory/increase_inventory",
+        payload
+      );
+
       toast.success("Quantidade adicionada com sucesso!", {
         position: "top-right",
         containerId: "toast-root",
       });
+
       onClose();
       if (onSuccess) onSuccess(response.data);
+
     } catch (error) {
       const status = error.response?.status;
+
       if (status === 422) {
         toast.error("A quantidade informada é inválida.", {
           position: "top-right",
@@ -108,11 +136,21 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
   };
 
   return (
-    <BaseModal isOpen={isOpen} onClose={onClose} contentLabel="Adicionar Produto" width="620px" height={"auto"} showCloseButton>
-      <h2 className="dashboard-modal-title">Adicionar Quantidade de Produto</h2>
+    <BaseModal
+      isOpen={isOpen}
+      onClose={onClose}
+      contentLabel="Adicionar Produto"
+      width="620px"
+      height="auto"
+      showCloseButton
+    >
+      <h2 className="dashboard-modal-title">
+        Adicionar Quantidade de Produto
+      </h2>
 
       <form className="form-dashboard" onSubmit={newValueProduct}>
         <div className="align-dashboard-form">
+
           <div className="input-dashboard-block">
             <label htmlFor="product">Produto</label>
             <SelectDropdown
@@ -121,7 +159,7 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
               placeholder="Selecione um produto"
               onChange={handleSelectProduct}
             />
-            <InfoTooltip text="Produto ao qual você deseja adicionar mais unidades. Ex: Camiseta Azul"/>
+            <InfoTooltip text="Produto ao qual você deseja adicionar mais unidades. Ex: Camiseta Azul" />
           </div>
 
           <div className="input-dashboard-block">
@@ -134,18 +172,29 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
               ref={quantityRef}
               value={selectedProduct ? selectedProduct.quantity : ""}
             />
-            <InfoTooltip text="Quantidade atual disponível no estoque para o produto selecionado."/>
+            <InfoTooltip text="Quantidade atual disponível no estoque para o produto selecionado." />
           </div>
 
           <div className="input-dashboard-block">
             <label htmlFor="addQuantity">Adicionar</label>
-            <InputDashboard id="addQuantity" name="addQuantity" type="number" />
-            <InfoTooltip text="Número de unidades que você deseja adicionar ao estoque do produto selecionado. Ex.: 10"/>
+            <InputDashboard
+              id="addQuantity"
+              name="addQuantity"
+              type="number"
+            />
+            <InfoTooltip text="Número de unidades que você deseja adicionar ao estoque do produto selecionado. Ex.: 10" />
           </div>
+
         </div>
 
         <div className="button-shadown">
-          <Button height={45} width={200} loading={buttonLoading} type="submit" label="Adicionar Produto" />
+          <Button
+            height={45}
+            width={200}
+            loading={buttonLoading}
+            type="submit"
+            label="Adicionar Produto"
+          />
         </div>
       </form>
     </BaseModal>

@@ -1,83 +1,86 @@
+// Styles
 import "./Reports.css";
 import "../commonStyle.css";
 
-import Sidebar from "../../layouts/Sidebar/Sidebar";
-import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
-import FilterDateButton from "../../components/FilterDateButton/FilterDateButton";
-import Button from "../../components/Button/Button";
+// Layouts
+import Sidebar from "../../layouts/Sidebar/Sidebar"; // Sidebar layout
+import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile"; // Mobile header
 
-import NewReportModal from "../../components/Modals/NewReportModal";
-import ReportCard from "../../components/ReportCard/ReportCard";
-import GeneratedReport from "../../components/GeneratedReport/GeneratedReport";
-import LineSalesChart from "../../components/LineSalesChart/LineSalesChart";
-import CategoryPieChart from "../../components/CategoryPieChart/CategoryPieChart";
+// Components
+import FilterDateButton from "../../components/FilterDateButton/FilterDateButton"; // Date filter
+import Button from "../../components/Button/Button"; // Reusable button
+import NewReportModal from "../../components/Modals/NewReportModal"; // Modal to create new report
+import ReportCard from "../../components/ReportCard/ReportCard"; // Metric card
+import GeneratedReport from "../../components/GeneratedReport/GeneratedReport"; // Generated reports list
+import LineSalesChart from "../../components/LineSalesChart/LineSalesChart"; // Line chart component
+import CategoryPieChart from "../../components/CategoryPieChart/CategoryPieChart"; // Pie chart by category
 
+// Icons
 import { LuChartColumn, LuDollarSign, LuTrendingUp, LuUsers, LuPackage } from "react-icons/lu";
 
-import { useAuthModals } from "../../hooks/useAuthModals";
+// Hooks & Utils
+import { useAuthModals } from "../../hooks/useAuthModals"; // Modal management hook
 import { useState, useEffect } from "react";
-import { useAuth } from "../../contexts/AuthContext";
-import api from "../../services/api";
-import { formatCurrency, formatPercent } from "../../utils/format";
+import { useAuth } from "../../contexts/AuthContext"; // Auth context
+import api from "../../services/api"; // API service
+import { formatCurrency, formatPercent } from "../../utils/format"; // Formatting helpers
 
 const Reports = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
-  const { user, token, isAuthenticated, pageLoading } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = useState(false); // Sidebar state
+  const { user, token, isAuthenticated, pageLoading } = useAuth(); // Auth state
   const companyId = user?.companyId;
 
-  const { activeModal, openReport, closeModal } = useAuthModals();
+  const { activeModal, openReport, closeModal } = useAuthModals(); // Modal controls
 
-  const [period, setPeriod] = useState("6m");
-  const [overview, setOverview] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [period, setPeriod] = useState("6m"); // Selected period
+  const [overview, setOverview] = useState(null); // Overview data
+  const [loading, setLoading] = useState(true); // Loading state
+  const [error, setError] = useState(null); // Error state
 
-  const toggleSidebar = () => setSidebarOpen(prev => !prev);
+  const toggleSidebar = () => setSidebarOpen(prev => !prev); // Toggle sidebar
 
-  const periodMap = {
+  const periodMap = { // Map display labels to API periods
     "Últimos 7 dias": "7d",
     "Últimos 30 dias": "30d",
     "Últimos 6 meses": "6m",
     "Último 1 ano": "1y",
   };
 
+  // Fetch overview data from API
   const fetchOverview = async (selectedPeriod) => {
     try {
       setLoading(true);
-
       const response = await api.post("/Company/report/sales/overview", {
         period: selectedPeriod,
       });
-
       const data = response.data;
 
-      if (!data || typeof data !== "object") {
-        throw new Error("Resposta inválida do servidor");
-      }
+      if (!data || typeof data !== "object") throw new Error("Invalid server response");
 
       setOverview(data.overview);
     } catch (err) {
-      console.error("Erro ao buscar overview:", err);
-      setError("Erro ao carregar relatório");
+      console.error("Error fetching overview:", err);
+      setError("Failed to load report");
     } finally {
       setLoading(false);
     }
   };
 
+  // Redirect to login if not authenticated
   useEffect(() => {
     if (!pageLoading && !isAuthenticated) {
       window.location.href = "/login";
     }
   }, [pageLoading, isAuthenticated]);
 
+  // Fetch overview on mount
   useEffect(() => {
     if (!pageLoading && isAuthenticated && companyId) {
       fetchOverview(period);
     }
   }, [pageLoading, isAuthenticated, companyId]);
 
-  const handleSelectPeriod = (val) => {
+  const handleSelectPeriod = (val) => { // Handle period selection
     const p = periodMap[val];
     setPeriod(p);
     fetchOverview(p);
@@ -85,24 +88,24 @@ const Reports = () => {
 
   return (
     <section className="body-section">
-      <HeaderMobile onToggleSidebar={toggleSidebar} />
-      <Sidebar isOpen={sidebarOpen} onClose={toggleSidebar} />
+      <HeaderMobile onToggleSidebar={toggleSidebar} /> {/* Mobile header */}
+      <Sidebar isOpen={sidebarOpen} onClose={toggleSidebar} /> {/* Sidebar layout */}
 
       <div className="content-page-section">
         <div className="align-heading">
           <div>
-            <h1 className="title-page-section">Relatórios</h1>
-            <p className="description-page-section">Análises e insights do seu negócio</p>
+            <h1 className="title-page-section">Relatórios</h1> {/* Page title */}
+            <p className="description-page-section">Análises e insights do seu negócio</p> {/* Subtitle */}
           </div>
 
           <div className="report-buttons">
             <div className="button-shadown">
               <Button
                 className="hover-dashboard"
-                onClick={openReport}
+                onClick={openReport} // Open new report modal
                 height={"auto"}
                 width={160}
-                label={<><LuChartColumn size={"1.5rem"} />Novo Relatório</>}
+                label={<><LuChartColumn size={"1.5rem"} />Novo Relatório</>} // Button label with icon
               />
             </div>
 
@@ -115,16 +118,17 @@ const Reports = () => {
                   "Último 1 ano",
                 ]}
                 defaultValue="Últimos 6 meses"
-                onSelect={handleSelectPeriod}
+                onSelect={handleSelectPeriod} // Handle period selection
               />
             </div>
           </div>
         </div>
 
+        {/* Overview cards */}
         <section className="reportCards">
           {loading ? (
             <>
-              <ReportCard loading />
+              <ReportCard loading /> {/* Placeholder cards */}
               <ReportCard loading />
               <ReportCard loading />
               <ReportCard loading />
@@ -162,6 +166,7 @@ const Reports = () => {
           )}
         </section>
 
+        {/* Charts */}
         <section className="chart-section">
           <div className="chart-wrapper">
             <LineSalesChart data={overview?.salesTotals || {}} period={period} />
@@ -172,6 +177,7 @@ const Reports = () => {
           </div>
         </section>
 
+        {/* Generated reports */}
         <section className="reports-section">
           <div>
             <h3>Relatórios Gerados</h3>
@@ -218,9 +224,10 @@ const Reports = () => {
         </section>
       </div>
 
+      {/* New Report Modal */}
       <NewReportModal isOpen={activeModal === "report"} onClose={closeModal} />
     </section>
   );
 };
 
-export default Reports;
+export default Reports; // Export Reports page component

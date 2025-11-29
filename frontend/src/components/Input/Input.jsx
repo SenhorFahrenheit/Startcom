@@ -1,8 +1,12 @@
-import React, { useState } from "react";
-import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
+import React, { useState } from "react"
+import { RiEyeFill, RiEyeOffFill } from "react-icons/ri"
 
-import "./Input.css";
+import "./Input.css"
 
+/**
+ * Input component
+ * Supports icons and password visibility toggle.
+ */
 const Input = React.forwardRef(
   (
     {
@@ -16,13 +20,24 @@ const Input = React.forwardRef(
     },
     ref
   ) => {
-    const [visible, setVisible] = useState(false);
+    // Controls password visibility
+    const [visible, setVisible] = useState(false)
 
-    const isPassword = type === "password";
-    const resolvedType = isPassword ? (visible ? "text" : "password") : type;
+    // Determines if input is a password field
+    const isPassword = type === "password"
+
+    // Resolves input type based on visibility state
+    const resolvedType = isPassword
+      ? visible
+        ? "text"
+        : "password"
+      : type
 
     return (
-      <div className={`input-with-icon ${iconPosition}`} style={style}>
+      <div
+        className={`input-with-icon ${iconPosition}`}
+        style={style}
+      >
         <input
           type={resolvedType}
           placeholder={placeholder}
@@ -30,6 +45,8 @@ const Input = React.forwardRef(
           ref={ref}
           {...rest}
         />
+
+        {/* Icon handling */}
         {isPassword ? (
           <span
             className="icon"
@@ -43,11 +60,15 @@ const Input = React.forwardRef(
             )}
           </span>
         ) : (
-          icon && <span className="icon">{icon}</span>
+          icon && (
+            <span className="icon">
+              {icon}
+            </span>
+          )
         )}
       </div>
-    );
+    )
   }
-);
+)
 
-export default Input;
+export default Input

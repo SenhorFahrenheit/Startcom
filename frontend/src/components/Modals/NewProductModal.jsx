@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { toast } from "react-toastify";
 
 import BaseModal from "./BaseModal";
@@ -7,12 +8,19 @@ import SelectDropdown from "../SelectDropdown/SelectDropdown";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
 
 import api from "../../services/api";
-import { useState } from "react";
 
+/**
+ * NewProductModal component
+ * Modal responsible for registering a new product in inventory.
+ */
 const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
-  const [buttonLoading, setButtonloading] = useState(false)
+  const [buttonLoading, setButtonloading] = useState(false);
   const [category, setCategory] = useState("Roupas");
 
+  /**
+   * Normalize currency input value
+   * Removes currency symbols and formats value for backend
+   */
   const normalizePrice = (value) => {
     if (!value) return value;
 
@@ -23,7 +31,9 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
       .trim();
   };
 
-
+  /**
+   * Create new product request
+   */
   const newProduct = async (e) => {
     e.preventDefault();
 
@@ -32,6 +42,7 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
 
     let hasError = false;
 
+    // Basic form validation
     if (!data.name.trim()) {
       toast.error("O campo Nome não pode estar vazio!", {
         position: "top-right",
@@ -96,45 +107,50 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
         costPrice: normalizePrice(data.costPrice),
         quantity: data.quantity,
         minQuantity: data.min,
-        category: category
-      }
+        category: category,
+      },
     };
 
     try {
-      setButtonloading(true)
-      const response = await api.post("/Company/inventory/create", body);
-      toast.success("Produto registrado com sucesso!", { position: "top-right", containerId: "toast-root" });
-      onClose();
-      if (onSuccess) {
-        onSuccess(response.data);
-      }
-    } catch (error) {
-        const status = error.response?.status;
+      setButtonloading(true);
 
-        if (status === 409) {
-          toast.error("Já existe um produto com esse nome.", {
-            position: "top-right",
-            containerId: "toast-root",
-          });
-        } else if(status === 422) {
-          toast.error("A quantidade ou o preço informado é inválido.", {
-            position: "top-right",
-            containerId: "toast-root",
-          });
-        } else if (status === 500) {
-          toast.error("Erro interno no servidor. Tenta de novo mais tarde.", {
-            position: "top-right",
-            containerId: "toast-root",
-          });
-        } else {
-          toast.error("Algo deu errado. Tente novamente.", {
-            position: "top-right",
-            containerId: "toast-root",
-          });
-        }
-      } finally {
-        setTimeout(() => setButtonloading(false), 1500)
+      const response = await api.post("/Company/inventory/create", body);
+
+      toast.success("Produto registrado com sucesso!", {
+        position: "top-right",
+        containerId: "toast-root",
+      });
+
+      onClose();
+      if (onSuccess) onSuccess(response.data);
+
+    } catch (error) {
+      const status = error.response?.status;
+
+      if (status === 409) {
+        toast.error("Já existe um produto com esse nome.", {
+          position: "top-right",
+          containerId: "toast-root",
+        });
+      } else if (status === 422) {
+        toast.error("A quantidade ou o preço informado é inválido.", {
+          position: "top-right",
+          containerId: "toast-root",
+        });
+      } else if (status === 500) {
+        toast.error("Erro interno no servidor. Tenta de novo mais tarde.", {
+          position: "top-right",
+          containerId: "toast-root",
+        });
+      } else {
+        toast.error("Algo deu errado. Tente novamente.", {
+          position: "top-right",
+          containerId: "toast-root",
+        });
       }
+    } finally {
+      setTimeout(() => setButtonloading(false), 1500);
+    }
   };
 
   return (
@@ -143,23 +159,24 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
       onClose={onClose}
       contentLabel="Cadastrar Nova Venda"
       width="500px"
-      height={"auto"}
-      showCloseButton={true}
+      height="auto"
+      showCloseButton
     >
       <h2 className="dashboard-modal-title">Registrar Novo Produto</h2>
 
       <form className="form-dashboard" onSubmit={newProduct}>
         <div className="align-dashboard-form">
+
           <div className="input-dashboard-block">
             <label htmlFor="name">Nome</label>
             <InputDashboard name="name" id="name" />
-            <InfoTooltip text="Nome do produto para identificar no estoque. Ex.: Camiseta Azul"/>
+            <InfoTooltip text="Nome do produto para identificar no estoque. Ex.: Camiseta Azul" />
           </div>
 
           <div className="input-dashboard-block">
             <label htmlFor="description">Descrição</label>
-            <InputDashboard name="description" id="description"/>
-            <InfoTooltip text="Um resumo rápido do produto. Ex.: Camiseta 100% algodão tamanho M"/>
+            <InputDashboard name="description" id="description" />
+            <InfoTooltip text="Um resumo rápido do produto. Ex.: Camiseta 100% algodão tamanho M" />
           </div>
 
           <div className="input-dashboard-block">
@@ -192,35 +209,43 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
               ]}
               onChange={(e) => setCategory(e.target.value)}
             />
-            <InfoTooltip text="Tipo do produto. Ajuda a organizar o estoque. Ex.: Roupas, Eletrônicos"/>
+            <InfoTooltip text="Tipo do produto. Ajuda a organizar o estoque. Ex.: Roupas, Eletrônicos" />
           </div>
 
           <div className="input-dashboard-block">
             <label htmlFor="quantity">Quantidade</label>
             <InputDashboard type="number" name="quantity" id="quantity" />
-            <InfoTooltip text="Quanto você tem desse produto agora. Ex.: 12"/>
+            <InfoTooltip text="Quanto você tem desse produto agora. Ex.: 12" />
           </div>
 
           <div className="input-dashboard-block">
             <label htmlFor="min">Quantidade Mínima</label>
             <InputDashboard type="number" name="min" id="min" />
-            <InfoTooltip text="Quantidade mínima antes de avisar que está acabando. Ex.: 3"/>
+            <InfoTooltip text="Quantidade mínima antes de avisar que está acabando. Ex.: 3" />
           </div>
 
           <div className="input-dashboard-block">
             <label htmlFor="price">Preço de Venda</label>
             <InputDashboard name="price" id="price" />
-            <InfoTooltip text="Quanto você cobra do cliente. Ex.: 59,90"/>
+            <InfoTooltip text="Quanto você cobra do cliente. Ex.: 59,90" />
           </div>
 
           <div className="input-dashboard-block">
             <label htmlFor="costPrice">Preço de Custo</label>
             <InputDashboard name="costPrice" id="costPrice" />
-            <InfoTooltip text="Quanto você pagou no produto. Ex.: 32,50"/>
+            <InfoTooltip text="Quanto você pagou no produto. Ex.: 32,50" />
           </div>
+
         </div>
+
         <div className="button-shadown">
-          <Button height={45} width={200} loading={buttonLoading} type="submit" label="Salvar Produto" />
+          <Button
+            height={45}
+            width={200}
+            loading={buttonLoading}
+            type="submit"
+            label="Salvar Produto"
+          />
         </div>
       </form>
     </BaseModal>
