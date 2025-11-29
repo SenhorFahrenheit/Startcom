@@ -93,3 +93,10 @@ class UserInDB(UserBase):
     password_hash: str = Field(..., description="The cryptographic hash of the user's password.")
     created_at: Optional[datetime] = Field(None, description="Date and time when the user was created.")
     updated_at: Optional[datetime] = Field(None, description="Date and time when the user was last updated.")
+
+from pydantic import BaseModel, EmailStr
+
+class ContactFormRequest(BaseModel):
+    name: str
+    email: EmailStr
+    message: str

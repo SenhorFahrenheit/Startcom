@@ -259,6 +259,36 @@ class UserService:
         )
 
         return True
+    
+    async def send_contact_email(self, name: str, email: str, message_text: str):
+        """
+        Send contact form content to the support mailbox.
+
+        - Subject: "Forms de Contato"
+        - Recipient: suportstartcomtech@gmail.com
+        """
+        support_email = "suportstartcomtech@gmail.com"
+        subject = "Forms de Contato"
+
+        # Simple HTML body
+        body = f"""
+            <p><strong>From:</strong> {name} &lt;{email}&gt;</p>
+            <p><strong>Message:</strong></p>
+            <div>{message_text}</div>
+        """
+
+        try:
+            message = MessageSchema(
+                subject=subject,
+                recipients=[support_email],
+                subtype="html",
+                body=body
+            )
+            await fm.send_message(message)
+            return True
+        except Exception as e:
+            # Bubble up as HTTPException for route handling
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to send contact email: {e}")
 
 
 
