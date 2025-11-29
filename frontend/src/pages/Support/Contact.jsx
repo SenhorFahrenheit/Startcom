@@ -1,7 +1,7 @@
 // Libraries & Styles
 import "./Contact.css";
 import "../commonStyle.css";
-import { Mail, Send } from "lucide-react";
+import { Mail} from "lucide-react";
 
 // Components
 import BackHome from "../../components/BackHome/BackHome";
@@ -12,7 +12,7 @@ import Input from "../../components/Input/Input";
 import { useContactForm } from "../../hooks/useContactForm";
 
 const Contact = () => {
-  const { register, handleSubmit, onSubmit, onError } = useContactForm();
+  const { register, handleSubmit, onSubmit, onError, buttonLoading } = useContactForm();
 
   return (
     <div className="support-container-wrapper">
@@ -87,12 +87,8 @@ const Contact = () => {
             height="50px"
             width="90%"
             fontSize="1.05rem"
-            label={
-              <>
-                <Send size="1.25rem" />
-                Falar com Suporte
-              </>
-            }
+            loading={buttonLoading}
+            label="Falar com Suporte"
           />
         </form>
 
