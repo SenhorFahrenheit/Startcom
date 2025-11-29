@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import axios from "axios";
+import api from "../services/api";
 
 // Custom hook for contact form submission
 export const useContactForm = () => {
@@ -11,7 +11,7 @@ export const useContactForm = () => {
   const onSubmit = async (data) => {
     try {
       // Sends form data to API
-      await axios.post("rota/aleatoria/", data);
+      await api.post("rota/aleatoria/", data);
 
       // Success toast
       toast.success("Mensagem enviada! Aguarde nosso retorno.", {

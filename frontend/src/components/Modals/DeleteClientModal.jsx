@@ -32,9 +32,7 @@ const DeleteClientModal = ({
       await api.delete(
         "/Company/clients/delete/",
         {
-          data: {
             clientId: clientData.id,
-          },
         }
       )
 
