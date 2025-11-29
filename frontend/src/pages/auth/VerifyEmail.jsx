@@ -7,47 +7,51 @@ import Button from "../../components/Button/Button";
 import "./VerifyEmail.css";
 
 const VerifyEmail = () => {
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams(); // get URL query parameters
+  const navigate = useNavigate(); // navigation hook
   
-  const [status, setStatus] = useState("loading"); // loading, success, error
-  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState("loading"); // current verification state: loading, success, error
+  const [message, setMessage] = useState(""); // message to show to user
   
   useEffect(() => {
+    // async function to verify email with API
     const verifyEmail = async () => {
-      const token = searchParams.get("token");
+      const token = searchParams.get("token"); // get token from URL
       
       if (!token) {
         setStatus("error");
-        setMessage("Token de verificação não encontrado na URL.");
+        setMessage("Verification token not found in URL."); // token missing
         return;
       }
 
       try {
+        // call API to verify email
         const response = await api.post("/User/verify-email/confirm", null, {
           params: { token },
         });
 
-        setStatus("success");
-        setMessage(response.data?.message || "Email verificado com sucesso!");
+        setStatus("success"); // verification successful
+        setMessage(response.data?.message || "Email successfully verified!");
       } catch (error) {
-        setStatus("error");
+        setStatus("error"); // verification failed
 
+        // handle specific HTTP error codes
         if (error.response?.status === 400) {
-          setMessage("Token inválido ou malformado.");
+          setMessage("Invalid or malformed token.");
         } else if (error.response?.status === 410) {
-          setMessage("Token expirado. Solicite um novo email de verificação.");
+          setMessage("Token expired. Request a new verification email.");
         } else if (error.response?.status === 404) {
-          setMessage("Token não encontrado. Verifique o link enviado por email.");
+          setMessage("Token not found. Check the email link.");
         } else {
-          setMessage("Erro inesperado ao verificar seu email.");
+          setMessage("Unexpected error occurred during email verification.");
         }
       }
     };
 
-    verifyEmail();
+    verifyEmail(); // trigger verification on mount
   }, [searchParams]);
 
+  // navigate to login page
   const handleGoToLogin = () => {
     navigate("/login");
   };
@@ -59,20 +63,20 @@ const VerifyEmail = () => {
           {/* Loading State */}
           {status === "loading" && (
             <>
-              <ImSpinner8 className="icon icon-loading" />
-              <h1>Verificando seu email...</h1>
-              <p>Aguarde um momento enquanto confirmamos sua conta.</p>
+              <ImSpinner8 className="icon icon-loading" /> {/* spinner icon */}
+              <h1>Verifying your email...</h1>
+              <p>Please wait while we confirm your account.</p>
             </>
           )}
 
           {/* Success State */}
           {status === "success" && (
             <>
-              <FaCheckCircle className="icon icon-success" />
-              <h1>Email Verificado!</h1>
+              <FaCheckCircle className="icon icon-success" /> {/* success icon */}
+              <h1>Email Verified!</h1>
               <p>{message}</p>
               <Button 
-                label="IR PARA LOGIN" 
+                label="GO TO LOGIN" 
                 onClick={handleGoToLogin}
                 type="button"
               />
@@ -82,12 +86,12 @@ const VerifyEmail = () => {
           {/* Error State */}
           {status === "error" && (
             <>
-              <FaTimesCircle className="icon icon-error" />
-              <h1>Ops! Algo deu errado</h1>
+              <FaTimesCircle className="icon icon-error" /> {/* error icon */}
+              <h1>Oops! Something went wrong</h1>
               <p>{message}</p>
               <div className="button-group">
                 <Button 
-                  label="VOLTAR PARA LOGIN" 
+                  label="BACK TO LOGIN" 
                   onClick={handleGoToLogin}
                   type="button"
                 />

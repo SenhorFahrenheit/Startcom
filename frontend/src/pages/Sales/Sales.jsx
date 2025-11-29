@@ -1,44 +1,51 @@
+// Styles
 import "./Sales.css";
 import "../commonStyle.css";
+
+// React
 import { useState, useEffect } from "react";
 
+// Utils
 import { formatCurrency } from '../../utils/format';
+import api from "../../services/api";
+
+// Hooks
 import { useAuthModals } from "../../hooks/useAuthModals";
-import NewSaleModal from "../../components/Modals/NewSaleModal";
+import { useAuth } from "../../contexts/AuthContext";
+
+// Layouts
 import Sidebar from "../../layouts/Sidebar/Sidebar";
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
+
+// Components
 import SalesCard from "../../components/SalesCard/SalesCard";
 import Button from "../../components/Button/Button";
 import FilterDateButton from "../../components/FilterDateButton/FilterDateButton";
+import NewSaleModal from "../../components/Modals/NewSaleModal";
 import SalesTable from "../../components/SalesTable/SalesTable";
-import { useAuth } from "../../contexts/AuthContext";
-import api from "../../services/api";
 
-import "react-loading-skeleton/dist/skeleton.css";
-
+// Icons
 import { LuPlus, LuDollarSign, LuShoppingCart, LuTrendingUp } from "react-icons/lu";
 
+// Skeleton CSS
+import "react-loading-skeleton/dist/skeleton.css";
+
 const Sales = () => {
-  const { token, user, isAuthenticated, pageLoading } = useAuth();
+  const { token, user, isAuthenticated, pageLoading } = useAuth(); // Auth state
   const companyId = user?.companyId;
 
-  useEffect(() => {
-    if (!pageLoading && !isAuthenticated) {
-      window.location.href = "/login";
-    }
-  }, [pageLoading, isAuthenticated]);
+  const { activeModal, openSale, closeModal } = useAuthModals(); // Modal control
 
-  const { activeModal, openSale, closeModal } = useAuthModals();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [skeletonLoading, setSkeletonLoading] = useState(false)
-  const [dateFilter, setDateFilter] = useState("Este Mês");
-  const [statusFilter, setStatusFilter] = useState({
+  const [sidebarOpen, setSidebarOpen] = useState(false); // Sidebar toggle
+  const [skeletonLoading, setSkeletonLoading] = useState(false); // Loading skeleton
+  const [dateFilter, setDateFilter] = useState("Este Mês"); // Selected date filter
+  const [statusFilter, setStatusFilter] = useState({ // Status filters
     "Concluído": true,
     "Pendente": true,
     "Cancelada": true,
   });
-  const [search, setSearch] = useState("");
-  const [overview, setOverview] = useState({
+  const [search, setSearch] = useState(""); // Search query
+  const [overview, setOverview] = useState({ // Sales overview data
     todayTotal: 0,
     todayComparison: 0,
     totalSales: 0,
@@ -46,32 +53,40 @@ const Sales = () => {
     averageTicket: 0,
     averageTicketComparison: 0,
   });
+  const [refreshSales, setRefreshSales] = useState(0); // Trigger to refresh table
 
-  const [refreshSales, setRefreshSales] = useState(0);
+  const toggleSidebar = () => setSidebarOpen(prev => !prev); // Toggle sidebar visibility
 
-  const toggleSidebar = () => setSidebarOpen(prev => !prev);
-
+  // Fetch sales overview from API
   const fetchOverview = async () => {
-  try {
-    setSkeletonLoading(true);
-    const response = await api.get("/Company/sales/overview");
-    const data = response.data.overview;
+    try {
+      setSkeletonLoading(true);
+      const response = await api.get("/Company/sales/overview");
+      const data = response.data.overview;
 
-    setOverview({
-      todayTotal: data.today.total,
-      todayComparison: data.today.comparison,
-      totalSales: data.sales.total,
-      weekSales: data.sales.week,
-      averageTicket: data.ticket.average,
-      averageTicketComparison: data.ticket.comparison,
-    });
-  } catch (error) {
-    console.error(error);
-  } finally {
-    setSkeletonLoading(false);
-  }
-};
+      setOverview({
+        todayTotal: data.today.total,
+        todayComparison: data.today.comparison,
+        totalSales: data.sales.total,
+        weekSales: data.sales.week,
+        averageTicket: data.ticket.average,
+        averageTicketComparison: data.ticket.comparison,
+      });
+    } catch (error) {
+      console.error("Error fetching sales overview:", error);
+    } finally {
+      setSkeletonLoading(false);
+    }
+  };
 
+  // Redirect to login if unauthenticated
+  useEffect(() => {
+    if (!pageLoading && !isAuthenticated) {
+      window.location.href = "/login";
+    }
+  }, [pageLoading, isAuthenticated]);
+
+  // Fetch overview on mount
   useEffect(() => {
     if (!pageLoading && isAuthenticated && companyId) {
       fetchOverview();
@@ -80,10 +95,11 @@ const Sales = () => {
 
   return (
     <section className="body-section">
-      <HeaderMobile onToggleSidebar={toggleSidebar} />
-      <Sidebar isOpen={sidebarOpen} onClose={toggleSidebar} />
+      <HeaderMobile onToggleSidebar={toggleSidebar} /> {/* Mobile header */}
+      <Sidebar isOpen={sidebarOpen} onClose={toggleSidebar} /> {/* Sidebar layout */}
 
       <div className="content-page-section">
+        {/* Page header */}
         <div className="align-heading">
           <div>
             <h1 className="title-page-section">Vendas</h1>
@@ -93,7 +109,7 @@ const Sales = () => {
           <div className="button-shadown">
             <Button 
               className="hover-dashboard" 
-              onClick={openSale} 
+              onClick={openSale} // Open New Sale Modal
               height={"auto"} 
               width={160} 
               label={<><LuPlus size={"1.5rem"}/>Nova Venda</>} 
@@ -101,13 +117,13 @@ const Sales = () => {
           </div>
         </div>
 
+        {/* Sales overview cards */}
         <section className="salesCards">
           {skeletonLoading ? (
             [0,1,2].map(idx => (
-              <SalesCard key={idx} loading={true} />
+              <SalesCard key={idx} loading={true} /> // Loading placeholders
             ))
           ) : (
-
             <>
               <SalesCard 
                 icon={<LuDollarSign size={24}/>} 
@@ -134,6 +150,7 @@ const Sales = () => {
           )}
         </section>
 
+        {/* Filters and search */}
         <div className="filter-search">
           <input 
             style={{ fontSize: 14, paddingLeft: 16 }} 
@@ -147,11 +164,12 @@ const Sales = () => {
             <FilterDateButton 
               options={["Hoje", "Esta Semana", "Este Mês", "Este Ano"]}
               defaultValue="Este Mês"
-              onSelect={setDateFilter}
+              onSelect={setDateFilter} // Date filter
             />
           </div>
         </div>
 
+        {/* Recent sales table */}
         <div className="recent-sells">
           <div className="recentSells-title">
             <h3>Vendas Recentes</h3>
@@ -161,21 +179,22 @@ const Sales = () => {
             dateFilter={dateFilter}
             statusFilter={statusFilter}
             search={search}
-            refreshTrigger={refreshSales}
+            refreshTrigger={refreshSales} // Trigger to refresh table after new sale
           />
         </div>
       </div>
 
+      {/* New Sale Modal */}
       <NewSaleModal
         isOpen={activeModal === "sale"}
         onClose={closeModal}
         onSuccess={() => {
-          fetchOverview();
-          setRefreshSales(prev => prev + 1);
+          fetchOverview(); // Refresh overview after new sale
+          setRefreshSales(prev => prev + 1); // Trigger table refresh
         }}
       />
     </section>
   );
 };
 
-export default Sales;
+export default Sales; // Export Sales page component

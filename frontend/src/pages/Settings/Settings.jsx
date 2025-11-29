@@ -1,41 +1,44 @@
-// Libs
+// Libraries
 import "./Settings.css";
 import "../commonStyle.css";
 import { useEffect, useState } from "react";
 import { LuBuilding, LuBell } from "react-icons/lu";
 import { Controller } from "react-hook-form";
+import { toast } from "react-toastify";
 
 // Layouts & Components
 import Sidebar from "../../layouts/Sidebar/Sidebar";
+import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
 import Button from "../../components/Button/Button";
 import InputDashboard from "../../components/InputDashboard/InputDashboard";
-import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
 import NotificationSetting from "../../components/NotificationSetting/NotificationSetting";
-import { useAuthModals } from "../../hooks/useAuthModals";
-import { useAuth } from "../../contexts/AuthContext";
 import DeleteAccountModal from "../../components/Modals/DeleteAccount";
 
+// Hooks & Services
+import { useAuth } from "../../contexts/AuthContext";
+import { useAuthModals } from "../../hooks/useAuthModals";
 import { useSettingForm } from "../../hooks/useSettingForm";
-
 import api from "../../services/api";
-import { toast } from "react-toastify";
-import { Delete } from "lucide-react";
 
 const Settings = () => {
-    const { token, user, isAuthenticated, pageLoading } = useAuth();
-    
-    useEffect(() => {
-      if (!pageLoading &&!isAuthenticated) {
-        window.location.href = "/login";
-      }
-    }, [pageLoading, isAuthenticated]);
-  
-    const { activeModal, openDeleteAccountModal, closeModal } = useAuthModals();
+  // Auth context
+  const { token, user, isAuthenticated, pageLoading } = useAuth();
 
+  // Redirect if unauthenticated
+  useEffect(() => {
+    if (!pageLoading && !isAuthenticated) {
+      window.location.href = "/login";
+    }
+  }, [pageLoading, isAuthenticated]);
+
+  // Modal management
+  const { activeModal, openDeleteAccountModal, closeModal } = useAuthModals();
+
+  // Sidebar state
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [buttonLoading, setButtonLoading] = useState(false);
   const toggleSidebar = () => setSidebarOpen(prev => !prev);
 
+  // Form state & hooks
   const {
     register,
     handleSubmit,
@@ -52,19 +55,17 @@ const Settings = () => {
   } = useSettingForm();
 
   const [initialData, setInitialData] = useState(null);
+  const watched = watch(); // Track live changes in form
 
-  const watched = watch();
-
+  // Load company data on mount
   useEffect(() => {
     const loadCompany = async () => {
       try {
         const { data } = await api.get("/User/my-company");
 
+        // Format phone
         const phone = data.phone_number || "";
-
-        const cleanedPhone = phone.startsWith("+55")
-        ? phone.replace("+55", "")
-        : phone;
+        const cleanedPhone = phone.startsWith("+55") ? phone.replace("+55", "") : phone;
 
         const formatted = {
           nameBusiness: data.name || "",
@@ -76,6 +77,7 @@ const Settings = () => {
 
         setInitialData(formatted);
 
+        // Populate form fields
         Object.entries(formatted).forEach(([key, value]) => {
           setValue(key, value);
         });
@@ -89,6 +91,7 @@ const Settings = () => {
     loadCompany();
   }, []);
 
+  // Check if form has unsaved changes
   const hasChanges =
     initialData &&
     Object.keys(initialData).some(key => {
@@ -97,9 +100,12 @@ const Settings = () => {
       return current !== original;
     });
 
+  // Submit form to update company settings
+  const [buttonLoading, setButtonLoading] = useState(false);
   const onSubmit = async (formData) => {
     try {
-      setButtonLoading(true)
+      setButtonLoading(true);
+
       const payload = {
         name: formData.nameBusiness,
         cpf_cnpj: formData.CNPJorCPF.replace(/\D/g, ""),
@@ -122,7 +128,7 @@ const Settings = () => {
 
     } catch (err) {
       console.error(err);
-      toast.success("Erro ao salvar alterações", { position: "top-right", containerId: "toast-root" });
+      toast.error("Erro ao salvar alterações", { position: "top-right", containerId: "toast-root" });
     } finally {
       setButtonLoading(false);
     }
@@ -134,6 +140,7 @@ const Settings = () => {
       <Sidebar isOpen={sidebarOpen} onClose={toggleSidebar} />
 
       <div className="content-page-section setting-page">
+        {/* Page Header */}
         <div className="align-heading">
           <div>
             <h1 className="title-page-section">Configurações</h1>
@@ -143,27 +150,28 @@ const Settings = () => {
           </div>
         </div>
 
+        {/* Settings Form */}
         <form className="settings-container-form" onSubmit={handleSubmit(onSubmit, onError)}>
 
+          {/* Company Profile */}
           <div className="settings-title">
             <LuBuilding size={20} color="var(--primary-color)" />
             <h3>Perfil da Empresa</h3>
           </div>
 
           <div className="form-setting-group">
+            {/* Business Name */}
             <div className="form-setting-gap">
               <label htmlFor="nameBusiness">Nome da Empresa</label>
               <InputDashboard
                 id="nameBusiness"
-                {...register("nameBusiness", {
-                  required: "Nome da empresa é obrigatório"
-                })}
+                {...register("nameBusiness", { required: "Nome da empresa é obrigatório" })}
               />
             </div>
 
+            {/* CNPJ or CPF */}
             <div className="form-setting-gap">
               <label htmlFor="CNPJorCPF">CNPJ ou CPF</label>
-
               <Controller
                 name="CNPJorCPF"
                 control={control}
@@ -172,12 +180,8 @@ const Settings = () => {
                   required: "Documento é obrigatório",
                   validate: (value) => {
                     const digits = value.replace(/\D/g, "");
-                    if (digits.length === 11) {
-                      return validateCPF(value) || "CPF inválido.";
-                    }
-                    if (digits.length === 14) {
-                      return validateCNPJ(value) || "CNPJ inválido.";
-                    }
+                    if (digits.length === 11) return validateCPF(value) || "CPF inválido.";
+                    if (digits.length === 14) return validateCNPJ(value) || "CNPJ inválido.";
                     return "CPF/CNPJ inválido.";
                   },
                 }}
@@ -196,37 +200,31 @@ const Settings = () => {
                   );
                 }}
               />
-
             </div>
           </div>
 
+          {/* Email & Phone */}
           <div className="form-setting-group">
-
             <div className="form-setting-gap">
               <label htmlFor="email">E-mail</label>
               <InputDashboard
                 id="email"
                 {...register("email", {
                   required: "Email é obrigatório",
-                  pattern: {
-                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                    message: "Email inválido"
-                  }
+                  pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: "Email inválido" }
                 })}
               />
             </div>
 
             <div className="form-setting-gap">
               <label htmlFor="telefone">Telefone</label>
-
               <Controller
                 name="telefone"
                 control={control}
                 defaultValue=""
                 rules={{
                   required: "Telefone é obrigatório",
-                  validate: v =>
-                    validatePhone(v) || "Telefone inválido. Use (00) 00000-0000"
+                  validate: v => validatePhone(v) || "Telefone inválido. Use (00) 00000-0000"
                 }}
                 render={({ field: { onChange, value } }) => (
                   <InputDashboard
@@ -240,20 +238,20 @@ const Settings = () => {
             </div>
           </div>
 
+          {/* Address */}
           <div className="form-setting-gap-unique">
             <label htmlFor="address">Endereço</label>
             <InputDashboard
               id="address"
-              {...register("address", {
-                required: "Endereço obrigatório"
-              })}
+              {...register("address", { required: "Endereço obrigatório" })}
             />
           </div>
 
+          {/* Buttons */}
           <div className="setting-changes">
             <div className="button-shadown">
               <Button
-                className={`hover-dashboard`}
+                className="hover-dashboard"
                 width={180}
                 buttonColor="#ff4d4f"
                 type="button"
@@ -263,7 +261,7 @@ const Settings = () => {
             </div>
             <div className="button-shadown">
               <Button
-                className={`hover-dashboard`}
+                className="hover-dashboard"
                 width={180}
                 type="submit"
                 loading={buttonLoading}
@@ -272,9 +270,9 @@ const Settings = () => {
               />
             </div>
           </div>
-
         </form>
 
+        {/* Notification Settings */}
         <div className="notification-settings">
           <div className="settings-title">
             <LuBell size={20} color="var(--primary-color)" />
@@ -287,18 +285,15 @@ const Settings = () => {
               description="Receber alerta quando um produto atingir o estoque mínimo."
               state="defaultChecked"
             />
-
             <NotificationSetting
               title="Novas Vendas"
               description="Receber notificação a cada nova venda concluída."
               state="defaultChecked"
             />
-
             <NotificationSetting
               title="Relatórios Semanais"
               description="Receber um resumo do desempenho da semana por e-mail."
             />
-
             <NotificationSetting
               title="Novo Cliente"
               description="Receber aviso sempre que um novo cliente for cadastrado no sistema."
@@ -306,13 +301,12 @@ const Settings = () => {
           </section>
         </div>
       </div>
-      
+
+      {/* Delete Account Modal */}
       <DeleteAccountModal
         isOpen={activeModal === "deleteAccount"}
         onClose={closeModal}
-        onSuccess={() => {
-          window.location.href = "/"
-        }}
+        onSuccess={() => { window.location.href = "/" }}
       />
     </section>
   );
