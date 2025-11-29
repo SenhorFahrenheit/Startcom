@@ -8,7 +8,7 @@ import { registerAPI } from "../services/api";
 // Hook to manage user registration form
 export const useRegisterForm = (onSuccess) => {
   // React Hook Form instance
-  const { register, handleSubmit, control, watch } = useForm();
+  const { register, handleSubmit, control, watch, reset } = useForm();
 
   // Loading state for submit button
   const [buttonLoading, setButtonLoading] = useState(false);
@@ -31,6 +31,7 @@ export const useRegisterForm = (onSuccess) => {
         onSuccess(data.email);
       }
 
+      reset(); // Reset form fields
     } catch (error) {
       // Handle duplicate account error
       if (error.response && error.response.status === 409) {
@@ -39,6 +40,7 @@ export const useRegisterForm = (onSuccess) => {
         });
         return;
       }
+      console.log(error)
 
       // Generic error
       toast.error("Não foi possível concluir o cadastro. Tente novamente.", {
