@@ -135,13 +135,13 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
 
           <div className="input-dashboard-block">
             <label htmlFor="name">Nome</label>
-            <InputDashboard name="name" id="name" />
+            <InputDashboard name="name" id="name"/>
             <InfoToolTip text="Nome completo do cliente. Ajuda a identificar quem é a pessoa. Ex.: Maria da Silva" />
           </div>
 
           <div className="input-dashboard-block">
             <label htmlFor="email">Email</label>
-            <InputDashboard type="email" name="email" id="email" />
+            <InputDashboard type="email" name="email" id="email" maxLength={30}/>
             <InfoToolTip text="Email para contato e envio de mensagens. Ex.: maria.silva@gmail.com" />
           </div>
 
@@ -160,7 +160,7 @@ const NewClientModal = ({ isOpen, onClose, onSuccess }) => {
 
           <div className="input-dashboard-block">
             <label htmlFor="city">Cidade</label>
-            <InputDashboard type="text" name="city" id="city" />
+            <InputDashboard type="text" name="city" id="city" maxLength={30}/>
             <InfoToolTip text="Cidade onde o cliente mora. Ex.: São Paulo" />
           </div>
 

@@ -175,6 +175,15 @@
   gap: 15px;
 }
 
+.client-name-ellipsis {
+  max-width: 100%;
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+}
+
 .modal-buttons-row {
   display: flex;
   gap: 15px;

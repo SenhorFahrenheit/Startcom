@@ -13,6 +13,8 @@ const InputDashboard = React.forwardRef(
       maxLength,
       type = "text",
       readOnly = false,
+      min,
+      max,
       style,
       ...rest
     },

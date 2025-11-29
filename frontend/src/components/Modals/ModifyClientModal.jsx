@@ -183,6 +183,7 @@ const ModifyClientModal = ({
           <div className="input-dashboard-block">
             <label htmlFor="email">Email</label>
             <InputDashboard
+              maxLength={30}
               type="email"
               name="email"
               id="email"
@@ -210,6 +211,7 @@ const ModifyClientModal = ({
           <div className="input-dashboard-block">
             <label htmlFor="city">Cidade</label>
             <InputDashboard
+              maxLength={30}
               name="city"
               id="city"
               value={city}

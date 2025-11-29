@@ -97,7 +97,9 @@ const DeleteClientModal = ({
           o cliente
           <strong>
             {" "}
-            {clientData.clientName}
+            <span className="client-name-ellipsis">
+              {clientData.clientName}
+            </span>  
           </strong>
           ?
         </div>
