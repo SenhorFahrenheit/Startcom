@@ -30,8 +30,8 @@ const Clients = () => {
 
   useEffect(() => {
     if (!pageLoading && !isAuthenticated) {
-          window.location.href = "/login";
-        }
+        window.location.href = "/login";
+    }
   }, [pageLoading, isAuthenticated]);
 
   const { activeModal, openClient, openModifyClient, openDeleteClient, closeModal } = useAuthModals();

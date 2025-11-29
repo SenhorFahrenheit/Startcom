@@ -158,7 +158,11 @@
 
 /* DeleteClientModal Settings */
 
-.delete-client-description {
+.delete-account-description {
+  margin: 20px 0;
+}
+
+.delete-client-description, .delete-account-description {
   margin-bottom: 20px;
   font-size: 15px;
   line-height: 1.4;

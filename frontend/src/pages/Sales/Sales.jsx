@@ -23,7 +23,7 @@ const Sales = () => {
   const companyId = user?.companyId;
 
   useEffect(() => {
-    if (!loading && !isAuthenticated) {
+    if (!pageLoading && !isAuthenticated) {
       window.location.href = "/login";
     }
   }, [pageLoading, isAuthenticated]);
@@ -50,8 +50,6 @@ const Sales = () => {
   const [refreshSales, setRefreshSales] = useState(0);
 
   const toggleSidebar = () => setSidebarOpen(prev => !prev);
-
-  const [loading, setLoading] = useState(true);
 
   const fetchOverview = async () => {
   try {

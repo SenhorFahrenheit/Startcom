@@ -90,8 +90,15 @@ const Inventory = () => {
   };
 
   useEffect(() => {
-    if (!pageLoading && !isAuthenticated) window.location.href = "/login";
-    if (!pageLoading && isAuthenticated && companyId) fetchInventory();
+    if (!pageLoading && !isAuthenticated) {
+      window.location.href = "/login"
+    };
+  }, [pageLoading, isAuthenticated]);
+
+  useEffect(() => {
+    if (!pageLoading && isAuthenticated && companyId) {
+      fetchInventory()
+    };
   }, [pageLoading, isAuthenticated, companyId]);
 
   return (

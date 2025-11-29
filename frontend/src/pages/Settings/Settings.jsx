@@ -11,13 +11,27 @@ import Button from "../../components/Button/Button";
 import InputDashboard from "../../components/InputDashboard/InputDashboard";
 import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
 import NotificationSetting from "../../components/NotificationSetting/NotificationSetting";
+import { useAuthModals } from "../../hooks/useAuthModals";
+import { useAuth } from "../../contexts/AuthContext";
+import DeleteAccountModal from "../../components/Modals/DeleteAccount";
 
 import { useSettingForm } from "../../hooks/useSettingForm";
 
 import api from "../../services/api";
 import { toast } from "react-toastify";
+import { Delete } from "lucide-react";
 
 const Settings = () => {
+    const { token, user, isAuthenticated, pageLoading } = useAuth();
+    
+    useEffect(() => {
+      if (!pageLoading &&!isAuthenticated) {
+        window.location.href = "/login";
+      }
+    }, [pageLoading, isAuthenticated]);
+  
+    const { activeModal, openDeleteAccountModal, closeModal } = useAuthModals();
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [buttonLoading, setButtonLoading] = useState(false);
   const toggleSidebar = () => setSidebarOpen(prev => !prev);
@@ -105,7 +119,6 @@ const Settings = () => {
         telefone: formData.telefone.trim(),
         address: formData.address.trim()
       });
-
 
     } catch (err) {
       console.error(err);
@@ -237,11 +250,21 @@ const Settings = () => {
             />
           </div>
 
-          <div className="setting-save-changes">
+          <div className="setting-changes">
             <div className="button-shadown">
               <Button
                 className={`hover-dashboard`}
-                width={200}
+                width={180}
+                buttonColor="#ff4d4f"
+                type="button"
+                label={<>Excluir Conta</>}
+                onClick={openDeleteAccountModal} 
+              />
+            </div>
+            <div className="button-shadown">
+              <Button
+                className={`hover-dashboard`}
+                width={180}
                 type="submit"
                 loading={buttonLoading}
                 disabled={!hasChanges}
@@ -283,6 +306,14 @@ const Settings = () => {
           </section>
         </div>
       </div>
+      
+      <DeleteAccountModal
+        isOpen={activeModal === "deleteAccount"}
+        onClose={closeModal}
+        onSuccess={() => {
+          window.location.href = "/"
+        }}
+      />
     </section>
   );
 };

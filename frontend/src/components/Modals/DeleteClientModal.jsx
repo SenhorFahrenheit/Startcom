@@ -13,8 +13,7 @@ const DeleteClientModal = ({ isOpen, onClose, onSuccess, clientData }) => {
   const deleteClient = async () => {
     try {
       setButtonLoading(true);
-
-      await api.delete(`/Company/clients/${clientData.clientId}`);
+      await api.delete(`/Company/clients/delete/`, { data: { clientId: clientData.id }});
 
       toast.success("Cliente excluído com sucesso!", {
         position: "top-right",

@@ -68,9 +68,10 @@ const Reports = () => {
   useEffect(() => {
     if (!pageLoading && !isAuthenticated) {
       window.location.href = "/login";
-      return;
     }
+  }, [pageLoading, isAuthenticated]);
 
+  useEffect(() => {
     if (!pageLoading && isAuthenticated && companyId) {
       fetchOverview(period);
     }
