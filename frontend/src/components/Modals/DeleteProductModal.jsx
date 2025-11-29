@@ -1,50 +1,85 @@
-import { useState } from "react";
-import { toast } from "react-toastify";
-import api from "../../services/api";
+import { useState } from "react"
+import { toast } from "react-toastify"
+import api from "../../services/api"
 
-import BaseModal from "./BaseModal";
-import Button from "../Button/Button";
+import BaseModal from "./BaseModal"
+import Button from "../Button/Button"
 
-const DeleteProductModal = ({ isOpen, onClose, onSuccess, product }) => {
-  const [buttonLoading, setButtonLoading] = useState(false);
+/**
+ * DeleteProductModal component
+ * Handles product deletion confirmation and request.
+ */
+const DeleteProductModal = ({
+  isOpen,
+  onClose,
+  onSuccess,
+  product,
+}) => {
+  // Controls delete button loading state
+  const [buttonLoading, setButtonLoading] =
+    useState(false)
 
-  if (!product) return null;
+  // Prevents modal rendering when product data is missing
+  if (!product) return null
 
+  /**
+   * Sends delete product request
+   */
   const deleteProduct = async () => {
     try {
-      setButtonLoading(true);
-      console.table(product)
-      await api.delete(`/Company/inventory/delete_product/`, { data: { productId: product.productId }});
+      setButtonLoading(true)
 
+      await api.delete(
+        "/Company/inventory/delete_product/",
+        {
+          data: {
+            productId: product.productId,
+          },
+        }
+      )
 
-      toast.success("Produto excluído com sucesso!", {
-        position: "top-right",
-        containerId: "toast-root",
-      });
+      toast.success(
+        "Produto excluído com sucesso!",
+        {
+          position: "top-right",
+          containerId: "toast-root",
+        }
+      )
 
-      onClose();
-      if (onSuccess) onSuccess(product.productId);
+      onClose()
 
+      if (onSuccess) {
+        onSuccess(product.productId)
+      }
     } catch (error) {
-      const status = error.response?.status;
-      console.log(error)
+      const status =
+        error.response?.status
 
       if (status === 404) {
-        toast.error("Produto não encontrado.", {
-          position: "top-right",
-          containerId: "toast-root",
-        });
+        toast.error(
+          "Produto não encontrado.",
+          {
+            position: "top-right",
+            containerId: "toast-root",
+          }
+        )
       } else {
-        toast.error("Falha ao excluir o produto.", {
-          position: "top-right",
-          containerId: "toast-root",
-        });
+        toast.error(
+          "Falha ao excluir o produto.",
+          {
+            position: "top-right",
+            containerId: "toast-root",
+          }
+        )
       }
-
     } finally {
-      setTimeout(() => setButtonLoading(false), 1300);
+      // Keeps loading state briefly for UX feedback
+      setTimeout(
+        () => setButtonLoading(false),
+        1300
+      )
     }
-  };
+  }
 
   return (
     <BaseModal
@@ -55,14 +90,24 @@ const DeleteProductModal = ({ isOpen, onClose, onSuccess, product }) => {
       height="auto"
       showCloseButton={false}
     >
-      <h2 className="dashboard-modal-title">Excluir Produto</h2>
+      <h2 className="dashboard-modal-title">
+        Excluir Produto
+      </h2>
 
       <p className="delete-client-description">
-        Tem certeza que deseja excluir o produto
-        <strong> {product.name}</strong>?<br />
-        Essa ação é permanente e não pode ser desfeita.
+        Tem certeza que deseja excluir
+        o produto
+        <strong>
+          {" "}
+          {product.name}
+        </strong>
+        ?
+        <br />
+        Essa ação é permanente e não
+        pode ser desfeita.
       </p>
 
+      {/* Action buttons */}
       <div className="modal-buttons-row">
         <div className="button-shadown">
           <Button
@@ -87,7 +132,7 @@ const DeleteProductModal = ({ isOpen, onClose, onSuccess, product }) => {
         </div>
       </div>
     </BaseModal>
-  );
-};
+  )
+}
 
-export default DeleteProductModal;
+export default DeleteProductModal

@@ -1,137 +1,185 @@
-import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
-import api from "../../services/api";
+import { useState, useEffect } from "react"
+import { toast } from "react-toastify"
+import api from "../../services/api"
 
-import BaseModal from "./BaseModal";
-import Button from "../Button/Button";
-import InputDashboard from "../InputDashboard/InputDashboard";
+import BaseModal from "./BaseModal"
+import Button from "../Button/Button"
+import InputDashboard from "../InputDashboard/InputDashboard"
 import InfoToolTip from "../InfoTooltip/InfoTooltip"
-import { formatPhone } from "../../utils/format";
 
-const ModifyClientModal = ({ isOpen, onClose, onSuccess, clientData }) => {
-  const [buttonLoading, setButtonLoading] = useState(false);
-  const [nome, setNome] = useState("");
-  const [email, setEmail] = useState("");
-  const [cidade, setCidade] = useState("");
-  const [telefone, setTelefone] = useState("");
+import { formatPhone } from "../../utils/format"
 
-  const [initialData, setInitialData] = useState(null);
+/**
+ * ModifyClientModal
+ * Modal responsible for editing an existing client
+ */
+const ModifyClientModal = ({
+  isOpen,
+  onClose,
+  onSuccess,
+  clientData,
+}) => {
+  const [buttonLoading, setButtonLoading] = useState(false)
 
-  const handleTelefoneChange = (e) => {
-    const formatted = formatPhone(e.target.value);
-    setTelefone(formatted);
-  };
+  // Form fields
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [city, setCity] = useState("")
+  const [phone, setPhone] = useState("")
 
+  // Keeps original data to detect changes
+  const [initialData, setInitialData] = useState(null)
+
+  /**
+   * Handles phone input formatting
+   */
+  const handlePhoneChange = (e) => {
+    setPhone(formatPhone(e.target.value))
+  }
+
+  /**
+   * Loads client data when modal opens
+   */
   useEffect(() => {
-    if (clientData && isOpen) {
-      let rawPhone = clientData.phoneNumber || "";
-      rawPhone = rawPhone.replace(/^\+55/, "");
-      const formattedPhone = formatPhone(rawPhone);
+    if (!clientData || !isOpen) return
 
-      setNome(clientData.clientName || "");
-      setEmail(clientData.email || "");
-      setTelefone(formattedPhone);
-      setCidade(clientData.city || "");
+    let rawPhone = clientData.phoneNumber || ""
+    rawPhone = rawPhone.replace(/^\+55/, "")
+    const formattedPhone = formatPhone(rawPhone)
 
-      setInitialData({
-        nome: clientData.clientName || "",
-        email: clientData.email || "",
-        telefone: formattedPhone,
-        cidade: clientData.city || "",
-      });
+    const filledData = {
+      name: clientData.clientName || "",
+      email: clientData.email || "",
+      phone: formattedPhone,
+      city: clientData.city || "",
     }
-  }, [clientData, isOpen]);
 
+    setName(filledData.name)
+    setEmail(filledData.email)
+    setPhone(filledData.phone)
+    setCity(filledData.city)
+
+    setInitialData(filledData)
+  }, [clientData, isOpen])
+
+  /**
+   * Checks if at least one field changed
+   */
   const isDirty =
     initialData &&
     (
-      nome !== initialData.nome ||
+      name !== initialData.name ||
       email !== initialData.email ||
-      telefone !== initialData.telefone ||
-      cidade !== initialData.cidade
-    );
+      phone !== initialData.phone ||
+      city !== initialData.city
+    )
 
-    const modifyClient = async (e) => {
-      e.preventDefault();
+  /**
+   * Submits updated client data
+   */
+  const modifyClient = async (e) => {
+    e.preventDefault()
 
-      const formData = new FormData(e.target);
-      const data = Object.fromEntries(formData.entries());
+    const formData = new FormData(e.target)
+    const data = Object.fromEntries(formData.entries())
 
-      let hasError = false;
+    let hasError = false
 
-      if (!data.nome.trim()) {
-        toast.error("O campo Nome não pode estar vazio!", { containerId: "toast-root" });
-        hasError = true;
+    if (!data.name?.trim()) {
+      toast.error("O campo Nome não pode estar vazio!", { containerId: "toast-root" })
+      hasError = true
+    }
+
+    if (!data.email?.trim()) {
+      toast.error("O campo Email não pode estar vazio!", { containerId: "toast-root" })
+      hasError = true
+    }
+
+    if (!data.phone?.trim()) {
+      toast.error("O campo Telefone não pode estar vazio!", { containerId: "toast-root" })
+      hasError = true
+    }
+
+    if (!data.city?.trim()) {
+      toast.error("O campo Cidade não pode estar vazio!", { containerId: "toast-root" })
+      hasError = true
+    }
+
+    if (hasError) return
+
+    const body = {
+      client_id: clientData.id,
+      name: data.name,
+      email: data.email,
+      phone: "+55" + data.phone.replace(/\D/g, ""),
+      address: data.city,
+    }
+
+    try {
+      setButtonLoading(true)
+
+      const response = await api.put(
+        "/Company/clients/update_client",
+        body
+      )
+
+      toast.success("Cliente atualizado com sucesso!", {
+        containerId: "toast-root",
+      })
+
+      onClose()
+      if (onSuccess) onSuccess(response.data)
+
+    } catch (error) {
+      const status = error.response?.status
+
+      if (status === 409) {
+        toast.error(
+          "Já existe um cliente com esse nome ou e-mail.",
+          { containerId: "toast-root" }
+        )
+      } else if (status === 404) {
+        toast.error("Cliente não encontrado.", { containerId: "toast-root" })
+      } else if (status === 400) {
+        toast.error("ID de cliente inválido.", { containerId: "toast-root" })
+      } else {
+        toast.error("Falha ao atualizar o cliente.", { containerId: "toast-root" })
       }
-      if (!data.email.trim()) {
-        toast.error("O campo Email não pode estar vazio!", { containerId: "toast-root" });
-        hasError = true;
-      }
-      if (!data.telefone.trim()) {
-        toast.error("O campo telefone não pode estar vazio!", { containerId: "toast-root" });
-        hasError = true;
-      }
-      if (!data.cidade.trim()) {
-        toast.error("O campo cidade não pode estar vazio!", { containerId: "toast-root" });
-        hasError = true;
-      }
 
-      if (hasError) return;
-
-      const body = {
-        client_id: clientData.id,
-        name: data.nome,
-        email: data.email,
-        phone: "+55" + data.telefone.replace(/\D/g, ""),
-        address: data.cidade 
-      };
-
-      try {
-        setButtonLoading(true);
-
-        const response = await api.put("/Company/clients/update_client", body);
-
-        toast.success("Cliente atualizado com sucesso!", {
-          containerId: "toast-root",
-        });
-
-        onClose();
-        if (onSuccess) onSuccess(response.data);
-
-      } catch (error) {
-        const status = error.response?.status;
-
-        if (status === 409) {
-          toast.error("Já existe um cliente com esse nome ou email.", { containerId: "toast-root" });
-        } else if (status === 404) {
-          toast.error("Cliente não encontrado.", { containerId: "toast-root" });
-        } else if (status === 400) {
-          toast.error("ID de cliente inválido.", { containerId: "toast-root" });
-        } else {
-          toast.error("Falha ao atualizar o cliente.", { containerId: "toast-root" });
-        }
-      } finally {
-        setTimeout(() => setButtonLoading(false), 1500);
-      }
-    };
+    } finally {
+      setTimeout(() => setButtonLoading(false), 1500)
+    }
+  }
 
   return (
-    <BaseModal isOpen={isOpen} onClose={onClose} contentLabel="Cadastrar Novo Cliente" width="430px" height={"auto"} showCloseButton={true}>
-      <h2 className="dashboard-modal-title">Modificar Cliente</h2>
+    <BaseModal
+      isOpen={isOpen}
+      onClose={onClose}
+      contentLabel="Modificar Cliente"
+      width="430px"
+      height="auto"
+      showCloseButton
+    >
+      <h2 className="dashboard-modal-title">
+        Modificar Cliente
+      </h2>
 
       <form className="form-dashboard" onSubmit={modifyClient}>
         <div className="align-dashboard-form">
+
+          {/* Nome */}
           <div className="input-dashboard-block">
-            <label htmlFor="nome">Nome</label>
+            <label htmlFor="name">Nome</label>
             <InputDashboard
-              name="nome"
-              id="nome"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
+              name="name"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
             />
-            <InfoToolTip text="Nome completo do cliente. Ajuda a identificar quem é a pessoa. Ex.: Maria da Silva"/>
+            <InfoToolTip text="Nome completo do cliente. Ex.: Maria da Silva" />
           </div>
 
+          {/* Email */}
           <div className="input-dashboard-block">
             <label htmlFor="email">Email</label>
             <InputDashboard
@@ -141,37 +189,38 @@ const ModifyClientModal = ({ isOpen, onClose, onSuccess, clientData }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            <InfoToolTip text="Email para contato e envio de mensagens. Ex.: maria.silva@gmail.com"/>
+            <InfoToolTip text="Email para contato. Ex.: maria.silva@gmail.com" />
           </div>
 
+          {/* Telefone */}
           <div className="input-dashboard-block">
-            <label htmlFor="telefone">Telefone</label>
-            <InputDashboard type="tel" maxLength={15} name="telefone" id="telefone" value={telefone} onChange={handleTelefoneChange} />
-            <InfoToolTip text="Telefone ou celular do cliente. Use o número principal. Ex.: (11) 91234-5678"/>
-          </div>
-
-          <div className="input-dashboard-block">
-            <label htmlFor="cidade">Cidade</label>
+            <label htmlFor="phone">Telefone</label>
             <InputDashboard
-              type="text"
-              name="cidade"
-              id="cidade"
-              value={cidade}
-              onChange={(e) => setCidade(e.target.value)}
+              type="tel"
+              maxLength={15}
+              name="phone"
+              id="phone"
+              value={phone}
+              onChange={handlePhoneChange}
             />
-            <InfoToolTip text="Cidade onde o cliente mora. Ex.: São Paulo"/>
+            <InfoToolTip text="Telefone principal do cliente. Ex.: (11) 91234-5678" />
           </div>
 
-          {/*<div className="input-dashboard-block">
-            <label htmlFor="tipo">Tipo</label>
-            <select name="tipo" id="tipo" defaultValue="Regular" className="InputDashboard">
-              <option>Regular</option>
-              <option>VIP</option>
-              <option>Premium</option>
-            </select>
-          </div>*/}
+          {/* Cidade */}
+          <div className="input-dashboard-block">
+            <label htmlFor="city">Cidade</label>
+            <InputDashboard
+              name="city"
+              id="city"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
+            <InfoToolTip text="Cidade onde o cliente reside. Ex.: São Paulo" />
+          </div>
+
         </div>
 
+        {/* Submit */}
         <div className="button-shadown">
           <Button
             height={45}
@@ -184,7 +233,7 @@ const ModifyClientModal = ({ isOpen, onClose, onSuccess, clientData }) => {
         </div>
       </form>
     </BaseModal>
-  );
-};
+  )
+}
 
-export default ModifyClientModal;
+export default ModifyClientModal

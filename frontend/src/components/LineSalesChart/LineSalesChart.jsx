@@ -1,7 +1,20 @@
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts"
 
-import { formatCurrency, formatMonthLabel, formatDateBR } from "../../utils/format";
+import {
+  formatCurrency,
+  formatMonthLabel,
+  formatDateBR,
+} from "../../utils/format"
 
+// Maps month names to numeric values
 const monthNames = {
   January: 1,
   February: 2,
@@ -15,97 +28,140 @@ const monthNames = {
   October: 10,
   November: 11,
   December: 12,
-};
+}
 
+/**
+ * Normalizes date keys to YYYY-MM or YYYY-MM-DD format
+ */
 const normalizeKey = (key) => {
-  const month = monthNames[key];
+  const month = monthNames[key]
+
   if (month) {
-    const year = new Date().getFullYear();
-    return `${year}-${String(month).padStart(2, "0")}`;
+    const year = new Date().getFullYear()
+    return `${year}-${String(month).padStart(2, "0")}`
   }
 
-  const parsed = new Date(key);
-  if (!isNaN(parsed.getTime())) return key;
+  const parsed = new Date(key)
+  if (!isNaN(parsed.getTime())) return key
 
-  if (/^\d{4}-\d{2}$/.test(key)) return key;
+  if (/^\d{4}-\d{2}$/.test(key)) return key
 
-  return null;
-};
+  return null
+}
 
+/**
+ * Fills missing daily entries with zero values
+ */
 const fillMissingDays = (data, daysBack) => {
-  const now = new Date();
-  const result = [];
+  const now = new Date()
+  const result = []
 
   for (let i = daysBack - 1; i >= 0; i--) {
-    const d = new Date(now);
-    d.setDate(now.getDate() - i);
-    const key = d.toISOString().split("T")[0];
+    const d = new Date(now)
+    d.setDate(now.getDate() - i)
+
+    const key = d.toISOString().split("T")[0]
 
     result.push({
       date: key,
       vendas: data[key] ?? 0,
-    });
+    })
   }
 
-  return result;
-};
+  return result
+}
 
+/**
+ * Fills missing monthly entries with zero values
+ */
 const fillMissingMonths = (data, monthsBack = 6) => {
-  const now = new Date();
-  const result = [];
+  const now = new Date()
+  const result = []
 
   for (let i = monthsBack - 1; i >= 0; i--) {
-    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+    const d = new Date(
+      now.getFullYear(),
+      now.getMonth() - i,
+      1
+    )
+
+    const key = `${d.getFullYear()}-${String(
+      d.getMonth() + 1
+    ).padStart(2, "0")}`
 
     result.push({
       date: key,
       vendas: data[key] ?? 0,
-    });
+    })
   }
 
-  return result;
-};
+  return result
+}
 
+// Supported date ranges
 const ranges = {
   "7d": { type: "day", amount: 7 },
   "30d": { type: "day", amount: 30 },
   "6m": { type: "month", amount: 6 },
   "1y": { type: "month", amount: 12 },
-};
+}
 
+/**
+ * LineSalesChart component
+ * Displays sales evolution over time.
+ */
 const LineSalesChart = ({ data, period }) => {
-  const range = ranges[period] || { type: "month", amount: 6 };
+  // Resolves selected range
+  const range = ranges[period] || {
+    type: "month",
+    amount: 6,
+  }
 
-  const normalizedData = {};
+  // Stores normalized date-value pairs
+  const normalizedData = {}
 
   Object.entries(data || {}).forEach(([key, value]) => {
-    const norm = normalizeKey(key);
-    if (!norm) return;
+    const norm = normalizeKey(key)
+    if (!norm) return
 
-    if (range.type === "day" && norm.length === 7) return;
-
-    if (range.type === "month" && norm.length === 10) {
-      const parsed = new Date(norm);
-      const monthKey = `${parsed.getFullYear()}-${String(
-        parsed.getMonth() + 1
-      ).padStart(2, "0")}`;
-
-      normalizedData[monthKey] = (normalizedData[monthKey] || 0) + value;
-      return;
+    // Ignores month keys when using day range
+    if (range.type === "day" && norm.length === 7) {
+      return
     }
 
-    normalizedData[norm] = value;
-  });
+    // Aggregates daily values into months
+    if (range.type === "month" && norm.length === 10) {
+      const parsed = new Date(norm)
 
+      const monthKey = `${parsed.getFullYear()}-${String(
+        parsed.getMonth() + 1
+      ).padStart(2, "0")}`
+
+      normalizedData[monthKey] =
+        (normalizedData[monthKey] || 0) + value
+      return
+    }
+
+    normalizedData[norm] = value
+  })
+
+  // Generates complete dataset based on selected range
   const formattedData =
     range.type === "day"
-      ? fillMissingDays(normalizedData, range.amount)
-      : fillMissingMonths(normalizedData, range.amount);
+      ? fillMissingDays(
+          normalizedData,
+          range.amount
+        )
+      : fillMissingMonths(
+          normalizedData,
+          range.amount
+        )
 
   return (
     <div className="chart">
-      <h3 className="title-chart-dashboard">Evolução das Vendas</h3>
+      <h3 className="title-chart-dashboard">
+        Evolução das Vendas
+      </h3>
 
       <ResponsiveContainer>
         <LineChart data={formattedData}>
@@ -123,12 +179,21 @@ const LineSalesChart = ({ data, period }) => {
           />
 
           <YAxis
-            tickFormatter={(value) => `${formatCurrency(value)}`}
-            tick={{ fill: "#374151", fontSize: 11.25, fontFamily: "var(--font-heading)" }}
+            tickFormatter={(value) =>
+              formatCurrency(value)
+            }
+            tick={{
+              fill: "#374151",
+              fontSize: 11.25,
+              fontFamily:
+                "var(--font-heading)",
+            }}
           />
-          
+
           <Tooltip
-            formatter={(v) => formatCurrency(v)}
+            formatter={(v) =>
+              formatCurrency(v)
+            }
             labelFormatter={(label) =>
               range.type === "day"
                 ? formatDateBR(label)
@@ -147,7 +212,7 @@ const LineSalesChart = ({ data, period }) => {
         </LineChart>
       </ResponsiveContainer>
     </div>
-  );
-};
+  )
+}
 
-export default LineSalesChart;
+export default LineSalesChart

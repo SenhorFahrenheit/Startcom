@@ -1,17 +1,24 @@
-import "./QuickActions.css"
+import "./QuickActions.css";
 
-const QuickActions = ({icon, name, description}) => {
+/**
+ * Displays a quick action item with icon and description
+ */
+const QuickActions = ({ icon, name, description }) => {
   return (
     <div className="quick-action">
-        <div className="align-quick-action-items">
-            <div className="quick-action-icon">{icon}</div>
-            <div className="quick-action-text-part">
-                <p className="title-quick-action">{name}</p>
-                <p className="description-quick-action">{description}</p>
-            </div>
-        </div>
-    </div>
-  )
-}
+      {/* Main content alignment */}
+      <div className="align-quick-action-items">
+        {/* Action icon */}
+        <div className="quick-action-icon">{icon}</div>
 
-export default QuickActions
+        {/* Action text content */}
+        <div className="quick-action-text-part">
+          <p className="title-quick-action">{name}</p>
+          <p className="description-quick-action">{description}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default QuickActions;

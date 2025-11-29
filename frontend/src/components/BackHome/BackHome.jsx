@@ -1,17 +1,25 @@
 import "./BackHome.css"
-import { MdArrowBack } from 'react-icons/md';
-import { useNavigate } from "react-router-dom";
+import { MdArrowBack } from "react-icons/md"
+import { useNavigate } from "react-router-dom"
 
+/**
+ * BackHome component
+ * Renders a button that navigates the user back to the home route.
+ */
 const BackHome = () => {
-    const navigate = useNavigate();
+    // React Router navigation handler
+    const navigate = useNavigate()
 
+    /**
+     * Redirects the user to the home page
+     */
     const handleBackHome = () => {
-        navigate("/");
-    }    
+        navigate("/")
+    }
 
     return (
         <button className="icon-back-home" onClick={handleBackHome}>
-            <MdArrowBack size={32}/>
+            <MdArrowBack size={32} />
         </button>
     )
 }
