@@ -169,6 +169,12 @@
   font-family: var(--font-base);
 }
 
+.delete-client-description {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
 .modal-buttons-row {
   display: flex;
   gap: 15px;

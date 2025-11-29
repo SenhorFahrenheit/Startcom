@@ -41,7 +41,7 @@ const BaseModal = ({
       }}
     >
       {/* Optional BackButton for closing the modal */}
-      {showCloseButton && <BackButton color="var(--primary-color)" onClick={onClose} />}
+      {showCloseButton && <><BackButton color="var(--primary-color)" onClick={onClose} /> <br/></>}
       {/* Render modal children */}
       {children}
     </Modal>

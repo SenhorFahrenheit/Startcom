@@ -92,14 +92,15 @@ const DeleteClientModal = ({
       </h2>
 
       <p className="delete-client-description">
-        Tem certeza que deseja excluir
-        o cliente
-        <strong>
-          {" "}
-          {clientData.clientName}
-        </strong>
-        ?
-        <br />
+        <div>
+          Tem certeza que deseja excluir
+          o cliente
+          <strong>
+            {" "}
+            {clientData.clientName}
+          </strong>
+          ?
+        </div>
         Essa ação é permanente e não
         pode ser desfeita.
       </p>

@@ -95,16 +95,15 @@ const DeleteProductModal = ({
       </h2>
 
       <p className="delete-client-description">
-        Tem certeza que deseja excluir
-        o produto
-        <strong>
-          {" "}
-          {product.name}
-        </strong>
-        ?
-        <br />
-        Essa ação é permanente e não
-        pode ser desfeita.
+        <div>
+          Tem certeza que deseja excluir
+          o produto <strong>{" "}{product.name}</strong>?
+        </div>
+
+        <div>
+          Essa ação é <strong>permanente</strong> e não
+          pode ser desfeita.
+        </div>
       </p>
 
       {/* Action buttons */}
