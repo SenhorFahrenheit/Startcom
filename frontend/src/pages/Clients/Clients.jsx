@@ -67,7 +67,7 @@ const Clients = () => {
   const fetchOverviewAndClients = async () => {
     try {
       setLoading(true);
-      const response = await api.post("/Company/clients/overview_full");
+      const response = await api.get("/Company/clients/overview_full");
       const data = response.data;
 
       if (data.status === "success") {

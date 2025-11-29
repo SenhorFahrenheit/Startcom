@@ -20,7 +20,7 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
 
   const fetchProducts = async () => {
       try {
-        const response = await api.post("/Company/inventory/full");
+        const response = await api.get("/Company/inventory/full");
         const list = response.data?.products || [];
 
         if (list.length === 0) {

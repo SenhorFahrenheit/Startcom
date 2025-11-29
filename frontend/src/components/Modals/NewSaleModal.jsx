@@ -28,7 +28,7 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
 
   const fetchProducts = async () => {
     try {
-    const response = await api.post("/Company/inventory/full");
+    const response = await api.get("/Company/inventory/full");
 
     const list = response.data?.products || [];
     setProducts(list);
@@ -54,7 +54,7 @@ const NewSaleModal = ({ isOpen, onClose, onSuccess }) => {
 
   const fetchClients = async () => {
     try {
-      const response = await api.post("/Company/clients/names");
+      const response = await api.get("/Company/clients/names");
 
       if (response.data?.clients) {
         setClients(response.data.clients);
