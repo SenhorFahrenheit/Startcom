@@ -142,3 +142,10 @@ export const formatMonthLabel = (value) => {
 
   return value; // Return original value if no match
 };
+
+// Utility function to pluralize words based on count
+// Example: pluralize(1, "item", "itens") -> "item"
+//          pluralize(3, "item", "itens") -> "itens"
+export const pluralize = (count, singular, plural) => {
+  return count === 1 ? singular : plural; // Return singular or plural based on count
+};

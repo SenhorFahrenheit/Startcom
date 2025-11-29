@@ -23,7 +23,7 @@ import { useAuthModals } from "../../hooks/useAuthModals"; // Modal management h
 import { useState, useEffect } from "react";
 import { useAuth } from "../../contexts/AuthContext"; // Auth context
 import api from "../../services/api"; // API service
-import { formatCurrency, formatPercent } from "../../utils/format"; // Formatting helpers
+import { formatCurrency, formatPercent, pluralize } from "../../utils/format"; // Formatting helpers
 
 const Reports = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false); // Sidebar state
@@ -86,6 +86,10 @@ const Reports = () => {
     fetchOverview(p);
   };
 
+  
+  const count = overview?.newCustomers ?? 0;
+  const salesRealized = overview?.sales?.total ?? 0; 
+
   return (
     <section className="body-section">
       <HeaderMobile onToggleSidebar={toggleSidebar} /> {/* Mobile header */}
@@ -145,15 +149,23 @@ const Reports = () => {
               <ReportCard
                 icon={<LuTrendingUp size={24} />}
                 value={overview?.sales?.total || 0}
-                description="Vendas realizadas"
+                description={`${pluralize(
+                  salesRealized,
+                  "Venda realizada",
+                  "Vendas realizadas"
+                )}`}
                 information={`${formatPercent(overview?.sales?.monthComparison) || "0,00%"} vs mês anterior`}
               />
 
               <ReportCard
                 icon={<LuUsers size={24} />}
                 value={overview?.activeCustomers || 0}
-                description="Clientes ativos"
-                information={`${overview?.newCustomers || 0} novos clientes`}
+                description={`${pluralize(
+                  count,
+                  "Cliente ativo",
+                  "Clientes ativos"
+                )}`}
+                information={`${count} ${pluralize(count, "novo cliente", "novos clientes")}`}
               />
 
               <ReportCard
