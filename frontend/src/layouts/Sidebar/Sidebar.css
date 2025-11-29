@@ -138,6 +138,13 @@ aside {
     font-weight: 600;
 }
 
+.nowrap-text-sidebar {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
 .email-sidebar {
     color: #a4a4a4;
     font-size: 0.8rem;
