@@ -8,7 +8,6 @@ from api.routes.company.clients_routes import router as client_routes
 from api.routes.company.inventory_routes import router as inventory_routes
 from api.routes.company.report_routes import router as report_routes
 
-from api.infra.config_cors import setup_cors
 from api.infra.scheduler.scheduler import start_scheduler
 import logging
 
@@ -19,9 +18,6 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 
-
-# Set up CORS middleware
-setup_cors(app)
 
 # HTTP routes
 app.include_router(google_router, prefix="/AuthGoogle")
