@@ -1,8 +1,10 @@
 import "./Sidebar.css";
 import Logo from "../../assets/StartComLogo.svg";
+import LogoutModal from "../../components/Modals/LogoutModal";
 
 import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
+import { useAuthModals } from "../../hooks/useAuthModals";
 
 import { BiHomeAlt } from 'react-icons/bi';
 import { FaChartColumn } from 'react-icons/fa6';
@@ -16,6 +18,7 @@ import { LuLogOut, LuX } from 'react-icons/lu';
 // Sidebar component with navigation and account info
 const Sidebar = ({ isOpen, onClose }) => {
   const { logout, user } = useAuth();
+  const { activeModal, openLogout, closeModal } = useAuthModals();
   const navigate = useNavigate();
 
   // Handles user logout and redirects to login page
@@ -75,10 +78,15 @@ const Sidebar = ({ isOpen, onClose }) => {
           </div>
         </div>
 
-        <button className="logout-button" onClick={handleLogout}>
+        <button className="logout-button" onClick={openLogout}>
           <LuLogOut /> Sair
         </button>
       </div>
+
+      <LogoutModal
+        isOpen={activeModal === "logout"}
+        onClose={closeModal}
+      />
     </aside>
   );
 };

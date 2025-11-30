@@ -75,6 +75,7 @@ const MessageModal = ({
       height="auto"
       showCloseButton={false}
     >
+      <br/>
       <div className="center-block message-modal">
         {/* Icon container */}
         <div

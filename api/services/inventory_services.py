@@ -85,16 +85,7 @@ class InventoryService:
 
     Each product includes its name, category, quantity, minimum quantity, 
     unit price, stock status ("Normal", "Baixo", "Crítico", "Esgotado") 
-    and total value (quantity × costPrice).
-
-    Args:
-        company_id (str): The ObjectId of the company in MongoDB.
-
-    Returns:
-        dict: Structured overview with aggregated stats and product details.
-
-    Raises:
-        HTTPException(404): If the company does not exist.
+    and total value (quantity × costPrice). Now also includes productId.
     """
         company = await self.company_collection.find_one({"_id": ObjectId(company_id)})
 
@@ -106,6 +97,7 @@ class InventoryService:
 
         formatted_products = []
         for p in inventory:
+            id = p.get("_id")
             name = p.get("name")
             category = p.get("category", "Outros") or "Outros"
             quantity = int(p.get("quantity", 0))
@@ -126,6 +118,7 @@ class InventoryService:
             total_value = round(quantity * cost_price, 2)
 
             formatted_products.append({
+                "productId": id.__str__(),
                 "name": name,
                 "category": category,
                 "quantity": quantity,

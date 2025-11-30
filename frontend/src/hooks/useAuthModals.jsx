@@ -5,6 +5,8 @@ export function useAuthModals(selectedProductSetter) {
   // Stores the currently active modal key
   const [activeModal, setActiveModal] = useState(null);
 
+  const openLogout = () => setActiveModal("logout");
+
   // Authentication-related modals
   const openAuthenticator = () => setActiveModal("authenticator");
   const openForgot = () => setActiveModal("forgot");
@@ -40,6 +42,7 @@ export function useAuthModals(selectedProductSetter) {
 
   return {
     activeModal,
+    openLogout,
     openAuthenticator,
     openForgot,
     openCode,
