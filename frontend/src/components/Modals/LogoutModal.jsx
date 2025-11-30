@@ -1,13 +1,12 @@
-import { useNavigate } from "react-router-dom"
 import { LogOut } from 'lucide-react';
 
 import BaseModal from "./BaseModal"
 import Button from "../Button/Button"
+import { useAuth } from "../../contexts/AuthContext";
 
-const LogoutModal = ({
-  isOpen,
-  onClose,
-}) => {
+const LogoutModal = ({isOpen, onClose, }) => {
+  const { logout } = useAuth();
+  
   return (
     <BaseModal
       isOpen={isOpen}
@@ -16,7 +15,6 @@ const LogoutModal = ({
       showCloseButton={false}
     >
       <br/>
-      <br />
       <div className="center-block message-modal">
         {/* Icon container */}
         <div
@@ -49,18 +47,34 @@ const LogoutModal = ({
         </h2>
 
         {/* Action button */}
-        <div
-          className="button-shadown"
-          style={{
-            marginTop: "10px",
-            marginBottom: "20px",
-          }}
-        >
-          <Button
-            height={45}
-            width={160}
-            label="Sair"
-          />
+        <div style={{display: "flex", justifyContent: "center", gap: "20px"}}>
+          <div
+            className="button-shadown"
+            style={{
+              marginTop: "10px",
+            }}
+          >
+            <Button
+              height={45}
+              width={160}
+              label="Fechar"
+              onClick={onClose}
+            />
+          </div>
+
+          <div
+            className="button-shadown"
+            style={{
+              marginTop: "10px",
+            }}
+          >
+            <Button
+              height={45}
+              width={160}
+              label="Sair"
+              onClick={logout}
+            />
+          </div>
         </div>
       </div>
     </BaseModal>

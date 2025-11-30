@@ -17,15 +17,8 @@ import { LuLogOut, LuX } from 'react-icons/lu';
 
 // Sidebar component with navigation and account info
 const Sidebar = ({ isOpen, onClose }) => {
-  const { logout, user } = useAuth();
+  const { user } = useAuth();
   const { activeModal, openLogout, closeModal } = useAuthModals();
-  const navigate = useNavigate();
-
-  // Handles user logout and redirects to login page
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
 
   return (
     <aside className={isOpen ? "open" : ""}>
