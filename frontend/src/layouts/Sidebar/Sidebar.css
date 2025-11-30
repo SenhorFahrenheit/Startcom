@@ -5,6 +5,7 @@ html, body {
 aside {
     width: 256px;
     min-height: 100vh;
+    min-height: 100svh;
     background-color: var(--primary-layout-background-color);
     display: flex;
     flex-direction: column;
@@ -33,7 +34,7 @@ aside {
     position: fixed;
     left: 0;
     top: 0;
-    height: 100%;
+    min-height: 100svh;
     transform: translateX(-100%);
     z-index: 1000;
     flex-direction: column;
