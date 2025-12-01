@@ -47,6 +47,7 @@ export function AuthProvider({ children }) {
 
   // Clears authentication data on logout
   const logout = () => {
+    window.location.href = "/login";
     setToken(null);
     setUser(null);
     localStorage.removeItem("token");
