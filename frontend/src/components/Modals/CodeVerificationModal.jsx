@@ -30,7 +30,7 @@ const CodeVerificationModal = ({ isOpen, onClose, email, flowType = "signup", on
     // Check if the code is complete
     if (fullCode.length < 6) {
       toast.error("Digite o código completo!", {
-        position: "top-center",
+        position: "top-right",
         containerId: "toast-root",
       });
       return;
@@ -43,7 +43,7 @@ const CodeVerificationModal = ({ isOpen, onClose, email, flowType = "signup", on
       // Show error if verification fails
       if (!response.success) {
         toast.error(response.message, {
-          position: "top-center",
+          position: "top-right",
           containerId: "toast-root",
         });
         return;
@@ -51,7 +51,7 @@ const CodeVerificationModal = ({ isOpen, onClose, email, flowType = "signup", on
 
       // Show success message if verification succeeds
       toast.success(response.message, {
-        position: "top-center",
+        position: "top-right",
         containerId: "toast-root",
       });
 
@@ -61,7 +61,7 @@ const CodeVerificationModal = ({ isOpen, onClose, email, flowType = "signup", on
     } catch {
       // Handle network or unexpected errors
       toast.error("Erro ao verificar código!", {
-        position: "top-center",
+        position: "top-right",
         containerId: "toast-root",
       });
     }
@@ -82,7 +82,7 @@ const CodeVerificationModal = ({ isOpen, onClose, email, flowType = "signup", on
       height="500px"
     >
       <h2 className="auth-modal-title">
-        {flowType === "signup" ? "Confirmação de Cadastro" : "Recuperação de Senha"}
+        Recuperação de Senha
       </h2>
       <p className="auth-description">
         Digite o código que enviamos para o seu e-mail.

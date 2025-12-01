@@ -8,9 +8,7 @@ export const verifyCodeMock = ({ code, flowType, email }) => {
       if (code === validCode) {
         resolve({
           success: true,
-          message: flowType === "signup"
-            ? "Cadastro confirmado com sucesso!"
-            : "Código de recuperação válido!"
+          message: "Código de recuperação válido!"
         });
       } else {
         resolve({

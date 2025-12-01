@@ -112,7 +112,6 @@ const MessageModal = ({
           className="button-shadown"
           style={{
             marginTop: "10px",
-            marginBottom: "20px",
           }}
         >
           <Button
