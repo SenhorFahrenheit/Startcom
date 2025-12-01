@@ -24,7 +24,8 @@ export const useLoginForm = (onSuccess) => {
     // Basic validation
     if (!loginEmail.trim() || !loginPassword.trim()) {
       toast.error("Preencha e-mail e senha para entrar.", {
-        position: "top-center",
+        position: "top-right",
+        theme: "light",
         containerId: "toast-root",
       });
       return;

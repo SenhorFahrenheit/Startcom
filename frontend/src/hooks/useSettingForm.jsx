@@ -41,7 +41,7 @@ export const useSettingForm = (onSuccess) => {
   // Handles validation errors
   const onError = (errors) => {
     Object.values(errors).forEach((err) =>
-      toast.error(err.message, { containerId: "toast-root" })
+      toast.error(err.message, { containerId: "toast-root", theme: "light", position: "top-right" })
     );
   };
 

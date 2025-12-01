@@ -32,6 +32,25 @@
   animation: fadeInTooltip 0.15s ease-out;
 }
 
+.info-tooltip-box {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tooltip-audio-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #555;
+}
+
+.tooltip-audio-btn:hover {
+  color: #000;
+}
+
 @keyframes fadeInTooltip {
   from { opacity: 0; transform: translateY(-2px); }
   to { opacity: 1; transform: translateY(0); }

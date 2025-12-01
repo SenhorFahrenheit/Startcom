@@ -243,7 +243,7 @@ const Settings = () => {
             <label htmlFor="address">Endereço</label>
             <InputDashboard
               id="address"
-              {...register("address", { required: "Endereço obrigatório" })}
+              {...register("address")}
             />
           </div>
 
