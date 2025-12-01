@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 import { toast } from "react-toastify"
+import { getPasswordStrength } from "../../utils/validations";
 
 // Components
 import BaseModal from "./BaseModal"
@@ -24,6 +25,14 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
 
+    const [passwordStrength, setPasswordStrength] = useState(
+        getPasswordStrength("")
+    );
+
+    useEffect(() => {
+        setPasswordStrength(getPasswordStrength(password));
+    }, [password]);
+
     // Reset inputs when modal is closed
     useEffect(() => {
         if (!isOpen) {
@@ -45,12 +54,12 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
 
         // Validation: password and confirmPassword should not be empty
         if (!password.trim()) {
-            toast.error("O campo de senha não pode estar vazio!", { position: "top-center", theme: "light", containerId: "toast-root" });
+            toast.error("O campo de Senha não pode estar vazio!", { position: "top-right", theme: "light", containerId: "toast-root" });
             hasError = true;
         }
 
         if (!confirmPassword.trim()) {
-            toast.error("O campo de confirmar senha não pode estar vazio!", { position: "top-center", theme: "light", containerId: "toast-root" });
+            toast.error("O campo de Confirmar Senha não pode estar vazio!", { position: "top-right", theme: "light", containerId: "toast-root" });
             hasError = true;
         }
 
@@ -68,16 +77,21 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
             return;
         }
 
+        if (passwordStrength.level === "weak") {
+            setError("A senha é muito fraca. Use pelo menos 8 caracteres.");
+            return;
+        }
+
         // If everything is correct, show success message
         if (password === confirmPassword) {
-            toast.success("Senha alterada com sucesso!", { position: "top-center", containerId: "toast-root" });
+            toast.success("Senha alterada com sucesso!", { position: "top-right", containerId: "toast-root" });
             // TODO: Add logic to actually change password in backend
             onClose();
         }
     }
 
     return (
-        <BaseModal isOpen={isOpen} onClose={onClose} contentLabel="Redefinir Senha" width="320px" height="500px">
+        <BaseModal isOpen={isOpen} onClose={onClose} contentLabel="Redefinir Senha" width="320px" height={"auto"}>
             <h2 className="auth-modal-title">Redefinição de senha</h2>
             <form onSubmit={setNewPassword} className="center-block">
 
@@ -108,6 +122,21 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     type="password"
                 />
+
+                <div className="password-strength-wrapper">
+                    <div className="password-strength-bar">
+                        <div
+                        className="password-strength-fill"
+                        style={{
+                            width: `${passwordStrength.percentage}%`,
+                            backgroundColor: passwordStrength.color,
+                        }}
+                        />
+                    </div>
+                    <p className="password-strength-label">
+                        {passwordStrength.text}
+                    </p>
+                </div>
                 
                 {/* Submit button */}
                 <Button type="submit" label={"REDEFINIR"} />

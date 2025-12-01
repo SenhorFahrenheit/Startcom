@@ -36,7 +36,7 @@ const ForgotPasswordModal = ({ isOpen, onClose, onSuccess }) => {
     // Validation: email should not be empty
     if (!email.trim()) {
       toast.error("O campo de e-mail não pode estar vazio!", {
-        position: "top-center",
+        position: "top-right",
         theme: "light",
         containerId: "toast-root"
       });
@@ -48,7 +48,7 @@ const ForgotPasswordModal = ({ isOpen, onClose, onSuccess }) => {
 
     // Show success message
     toast.success("Se este e-mail existir, você receberá um número de recuperação.", {
-      position: "top-center",
+      position: "top-right",
       containerId: "toast-root"
     });
 
