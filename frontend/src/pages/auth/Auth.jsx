@@ -25,6 +25,8 @@ import "./Auth.css";
 import BackButton from "../../components/BackButton/BackButton";
 
 const Auth = () => {
+  const [resetEmail, setResetEmail] = useState("");
+  const [resetToken, setResetToken] = useState("");
 
   const navigate = useNavigate();
 
@@ -353,7 +355,8 @@ const Auth = () => {
       <ForgotPasswordModal
         isOpen={activeModal === "forgot"}
         onClose={closeModal}
-        onSuccess={() => {
+        onSuccess={(email) => {
+          setResetEmail(email);
           closeModal();
           setTimeout(() => openCode(), 350);
         }}
@@ -361,8 +364,9 @@ const Auth = () => {
       <CodeVerificationModal
         isOpen={activeModal === "code"}
         onClose={closeModal}
-        email={loginEmail}
-        onSuccess={() => {
+        email={resetEmail}
+        onSuccess={(token) => {
+          setResetToken(token);
           closeModal();
           setTimeout(() => openPassword(), 350);
         }}
@@ -370,6 +374,7 @@ const Auth = () => {
       <ChangePasswordModal
         isOpen={activeModal === "password"}
         onClose={closeModal}
+        token={resetToken}
       />
     </div>
   );

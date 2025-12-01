@@ -2,6 +2,7 @@ import { useState } from "react";
 import CodeInput from "../CodeInput/CodeInput";
 import { toast } from "react-toastify";
 import BaseModal from "./BaseModal";
+import api from "../../services/api";
 import verifyCodeMock from "../../services/verifyCode";
 import Button from "../Button/Button";
 
@@ -18,9 +19,10 @@ import Button from "../Button/Button";
  * - flowType: string, "signup" or "recovery" (default: "signup")
  * - onSuccess: function, callback executed after successful verification
  */
-const CodeVerificationModal = ({ isOpen, onClose, email, flowType = "signup", onSuccess }) => {
+const CodeVerificationModal = ({ isOpen, onClose, email, onSuccess }) => {
   // Local state to store the code input
   const [code, setCode] = useState("");
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   /**
    * Verify the entered code
@@ -37,33 +39,29 @@ const CodeVerificationModal = ({ isOpen, onClose, email, flowType = "signup", on
     }
 
     try {
-      // Mock API call to verify the code
-      const response = await verifyCodeMock({ code: fullCode, email, flowType });
-
-      // Show error if verification fails
-      if (!response.success) {
-        toast.error(response.message, {
-          position: "top-right",
-          containerId: "toast-root",
-        });
-        return;
-      }
+      // API call to verify the code
+      const response = await api.post("/User/auth/verify-reset-code", {
+        email,
+        code: fullCode,
+      });
 
       // Show success message if verification succeeds
-      toast.success(response.message, {
+      toast.success("Código verificado com sucesso!", {
         position: "top-right",
         containerId: "toast-root",
       });
 
       // Reset code input and execute onSuccess callback
       setCode("");
-      onSuccess?.();
+      onSuccess(response.data.resetToken);
     } catch {
       // Handle network or unexpected errors
       toast.error("Erro ao verificar código!", {
         position: "top-right",
         containerId: "toast-root",
       });
+    } finally {
+      setButtonLoading(false);
     }
   };
 
@@ -100,7 +98,7 @@ const CodeVerificationModal = ({ isOpen, onClose, email, flowType = "signup", on
         />
 
         {/* Submit button */}
-        <Button type="submit" label={"VALIDAR"} />
+        <Button type="submit" label={"VALIDAR"} loading={buttonLoading}/>
       </form>
     </BaseModal>
   );

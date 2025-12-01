@@ -3,7 +3,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import api from "../../services/api";
 import { FaCheckCircle, FaTimesCircle } from "react-icons/fa";
 import { ImSpinner8 } from "react-icons/im";
-import Button from "../../components/Button/Button";
 import "./VerifyEmail.css";
 
 const VerifyEmail = () => {
@@ -20,7 +19,7 @@ const VerifyEmail = () => {
       
       if (!token) {
         setStatus("error");
-        setMessage("Verification token not found in URL."); // token missing
+        setMessage("Token de verificação não encontrado na URL"); // token missing
         return;
       }
 
@@ -37,13 +36,13 @@ const VerifyEmail = () => {
 
         // handle specific HTTP error codes
         if (error.response?.status === 400) {
-          setMessage("Invalid or malformed token.");
+          setMessage("Token Inválido ou Mal Formado.");
         } else if (error.response?.status === 410) {
-          setMessage("Token expired. Request a new verification email.");
+          setMessage("Token expirado. Solicite um novo link de verificação.");
         } else if (error.response?.status === 404) {
-          setMessage("Token not found. Check the email link.");
+          setMessage("Token não encontrado. Verifique o link de verificação.");
         } else {
-          setMessage("Unexpected error occurred during email verification.");
+          setMessage("Erro desconhecido ao verificar o email. Tente novamente mais tarde.");
         }
       }
     };
@@ -64,8 +63,8 @@ const VerifyEmail = () => {
           {status === "loading" && (
             <>
               <ImSpinner8 className="icon icon-loading" /> {/* spinner icon */}
-              <h1>Verifying your email...</h1>
-              <p>Please wait while we confirm your account.</p>
+              <h1>Verificando o seu email...</h1>
+              <p>Por favor, aguarde enquanto verificamos a sua conta.</p>
             </>
           )}
 
@@ -73,13 +72,8 @@ const VerifyEmail = () => {
           {status === "success" && (
             <>
               <FaCheckCircle className="icon icon-success" /> {/* success icon */}
-              <h1>Email Verified!</h1>
+              <h1>Email Verificado!</h1>
               <p>{message}</p>
-              <Button 
-                label="GO TO LOGIN" 
-                onClick={handleGoToLogin}
-                type="button"
-              />
             </>
           )}
 
@@ -87,15 +81,8 @@ const VerifyEmail = () => {
           {status === "error" && (
             <>
               <FaTimesCircle className="icon icon-error" /> {/* error icon */}
-              <h1>Oops! Something went wrong</h1>
+              <h1>Oops! Alguma coisa deu errado...</h1>
               <p>{message}</p>
-              <div className="button-group">
-                <Button 
-                  label="BACK TO LOGIN" 
-                  onClick={handleGoToLogin}
-                  type="button"
-                />
-              </div>
             </>
           )}
         </div>

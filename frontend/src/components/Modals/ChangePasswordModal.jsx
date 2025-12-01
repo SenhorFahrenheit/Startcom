@@ -7,6 +7,8 @@ import BaseModal from "./BaseModal"
 import Input from "../Input/Input"
 import Button from "../Button/Button"
 
+import api from "../../services/api";
+
 // Icons
 import { IoAlertCircle } from 'react-icons/io5';
 
@@ -19,11 +21,12 @@ import { IoAlertCircle } from 'react-icons/io5';
  * - isOpen: boolean, whether the modal is visible
  * - onClose: function, callback to close the modal
  */
-const ChangePasswordModal = ({ isOpen, onClose }) => {
+const ChangePasswordModal = ({ isOpen, onClose, token }) => {
     // Local state for password inputs and error messages
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
+    const [buttonLoading, setButtonLoading] = useState(false);
 
     const [passwordStrength, setPasswordStrength] = useState(
         getPasswordStrength("")
@@ -45,12 +48,9 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
      * Handle form submission to set new password
      * @param {Event} e - Form submit event
      */
-    const setNewPassword = (e) => {
+    const setNewPassword = async (e) => {
         e.preventDefault();
         let hasError = false;
-
-        // Simulation -> Current password would normally come from the backend
-        const currentPassword = "senha123";
 
         // Validation: password and confirmPassword should not be empty
         if (!password.trim()) {
@@ -65,12 +65,6 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
 
         if (hasError) return;
 
-        // New password should be different from current password
-        if (password === currentPassword) {
-            setError("A nova senha precisa ser diferente da senha atual.");
-            return;
-        }
-
         // Password and confirmation must match
         if (password !== confirmPassword) {
             setError("As senhas não coincidem.");
@@ -82,11 +76,27 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
             return;
         }
 
-        // If everything is correct, show success message
+        // If everything is correct, proceed to set the new password
+        setError("");
         if (password === confirmPassword) {
-            toast.success("Senha alterada com sucesso!", { position: "top-right", containerId: "toast-root" });
-            // TODO: Add logic to actually change password in backend
-            onClose();
+            try {
+                // API call to set the new password
+                setButtonLoading(true);
+                await api.post("/User/auth/reset-password", {
+                    token: token, 
+                    new_password: password,
+                })
+
+                toast.success("Senha redefinida com sucesso!", { position: "top-right", containerId: "toast-root" });
+                setPassword("");
+                setConfirmPassword("");
+                onClose();
+            } catch (error) {
+                console.error(error);
+                toast.error("Ocorreu um erro ao redefinir a senha. Tente novamente mais tarde.", { position: "top-right", containerId: "toast-root" });
+            } finally   {
+                setButtonLoading(false);
+            }
         }
     }
 
@@ -139,7 +149,7 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
                 </div>
                 
                 {/* Submit button */}
-                <Button type="submit" label={"REDEFINIR"} />
+                <Button type="submit" label={"REDEFINIR"} loading={buttonLoading} />
             </form>
         </BaseModal>
     )

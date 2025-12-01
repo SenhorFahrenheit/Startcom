@@ -5,6 +5,8 @@ import BaseModal from "./BaseModal";
 import Input from "../Input/Input";
 import Button from "../Button/Button";
 
+import api from "../../services/api";
+
 /**
  * ForgotPasswordModal component
  *
@@ -18,6 +20,7 @@ import Button from "../Button/Button";
 const ForgotPasswordModal = ({ isOpen, onClose, onSuccess }) => {
   // State to store the email input
   const [email, setEmail] = useState("");
+  const [buttonLoading, setButtonLoading] = useState(false);
 
   // Reset email when modal is closed
   useEffect(() => {
@@ -30,7 +33,7 @@ const ForgotPasswordModal = ({ isOpen, onClose, onSuccess }) => {
    * Handle form submission to send recovery email
    * @param {Event} e - Form submit event
    */
-  const sendEmail = (e) => {
+  const sendEmail = async (e) => {
     e.preventDefault();
 
     // Validation: email should not be empty
@@ -43,18 +46,21 @@ const ForgotPasswordModal = ({ isOpen, onClose, onSuccess }) => {
       return;
     }
 
-    // TODO: Send request to backend
-    console.log("Email to backend:", email);
+    try {
+      setButtonLoading(true);
 
-    // Show success message
-    toast.success("Se este e-mail existir, você receberá um número de recuperação.", {
-      position: "top-right",
-      containerId: "toast-root"
-    });
+      await api.post("/User/auth/send-password-reset", { email });
 
-    // Reset email and execute onSuccess callback
-    setEmail("");
-    onSuccess(email);
+      toast.success("Se este e-mail existir, você receberá um número de recuperação.",{position: "top-right", containerId: "toast-root",});
+      setEmail("");
+      onSuccess(email);
+    } catch (error) {
+      console.error(error);
+      toast.error("Ocorreu um erro ao enviar o e-mail. Tente novamente mais tarde.",{position: "top-right",containerId: "toast-root",});
+    } finally {
+      setButtonLoading(false);
+    }
+
   }
 
   return (
@@ -81,7 +87,7 @@ const ForgotPasswordModal = ({ isOpen, onClose, onSuccess }) => {
         />
         
         {/* Submit button */}
-        <Button type="submit" label={"ENVIAR"} />
+        <Button type="submit" label={"ENVIAR"} loading={buttonLoading} />
       </form>
     </BaseModal>
   );
