@@ -10,6 +10,8 @@ from ...schemas.company_schemas import CompanyData, CompanyUpdate
 from ...services.company_services import CompanyService
 from datetime import timedelta
 from jose import jwt, JWTError
+import os
+from ...utils.token_utils import _verify_reset_token_dependency
 
 # Create a router instance to group all user-related routes
 router = APIRouter()
@@ -399,52 +401,30 @@ async def verify_password_reset_code(body: PasswordResetCodeVerification):
 
 @router.post("/auth/reset-password")
 async def reset_password(
-    body: PasswordResetConfirm,
+    data=Depends(_verify_reset_token_dependency),
 ):
     """
-    Reset user password using the temporary reset token.
-
-    ## Authentication
-    Requires the temporary token from `/verify-reset-code` in the Authorization header:
-    ```
-    Authorization: Bearer <resetToken>
-    ```
+    Reset user password using the temporary reset token supplied in the request body.
 
     ## Request Body
     ```json
     {
+      "token": "eyJhbGciOiJIUzI1NiIs...",
       "new_password": "NewSecurePassword123!"
     }
     ```
 
-    ## Successful Response (200)
-    ```json
-    {
-      "status": "success",
-      "message": "Password reset successfully."
-    }
-    ```
-
-    ## Possible Errors
-    - **400** — Invalid token or user mismatch
-    - **401** — Token expired or missing
-    - **500** — Unexpected error
-
-    ## Security Notes
-    - New password must be at least 8 characters
-    - Token is valid for 15 minutes
-    - After reset, user should log in with new password
+    ## Notes
+    - Token is validated (signature, expiration) and must contain claims: userId (or sub/id), email and type == "password_reset".
     """
     try:
-        # Validate that token is password_reset type
-        user_id = current_user.get("userId")
-        email = current_user.get("email")
-        token_type = current_user.get("type")
+        verified = data["verified"]
+        user_id = verified["user_id"]
+        email = verified["email"]
+        new_password = data["new_password"]
 
-        if token_type != "password_reset":
-            raise HTTPException(400, "Invalid token type.")
-
-        await user_service.reset_password(user_id, email, body.new_password)
+        # Call service to perform the password reset
+        await user_service.reset_password(str(user_id), email, new_password)
 
         return {
             "status": "success",
@@ -453,4 +433,4 @@ async def reset_password(
     except HTTPException as e:
         raise e
     except Exception as e:
-        raise HTTPException(500, str(e))
+        raise HTTPException(status_code=500, detail=str(e))
