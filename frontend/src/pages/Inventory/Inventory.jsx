@@ -94,7 +94,7 @@ const Inventory = () => {
       setProducts(formatted);
     } catch (err) {
       console.error("Error fetching inventory:", err);
-      setError("Failed to load inventory");
+      setError("Falha ao carregar estoque. Tente novamente.");
     } finally {
       setLoading(false);
     }

@@ -79,6 +79,7 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
     if (!data.addQuantity || data.addQuantity === "0") {
       toast.error("O campo Adicionar não pode estar vazio!", {
         position: "top-right",
+        theme: "light",
         containerId: "toast-root",
       });
       hasError = true;
@@ -88,6 +89,7 @@ const ModifyProductModal = ({ isOpen, onClose, onSuccess }) => {
     if (!selectedProduct) {
       toast.error("Selecione um produto!", {
         position: "top-right",
+        theme: "light",
         containerId: "toast-root",
       });
       hasError = true;
