@@ -102,6 +102,7 @@ async def inventory_overview_route(
       "totalValue": 12800.5,
       "products": [
         {
+          "productId": "69019f25b407b09e0d09d000",
           "name": "Notebook Gamer",
           "category": "Informática",
           "quantity": 45,

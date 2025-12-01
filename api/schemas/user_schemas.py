@@ -100,3 +100,14 @@ class ContactFormRequest(BaseModel):
     name: str
     email: EmailStr
     message: str
+
+class PasswordResetRequest(BaseModel):
+    email: EmailStr = Field(..., description="User email")
+
+class PasswordResetCodeVerification(BaseModel):
+    email: EmailStr = Field(..., description="User email")
+    code: str = Field(..., min_length=6, max_length=6, description="6-digit verification code")
+
+class PasswordResetConfirm(BaseModel):
+    token: str = Field(..., description="Password reset token")
+    new_password: str = Field(..., min_length=8, max_length=255, description="New password")

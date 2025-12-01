@@ -3,8 +3,10 @@ from pymongo.errors import PyMongoError
 from passlib.context import CryptContext
 from fastapi import HTTPException, status
 from bson import ObjectId
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from jose import jwt, JWTError
+import secrets
+import hashlib
 
 from ..services.company_services import CompanyService
 from ..schemas.user_schemas import UserCreate, UserInDB
@@ -74,6 +76,10 @@ class UserService:
             str: The securely hashed password.
         """
         return pwd_context.hash(password)
+
+    def _hash_reset_code(self, code: str) -> str:
+        """Hash the reset code for secure storage."""
+        return hashlib.sha256(code.encode()).hexdigest()
 
     # ---------------------------------------------------------------------
     # User creation
@@ -289,6 +295,134 @@ class UserService:
         except Exception as e:
             # Bubble up as HTTPException for route handling
             raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to send contact email: {e}")
+
+    async def send_password_reset_email(self, email: str) -> None:
+        """
+        Generate a 6-digit reset code, store it (hashed) in DB,
+        and send it via email.
+        """
+        # 1) Verify user exists
+        user = await self.users_collection.find_one({"email": email})
+        if not user:
+            # Security: Don't confirm if email exists
+            return
+
+        # 2) Generate 6-digit code
+        reset_code = str(secrets.randbelow(1000000)).zfill(6)
+        code_hash = self._hash_reset_code(reset_code)
+
+        # 3) Store in DB (expires in 10 minutes)
+        expires_at = datetime.utcnow() + timedelta(minutes=10)
+        await self.users_collection.update_one(
+            {"_id": user["_id"]},
+            {
+                "$set": {
+                    "passwordReset": {
+                        "codeHash": code_hash,
+                        "expiresAt": expires_at,
+                        "attempts": 0
+                    }
+                }
+            }
+        )
+
+        # 4) Send email with code
+        try:
+            message = MessageSchema(
+                subject="Código de Recuperação de Senha - Startcom",
+                recipients=[email],
+                subtype="html",
+                template_body={"code": reset_code, "name": user.get("name", "")}
+            )
+            await fm.send_message(message, template_name="password_reset.html")
+        except Exception as e:
+            print(f"[UserService] ⚠ Failed to send password reset email: {e}")
+
+
+    async def verify_reset_code(self, email: str, code: str) -> str:
+        """
+        Verify the reset code and return a temporary JWT token.
+        
+        Returns:
+            str: Temporary JWT token valid for 15 minutes
+        """
+        # 1) Find user
+        user = await self.users_collection.find_one({"email": email})
+        if not user:
+            raise HTTPException(400, "Invalid email or code.")
+
+        # 2) Check if reset request exists
+        reset_data = user.get("passwordReset")
+        if not reset_data:
+            raise HTTPException(400, "Invalid email or code.")
+
+        # 3) Check expiration
+        if reset_data["expiresAt"] < datetime.utcnow():
+            await self.users_collection.update_one(
+                {"_id": user["_id"]},
+                {"$unset": {"passwordReset": ""}}
+            )
+            raise HTTPException(400, "Code has expired. Request a new one.")
+
+        # 4) Check attempts (prevent brute force)
+        attempts = reset_data.get("attempts", 0)
+        if attempts >= 5:
+            await self.users_collection.update_one(
+                {"_id": user["_id"]},
+                {"$unset": {"passwordReset": ""}}
+            )
+            raise HTTPException(429, "Too many attempts. Request a new code.")
+
+        # 5) Verify code
+        code_hash = self._hash_reset_code(code)
+        if not secrets.compare_digest(code_hash, reset_data["codeHash"]):
+            # Increment attempts
+            await self.users_collection.update_one(
+                {"_id": user["_id"]},
+                {"$inc": {"passwordReset.attempts": 1}}
+            )
+            raise HTTPException(400, "Invalid email or code.")
+
+        # 6) Generate temporary JWT token (15 minutes)
+        secret_key = os.getenv("SECRET_KEY")
+        algorithm = "HS256"
+        
+        payload = {
+            "userId": str(user["_id"]),
+            "email": email,
+            "type": "password_reset",
+            "exp": datetime.utcnow() + timedelta(minutes=15)
+        }
+        temp_token = jwt.encode(payload, secret_key, algorithm=algorithm)
+
+        return temp_token
+
+    async def reset_password(self, user_id: str, email: str, new_password: str) -> None:
+        """
+        Update user's password and clean up reset token.
+        """
+        # Validate user
+        user = await self.users_collection.find_one({
+            "_id": ObjectId(user_id),
+            "email": email
+        })
+        if not user:
+            raise HTTPException(400, "Invalid request.")
+
+        # Hash new password
+        password_hash = self.get_password_hash(new_password)
+
+        # Update password and remove reset data
+        await self.users_collection.update_one(
+            {"_id": ObjectId(user_id)},
+            {
+                "$set": {
+                    "passwordHash": password_hash,
+                    "updated_at": datetime.utcnow()
+                },
+                "$unset": {"passwordReset": ""}
+            }
+        )
 
 
 
