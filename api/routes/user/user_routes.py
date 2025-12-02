@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends
 from api.services.user_services import UserService
-from api.schemas.user_schemas import UserCreate, UserCreatedResponse, ContactFormRequest, PasswordResetRequest, PasswordResetCodeVerification, PasswordResetConfirm
+from api.schemas.user_schemas import UserCreate, UserCreatedResponse, ContactFormRequest, PasswordResetRequest, PasswordResetCodeVerification, PasswordResetConfirm, DeleteAccountRequest
 from ...infra.database import mongo
 from ...utils.email_token import create_email_token
 from bson import ObjectId
@@ -434,3 +434,53 @@ async def reset_password(
         raise e
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/send-delete-account-email", status_code=status.HTTP_200_OK)
+async def send_delete_account_email_route(
+    email: str,
+    current_user=Depends(get_current_user)
+):
+    """
+    Send account deletion confirmation email to the authenticated user.
+    - Protected route (requires valid token)
+    - No body required
+    """
+    try:
+        user_id = current_user.get("user_id")
+        if not user_id:
+            raise HTTPException(status_code=400, detail="Invalid user context")
+    
+        # fetch fresh user data
+        user = await user_service.find_by_email(email)
+        email = user.get("email") if user else current_user.get("email")
+        name = user.get("name") if user else current_user.get("name", "")
+
+        token, token_id, expire = await user_service.create_account_deletion_token(user_id, email)
+        await user_service.send_account_deletion_email(email=email, token=token, full_name=name)
+
+        return {"status": "success", "message": "Account deletion email sent."}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
+
+@router.post("/delete-account", status_code=status.HTTP_200_OK)
+async def delete_account_route(body: DeleteAccountRequest):
+    """
+    Perform account deletion if provided token is valid.
+    Public endpoint: token in body (from email link).
+    """
+    try:
+        token = body.token
+        verified = await user_service.verify_account_deletion_token(token)
+        user_id = verified["user_id"]
+
+        await user_service.delete_account_by_user_id(user_id)
+
+        return {"status": "success", "message": "Account deleted successfully."}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

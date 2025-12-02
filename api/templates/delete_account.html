@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <title>Excluir Conta - Startcom</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <style>
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:#f6f7fb; color:#111; margin:0; padding:20px; }
+      .container { max-width:680px; margin:24px auto; background:#ffffff; border-radius:8px; padding:28px; box-shadow:0 2px 8px rgba(13,18,30,0.08); }
+      .header { font-size:18px; font-weight:600; color:#0b3b6f; margin-bottom:12px; }
+      .lead { font-size:15px; color:#333; margin-bottom:18px; line-height:1.5; }
+      .btn { display:inline-block; background:#d64545; color:#fff; text-decoration:none; padding:12px 20px; border-radius:6px; font-weight:600; }
+      .muted { color:#6b7280; font-size:13px; margin-top:18px; }
+      .footer { font-size:12px; color:#7c8694; margin-top:22px; }
+      .hr { height:1px; background:#eef1f6; margin:18px 0; border-radius:1px; }
+      a.plain { color:#0b3b6f; word-break:break-all; }
+    </style>
+  </head>
+  <body>
+    <div class="container" role="article" aria-label="Account deletion request">
+      <div class="header">Account deletion request</div>
+
+      <p class="lead">
+        Hi {{ name | default('') }},
+      </p>
+
+      <p class="lead">
+       Nós recebemos uma solicitação para excluir sua conta Startcom. Se você iniciou esta solicitação e realmente deseja excluir sua conta, clique no botão abaixo para confirmar. Este link é válido por 24 horas.
+
+      <p style="text-align:center; margin:22px 0;">
+        <a class="btn" href="{{ link }}" target="_blank" rel="noopener noreferrer">Deletar minha conta</a>
+      </p>
+
+      <div class="hr" role="separator" aria-hidden="true"></div>
+
+      <p class="muted">
+        Se o botão acima não funcionar, copie e cole o seguinte link no seu navegador:
+      </p>
+      <p><a class="plain" href="{{ link }}">{{ link }}</a></p>
+
+      <p class="muted">
+        Se você não solicitou a exclusão da conta, pode ignorar este e-mail com segurança. Nenhuma ação será tomada sem clicar no link.
+      </p>
+
+      <div class="footer">
+        Abraço,<br/>
+        Startcom Support Team<br/>
+        suportstartcomtech@gmail.com
+      </div>
+    </div>
+  </body>
+</html>
