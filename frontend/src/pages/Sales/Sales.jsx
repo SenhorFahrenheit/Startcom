@@ -92,6 +92,25 @@ const Sales = () => {
       fetchOverview();
     }
   }, [pageLoading, isAuthenticated, companyId]);
+  
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      const tag = document.activeElement?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+
+      // Ctrl + +
+      if (event.ctrlKey && (event.key === "+" || event.key === "=")) {
+        event.preventDefault();
+        openSale();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [openSale]);
 
   return (
     <section className="body-section">
@@ -111,8 +130,8 @@ const Sales = () => {
               className="hover-dashboard" 
               onClick={openSale} // Open New Sale Modal
               height={"auto"} 
-              width={160} 
-              label={<><LuPlus size={"1.5rem"}/>Nova Venda</>} 
+              width={200} 
+              label={<>Nova Venda <span style={{ fontSize: 14,padding: "3px 12px", borderRadius: "var(--border-radius)", background: "#ffffffff", color: "var(--primary-color)" }}>Ctrl +</span></>}
             />
           </div>
         </div>

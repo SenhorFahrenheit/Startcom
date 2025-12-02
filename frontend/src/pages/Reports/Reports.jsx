@@ -93,6 +93,25 @@ const Reports = () => {
     fetchOverview(p);
   };
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      const tag = document.activeElement?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+
+      // Ctrl + +
+      if (event.ctrlKey && (event.key === "+" || event.key === "=")) {
+        event.preventDefault();
+        openReport();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [openReport]);
+
   return (
     <section className="body-section">
       <HeaderMobile onToggleSidebar={toggleSidebar} /> {/* Mobile header */}
@@ -106,16 +125,6 @@ const Reports = () => {
           </div>
 
           <div className="report-buttons">
-            <div className="button-shadown">
-              <Button
-                className="hover-dashboard"
-                onClick={openReport} // Open new report modal
-                height={"auto"}
-                width={160}
-                label={<><LuChartColumn size={"1.5rem"} />Novo Relatório</>} // Button label with icon
-              />
-            </div>
-
             <div className="filter-date">
               <FilterDateButton
                 options={[
@@ -126,6 +135,16 @@ const Reports = () => {
                 ]}
                 defaultValue="Últimos 6 meses"
                 onSelect={handleSelectPeriod} // Handle period selection
+              />
+            </div>
+
+            <div className="button-shadown">
+              <Button
+                className="hover-dashboard"
+                onClick={openReport} // Open new report modal
+                height={"auto"}
+                width={200}
+                label={<>Novo Relatório <span style={{ fontSize: 14,padding: "3px 12px", borderRadius: "var(--border-radius)", background: "#ffffffff", color: "var(--primary-color)" }}>Ctrl +</span></>} // Button label with icon
               />
             </div>
           </div>

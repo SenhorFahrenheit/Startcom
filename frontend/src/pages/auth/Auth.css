@@ -207,7 +207,7 @@ h2 {
 .CNPJ:focus,
 .CPF.active,
 .CNPJ.active {
-  background-color: var(--quinary-color);
+  background-color: var(--primary-color);
   color: #fff;
 }
 
