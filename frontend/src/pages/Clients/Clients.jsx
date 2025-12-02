@@ -136,6 +136,25 @@ const Clients = () => {
   // Toggle sidebar
   const toggleSidebar = () => setSidebarOpen(prev => !prev);
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      const tag = document.activeElement?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+
+      // Ctrl + +
+      if (event.ctrlKey && (event.key === "+" || event.key === "=")) {
+        event.preventDefault();
+        openClient();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [openClient]);
+
   return (
     <section className="body-section">
       <HeaderMobile onToggleSidebar={toggleSidebar} /> {/* Mobile header */}
@@ -154,8 +173,8 @@ const Clients = () => {
               className="hover-dashboard" 
               onClick={openClient} 
               height={"auto"} 
-              width={160} 
-              label={<><LuPlus size={"1.5rem"}/>Novo Cliente</>} 
+              width={200} 
+              label={<>Novo Cliente <span style={{ fontSize: 14,padding: "3px 12px", borderRadius: "var(--border-radius)", background: "#ffffffff", color: "var(--primary-color)" }}>Ctrl +</span></>}
             /> {/* Open new client modal */}
           </div>
         </div>

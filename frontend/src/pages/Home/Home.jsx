@@ -22,7 +22,6 @@ const Home = () => {
   return (
     <>
         <Header/> {/* Main header */}
-
         <div className='first-container'>
           <h1 className='title-page'>Transforme seu <span>negócio</span> com a StartCom</h1> {/* Main title */}
           <p className='description-page'>A plataforma completa para pequenos e médios empreendedores gerenciarem vendas, clientes, estoque e muito mais em um só lugar.</p> {/* Description */}
@@ -50,13 +49,13 @@ const Home = () => {
         </div>
 
         <div className='third-container' id="reviews">
-          <h2 className='subtitle-page'>O que nossos clientes dizem</h2> {/* Customer reviews section */}
+          <h2 className='subtitle-page'>O que nossos usuários dizem</h2> {/* Customer reviews section */}
           <p className='subtitle-description-page'>Histórias reais de empreendedores que transformaram seus negócios</p> {/* Section description */}
           
           <div className='review-cards'>
             {/* Customer review cards */}
             <ReviewCard rating={5} name={"Maria Silva"} business={"Loja de Roupas Femininas"} comment={"Com a StartCom, consegui aumentar minhas vendas em 40% no primeiro trimestre!"}/>
-            <ReviewCard rating={5} name={"João Santos"} business={"Mercadinho do Bairro"} comment={"Finalmente tenho controle total do meu estoque. Não perco mais vendas por falta de produtos."}/>
+            <ReviewCard rating={5} name={"Carlos Soares"} business={"Mercadinho do Bairro"} comment={"Finalmente tenho controle total do meu estoque. Não perco mais vendas por falta de produtos."}/>
             <ReviewCard rating={4} name={"Ana Costa"} business={"Doceria Artesanal"} comment={"Os relatórios me ajudaram a identificar meus produtos mais vendidos. Recomendo!"}/>
           </div>
         </div>

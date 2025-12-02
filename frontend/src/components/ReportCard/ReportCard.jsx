@@ -5,7 +5,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 /**
  * Displays a report summary card with loading state
  */
-const ReportCard = ({ icon, value, description, information, loading }) => {
+const ReportCard = ({ icon, value, description, information, loading, progress }) => {
   return (
     <div className="ReportCard">
       {/* Report icon */}
@@ -28,7 +28,7 @@ const ReportCard = ({ icon, value, description, information, loading }) => {
       </p>
 
       {/* Additional information */}
-      <p className="report-information-item">
+      <p className={`report-information-item ${progress}`}>
         {loading ? <Skeleton width={160} /> : information}
       </p>
     </div>

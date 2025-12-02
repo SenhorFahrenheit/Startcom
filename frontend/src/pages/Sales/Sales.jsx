@@ -6,7 +6,7 @@ import "../commonStyle.css";
 import { useState, useEffect } from "react";
 
 // Utils
-import { formatCurrency } from '../../utils/format';
+import { formatCurrency, formatPercent } from '../../utils/format';
 import api from "../../services/api";
 
 // Hooks
@@ -92,6 +92,25 @@ const Sales = () => {
       fetchOverview();
     }
   }, [pageLoading, isAuthenticated, companyId]);
+  
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      const tag = document.activeElement?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+
+      // Ctrl + +
+      if (event.ctrlKey && (event.key === "+" || event.key === "=")) {
+        event.preventDefault();
+        openSale();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [openSale]);
 
   return (
     <section className="body-section">
@@ -111,8 +130,8 @@ const Sales = () => {
               className="hover-dashboard" 
               onClick={openSale} // Open New Sale Modal
               height={"auto"} 
-              width={160} 
-              label={<><LuPlus size={"1.5rem"}/>Nova Venda</>} 
+              width={200} 
+              label={<>Nova Venda <span style={{ fontSize: 14,padding: "3px 12px", borderRadius: "var(--border-radius)", background: "#ffffffff", color: "var(--primary-color)" }}>Ctrl +</span></>}
             />
           </div>
         </div>
@@ -129,7 +148,7 @@ const Sales = () => {
                 icon={<LuDollarSign size={24}/>} 
                 description="Vendas Hoje" 
                 value={formatCurrency(overview.todayTotal)} 
-                information={`${overview.todayComparison > 0 ? "+" : ""}${overview.todayComparison}% vs ontem`}
+                information={`${overview.todayComparison > 0 ? "+" : ""}${formatPercent(overview.todayComparison)} vs ontem`}
                 progress={overview.todayComparison > 0 ? "good-progress" : overview.todayComparison < 0 ? "bad-progress" : "neutral-progress"}
               />
               <SalesCard 
@@ -143,7 +162,7 @@ const Sales = () => {
                 icon={<LuTrendingUp size={24}/>} 
                 description="Ticket Médio" 
                 value={formatCurrency(overview.averageTicket)} 
-                information={`${overview.averageTicketComparison > 0 ? "+" : ""}${overview.averageTicketComparison}% este mês`}
+                information={`${overview.averageTicketComparison > 0 ? "+" : ""}${formatPercent(overview.averageTicketComparison)} este mês`}
                 progress={overview.averageTicketComparison > 0 ? "good-progress" : overview.averageTicketComparison < 0 ? "bad-progress" : "neutral-progress"}
               />
             </>

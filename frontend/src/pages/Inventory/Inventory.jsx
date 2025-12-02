@@ -32,7 +32,7 @@ const Inventory = () => {
   const [categoryFilter, setCategoryFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
   const [search, setSearch] = useState("");
-
+  
   const [selectedProduct, setSelectedProduct] = useState(null); // Product selected for editing/deleting
 
   // Modals management
@@ -114,6 +114,30 @@ const Inventory = () => {
     };
   }, [pageLoading, isAuthenticated, companyId]);
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      const tag = document.activeElement?.tagName;
+      if (tag === "INPUT" || tag === "TEXTAREA") return;
+
+      // Ctrl + +
+      if (event.ctrlKey && (event.key === "+" || event.key === "=")) {
+        event.preventDefault();
+        openProduct();
+      }
+      // Ctrl + Shift + E
+      if (event.ctrlKey && event.shiftKey && event.key.toLowerCase() === "e") {
+        event.preventDefault();
+        openModifyProduct();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [openProduct, openModifyProduct]);
+
   return (
     <section className="body-section">
       <HeaderMobile onToggleSidebar={toggleSidebar} /> {/* Mobile header */}
@@ -133,8 +157,8 @@ const Inventory = () => {
                 className="hover-dashboard"
                 onClick={openModifyProduct}
                 height={"auto"}
-                width={180}
-                label={<><LuPlus size={"1.5rem"} />Produto Existente</>}
+                width={200}
+                label={<>Repor <span style={{ fontSize: 14,padding: "3px 12px", borderRadius: "var(--border-radius)", background: "#ffffffff", color: "var(--primary-color)" }}>Ctrl Shit E</span></>}
               />
             </div>
 
@@ -143,8 +167,8 @@ const Inventory = () => {
                 className="hover-dashboard"
                 onClick={openProduct}
                 height={"auto"}
-                width={180}
-                label={<><LuPlus size={"1.5rem"} />Novo Produto</>}
+                width={200}
+                label={<>Novo Produto <span style={{ fontSize: 14,padding: "3px 12px", borderRadius: "var(--border-radius)", background: "#ffffffff", color: "var(--primary-color)" }}>Ctrl +</span></>}
               />
             </div>
           </div>

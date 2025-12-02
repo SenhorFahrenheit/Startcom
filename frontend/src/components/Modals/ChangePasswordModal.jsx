@@ -82,7 +82,7 @@ const ChangePasswordModal = ({ isOpen, onClose, token }) => {
             try {
                 // API call to set the new password
                 setButtonLoading(true);
-                await api.post("/User/auth/reset-password", {
+                await api.post("/User/reset-password", {
                     token: token, 
                     new_password: password,
                 })
