@@ -304,7 +304,7 @@ class UserService:
         # 1) Verify user exists
         user = await self.users_collection.find_one({"email": email})
         if not user:
-            # Security: Don't confirm if email exists
+            # Security: don't confirm if email exists
             return
 
         # 2) Generate 6-digit code
@@ -441,6 +441,126 @@ class UserService:
     status_code=400,
     detail={"error_code": "EMAIL_NOT_VERIFIED", "message": "Email not verified. Please verify your email before logging in."}
 )
+
+    async def create_account_deletion_token(self, user_id: str, email: str, hours_valid: int = 24):
+        """
+        Create a one-time JWT token for account deletion, store tokenId + expiry in user doc.
+        Returns (token, token_id, expires_at).
+        """
+        token_id = secrets.token_urlsafe(16)
+        expires_at = datetime.utcnow() + timedelta(hours=hours_valid)
+        payload = {
+            "userId": str(user_id),
+            "email": email,
+            "tokenId": token_id,
+            "type": "account_deletion",
+            "exp": expires_at
+        }
+        secret_key = os.getenv("SECRET_KEY")
+        algorithm = "HS256"
+        token = jwt.encode(payload, secret_key, algorithm=algorithm)
+
+        # store token meta in user doc
+        await self.users_collection.update_one(
+            {"_id": ObjectId(user_id)},
+            {"$set": {"deletionToken": {"tokenId": token_id, "expiresAt": expires_at}}}
+        )
+        return token, token_id, expires_at
+
+    async def send_account_deletion_email(self, email: str, token: str, full_name: str | None = None):
+        """
+        Send account deletion email with link containing the token.
+        Uses FRONTEND_DELETE_ACCOUNT_URL environment variable as target page.
+        """
+        frontend_delete_url = os.getenv("FRONTEND_DELETE_ACCOUNT_URL", "").rstrip("/")
+        if not frontend_delete_url:
+            # fallback to a reasonable path if not configured
+            frontend_delete_url = os.getenv("FRONTEND_URL", "https://startcomtech.com.br/").rstrip("/") + "/excluir-conta"
+
+        deletion_link = f"{frontend_delete_url}?token={token}"
+        subject = "Solicitação de Exclusão de Conta - Startcom"
+        try:
+            message = MessageSchema(
+                subject=subject,
+                recipients=[email],
+                subtype="html",
+                template_body={"name": full_name or "", "link": deletion_link}
+            )
+            # try template first (delete_account.html), fallback to inline if template missing
+            try:
+                await fm.send_message(message, template_name="delete_account.html")
+            except Exception:
+                body = f"""
+                    <p>Olá {full_name or ''},</p>
+                    <p>Você solicitou a exclusão da sua conta Startcom. Se você realmente quer prosseguir, siga o link abaixo:</p>
+                    <p><a href="{deletion_link}">Deletar minha conta</a></p>
+                    <p>Esse link expira em 24 horas.</p>
+                """
+                message2 = MessageSchema(
+                    subject=subject,
+                    recipients=[email],
+                    subtype="html",
+                    body=body
+                )
+                await fm.send_message(message2)
+        except Exception as e:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to send deletion email: {e}")
+
+    async def verify_account_deletion_token(self, token: str) -> dict:
+        """
+        Verify deletion token and return claims (user_id, email, payload).
+        Also checks stored deletionToken tokenId and expiry in DB.
+        """
+        algorithm = os.getenv("ALGORITHM_ACCOUNT_DELETION", "HS256")
+        secret_key = os.getenv("SECRET_KEY")
+        if not secret_key:
+            raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Server missing secrets")
+
+        try:
+            payload = jwt.decode(token, secret_key, algorithms=[algorithm])
+        except JWTError:
+            raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid or expired token")
+
+        token_type = payload.get("type")
+        if token_type != "account_deletion":
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid token type")
+
+        user_id = payload.get("userId")
+        token_id = payload.get("tokenId")
+        email = payload.get("email")
+        if not user_id or not token_id or not email:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Token missing required claims")
+
+        # verify stored token meta
+        user = await self.users_collection.find_one({"_id": ObjectId(user_id)}, {"deletionToken": 1, "email": 1})
+        if not user:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+        deletion_meta = user.get("deletionToken")
+        if not deletion_meta or deletion_meta.get("tokenId") != token_id:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid or used token")
+
+        if deletion_meta.get("expiresAt") < datetime.utcnow():
+            raise HTTPException(status_code=status.HTTP_410_GONE, detail="Token expired")
+
+        return {"user_id": str(user_id), "email": email, "payload": payload}
+
+    async def delete_account_by_user_id(self, user_id: str):
+        """
+        Delete user document and optionally remove companies owned by the user if CompanyService supports it.
+        """
+        # remove user
+        await self.users_collection.delete_one({"_id": ObjectId(user_id)})
+
+        # try to remove companies owned by this user (best-effort, ignore if method missing)
+        try:
+            if hasattr(self.company_service, "delete_companies_by_owner"):
+                await self.company_service.delete_companies_by_owner(user_id)
+            elif hasattr(self.company_service, "delete_company_by_owner"):
+                await self.company_service.delete_company_by_owner(user_id)
+        except Exception as e:
+            # don't fail deletion if company cleanup fails, but log
+            print(f"[UserService] ⚠ company cleanup failed for user {user_id}: {e}")
 
 
 

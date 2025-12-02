@@ -111,3 +111,6 @@ class PasswordResetCodeVerification(BaseModel):
 class PasswordResetConfirm(BaseModel):
     token: str = Field(..., description="Password reset token")
     new_password: str = Field(..., min_length=8, max_length=255, description="New password")
+
+class DeleteAccountRequest(BaseModel):
+    token: str
