@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from api.services.auth_services import AuthService
 from ...infra.database import mongo
 from ...schemas.auth_schemas import LoginRequest
+from ...services.user_services import UserService
 
 # Service layer to handle authentication-related business logic
 auth_service = AuthService(mongo.client)
@@ -41,11 +42,16 @@ async def login_route(login_data: LoginRequest):
     """
 
     try:
+        user_service = UserService(mongo)
+        # Ensure email is verified before attempting authentication
+        await user_service.ensure_user_email_verified(login_data.email)
+
         # Call the AuthService to authenticate the user
-        # token, email, name = await auth_service.login(login_data.email, login_data.password)
         result = await auth_service.login(login_data.email, login_data.password)
         token = result["access_token"]
         return {"access_token": token, "token_type": "bearer", "email": result['email'], "name": result['name'], "companyId": result["company_id"]}
+    except HTTPException:
+        raise
     except Exception as e:
         # In case of failed login, raise an HTTP 401 Unauthorized
         raise HTTPException(status_code=401, detail=str(e))

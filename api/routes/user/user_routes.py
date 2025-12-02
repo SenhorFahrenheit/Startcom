@@ -314,7 +314,7 @@ async def send_contact_form(
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
-@router.post("/auth/send-password-reset")
+@router.post("/send-password-reset")
 async def send_password_reset(body: PasswordResetRequest):
     """
     Send a password reset code to the user's email.
@@ -359,7 +359,7 @@ async def send_password_reset(body: PasswordResetRequest):
         }
 
 
-@router.post("/auth/verify-reset-code")
+@router.post("/verify-reset-code")
 async def verify_password_reset_code(body: PasswordResetCodeVerification):
     """
     Verify the reset code and return a temporary token.
@@ -399,7 +399,7 @@ async def verify_password_reset_code(body: PasswordResetCodeVerification):
         raise HTTPException(500, str(e))
 
 
-@router.post("/auth/reset-password")
+@router.post("/reset-password")
 async def reset_password(
     data=Depends(_verify_reset_token_dependency),
 ):

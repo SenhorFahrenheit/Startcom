@@ -423,6 +423,23 @@ class UserService:
                 "$unset": {"passwordReset": ""}
             }
         )
+    async def ensure_user_email_verified(self, email: str):
+        """
+        Ensure that if a user record exists for `email`, its emailVerified flag is True.
+
+        - If the user exists and emailVerified is falsy/missing -> raise 403 with a clear message.
+        - If the user does not exist, do nothing (AuthService will handle invalid credentials).
+        """
+        user = await self.find_by_email(email)
+        if not user:
+            return
+
+        # user may be a dict (from DB) or a Pydantic model
+        verified = user.get("emailVerified") if isinstance(user, dict) else getattr(user, "emailVerified", None)
+        if not verified:
+            raise HTTPException(status_code=403, detail="Email not verified. Please verify your email before logging in.")
+
+
 
 
 
