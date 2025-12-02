@@ -49,7 +49,7 @@ const ForgotPasswordModal = ({ isOpen, onClose, onSuccess }) => {
     try {
       setButtonLoading(true);
 
-      await api.post("/User/auth/send-password-reset", { email });
+      await api.post("/User/send-password-reset", { email });
 
       toast.success("Se este e-mail existir, você receberá um número de recuperação.",{position: "top-right", containerId: "toast-root",});
       setEmail("");

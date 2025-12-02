@@ -3,11 +3,15 @@ import { FiInfo } from "react-icons/fi"
 import { HiSpeakerWave, HiSpeakerXMark } from "react-icons/hi2"
 
 import "./InfoTooltip.css"
-
+/**
+* InfoTooltip Component
+* Props:
+* - text: The informational text to display in the tooltip and read aloud.
+*/
 const InfoTooltip = ({ text }) => {
   const [open, setOpen] = useState(false)
   const [speaking, setSpeaking] = useState(false)
-
+  // Ref to manage tooltip close timeout
   const closeTimeoutRef = useRef(null)
 
   const speak = () => {
@@ -32,7 +36,6 @@ const InfoTooltip = ({ text }) => {
   }
 
   const handleMouseEnter = () => {
-    // Cancela fechamento pendente
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current)
       closeTimeoutRef.current = null
@@ -41,10 +44,9 @@ const InfoTooltip = ({ text }) => {
   }
 
   const handleMouseLeave = () => {
-    // Aguarda antes de fechar
     closeTimeoutRef.current = setTimeout(() => {
       setOpen(false)
-    }, 400) // ⏱ ajuste aqui (300–500ms ideal)
+    }, 400)
   }
 
   return (

@@ -40,7 +40,7 @@ const CodeVerificationModal = ({ isOpen, onClose, email, onSuccess }) => {
 
     try {
       // API call to verify the code
-      const response = await api.post("/User/auth/verify-reset-code", {
+      const response = await api.post("/User/verify-reset-code", {
         email,
         code: fullCode,
       });
