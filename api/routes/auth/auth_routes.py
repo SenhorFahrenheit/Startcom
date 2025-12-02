@@ -35,7 +35,7 @@ async def login_route(login_data: LoginRequest):
 
     ## Error Responses
     - **401 Unauthorized** — Invalid email or password.
-    - **403 Forbidden** — Email not verified.
+    - **500 ** — Email not verified.
     - **500 Internal Server Error** — Unexpected error during authentication.
 
     ## JWT

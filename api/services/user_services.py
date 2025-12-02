@@ -437,7 +437,7 @@ class UserService:
         # user may be a dict (from DB) or a Pydantic model
         verified = user.get("emailVerified") if isinstance(user, dict) else getattr(user, "emailVerified", None)
         if not verified:
-            raise HTTPException(status_code=403, detail="Email not verified. Please verify your email before logging in.")
+            raise HTTPException(status_code=500, detail="Email not verified. Please verify your email before logging in.")
 
 
 
