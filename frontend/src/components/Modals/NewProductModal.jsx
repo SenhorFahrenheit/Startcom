@@ -6,6 +6,7 @@ import Button from "../Button/Button";
 import InputDashboard from "../InputDashboard/InputDashboard";
 import SelectDropdown from "../SelectDropdown/SelectDropdown";
 import InfoTooltip from "../InfoTooltip/InfoTooltip";
+import { formatCurrency } from "../../utils/format";
 
 import api from "../../services/api";
 
@@ -16,6 +17,8 @@ import api from "../../services/api";
 const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
   const [buttonLoading, setButtonloading] = useState(false);
   const [category, setCategory] = useState("Roupas");
+  const [price, setPrice] = useState(null);
+  const [costPrice, setCostPrice] = useState(null);
 
   /**
    * Normalize currency input value
@@ -29,6 +32,16 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
       .replace(/\s+/g, "")
       .replace(",", ".")
       .trim();
+  };
+
+  const handleCurrencyChange = (value, setter) => {
+    const numericValue = value.replace(/\D/g, "");
+    if (!numericValue) {
+      setter("");
+      return;
+    }
+    const numberValue = Number(numericValue) / 100;
+    setter(numberValue);
   };
 
   /**
@@ -121,6 +134,8 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
         containerId: "toast-root",
       });
 
+      setPrice(null);
+      setCostPrice(null);
       onClose();
       if (onSuccess) onSuccess(response.data);
 
@@ -226,13 +241,14 @@ const NewProductModal = ({ isOpen, onClose, onSuccess }) => {
 
           <div className="input-dashboard-block">
             <label htmlFor="price">Preço de Venda</label>
-            <InputDashboard name="price" id="price" />
+            <InputDashboard name="price" id="price" value={price !== null ? formatCurrency(price) : ""} onChange={(e) => handleCurrencyChange(e.target.value, setPrice)}
+            />
             <InfoTooltip text="Quanto você cobra do cliente. Ex.: 59,90" />
           </div>
 
           <div className="input-dashboard-block">
             <label htmlFor="costPrice">Preço de Custo</label>
-            <InputDashboard name="costPrice" id="costPrice" />
+            <InputDashboard name="costPrice" id="costPrice" value={costPrice !== null ? formatCurrency(costPrice) : ""} onChange={(e) => handleCurrencyChange(e.target.value, setCostPrice)}/>
             <InfoTooltip text="Quanto você pagou no produto. Ex.: 32,50" />
           </div>
 

@@ -62,7 +62,6 @@ aside {
   }
 }
 
-
 .logo-sidebar {
     border-bottom: 1px solid #424242;
     display: flex;
@@ -78,6 +77,11 @@ aside {
     flex-direction: column;
     gap: 5px;
     margin-top: 24px;
+}
+
+.title-logo {
+  font-family: var(--font-base);
+  font-weight: 600;
 }
 
 .nav-sidebar > a{

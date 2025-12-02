@@ -34,6 +34,13 @@ const Reports = () => {
 
   const [period, setPeriod] = useState("6m"); // Selected period
   const [overview, setOverview] = useState(null); // Overview data
+  const monthRevenueComparison = overview?.monthRevenue?.comparison ?? 0;
+  const salesComparison = overview?.sales?.monthComparison ?? 0;
+  const ticketComparison = overview?.ticket?.comparison ?? 0;
+
+  const salesRealized = overview?.sales?.total ?? 0;
+  const count = overview?.newCustomers ?? 0;
+
   const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
 
@@ -85,10 +92,6 @@ const Reports = () => {
     setPeriod(p);
     fetchOverview(p);
   };
-
-  
-  const count = overview?.newCustomers ?? 0;
-  const salesRealized = overview?.sales?.total ?? 0; 
 
   return (
     <section className="body-section">
@@ -143,36 +146,62 @@ const Reports = () => {
                 icon={<LuDollarSign size={24} />}
                 value={formatCurrency(overview?.monthRevenue?.total || 0)}
                 description="Faturamento este mês"
-                information={`${formatPercent(overview?.monthRevenue?.comparison) || "0,00%"} vs mês anterior`}
+                information={`${monthRevenueComparison > 0 ? "+" : ""}${formatPercent(monthRevenueComparison)} vs mês anterior`}
+                progress={
+                  monthRevenueComparison > 0
+                    ? "good-progress"
+                    : monthRevenueComparison < 0
+                    ? "bad-progress"
+                    : "neutral-progress"
+                }
               />
 
               <ReportCard
                 icon={<LuTrendingUp size={24} />}
                 value={overview?.sales?.total || 0}
-                description={`${pluralize(
+                description={pluralize(
                   salesRealized,
                   "Venda realizada",
                   "Vendas realizadas"
-                )}`}
-                information={`${formatPercent(overview?.sales?.monthComparison) || "0,00%"} vs mês anterior`}
+                )}
+                information={`${salesComparison > 0 ? "+" : ""}${formatPercent(salesComparison)} vs mês anterior`}
+                progress={
+                  salesComparison > 0
+                    ? "good-progress"
+                    : salesComparison < 0
+                    ? "bad-progress"
+                    : "neutral-progress"
+                }
               />
 
               <ReportCard
                 icon={<LuUsers size={24} />}
                 value={overview?.activeCustomers || 0}
                 description={`${pluralize(
-                  count,
+                  overview?.activeCustomers,
                   "Cliente ativo",
                   "Clientes ativos"
                 )}`}
                 information={`${count} ${pluralize(count, "novo cliente", "novos clientes")}`}
+                progress={
+                  count > 0
+                    ? "good-progress"
+                    : "neutral-progress"
+                }
               />
 
               <ReportCard
                 icon={<LuPackage size={24} />}
                 value={formatCurrency(overview?.ticket?.average || 0)}
                 description="Ticket médio"
-                information={`${formatPercent(overview?.ticket?.comparison) || "0,00%"} vs mês anterior`}
+                information={`${ticketComparison > 0 ? "+" : ""}${formatPercent(ticketComparison)} vs mês anterior`}
+                progress={
+                  ticketComparison > 0
+                    ? "good-progress"
+                    : ticketComparison < 0
+                    ? "bad-progress"
+                    : "neutral-progress"
+                }
               />
             </>
           )}
