@@ -12,7 +12,9 @@ import HeaderMobile from "../../layouts/HeaderMobile/HeaderMobile";
 import Button from "../../components/Button/Button";
 import InputDashboard from "../../components/InputDashboard/InputDashboard";
 import NotificationSetting from "../../components/NotificationSetting/NotificationSetting";
+
 import DeleteAccountModal from "../../components/Modals/DeleteAccount";
+import DeleteWarnModal from "../../components/Modals/DeleteWarnModal";
 
 // Hooks & Services
 import { useAuth } from "../../contexts/AuthContext";
@@ -32,7 +34,7 @@ const Settings = () => {
   }, [pageLoading, isAuthenticated]);
 
   // Modal management
-  const { activeModal, openDeleteAccountModal, closeModal } = useAuthModals();
+  const { activeModal, openDeleteAccountModal, openDeleteWarnModal, closeModal } = useAuthModals();
 
   // Sidebar state
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -56,12 +58,14 @@ const Settings = () => {
 
   const [initialData, setInitialData] = useState(null);
   const watched = watch(); // Track live changes in form
+  const [email, setEmail] = useState("");
 
   // Load company data on mount
   useEffect(() => {
     const loadCompany = async () => {
       try {
         const { data } = await api.get("/User/my-company");
+        setEmail(data.email || "");
 
         // Format phone
         const phone = data.phone_number || "";
@@ -126,6 +130,7 @@ const Settings = () => {
         address: formData.address.trim()
       });
 
+      setEmail(formData.email.trim());
     } catch (err) {
       console.error(err);
       toast.error("Erro ao salvar alterações", { position: "top-right", containerId: "toast-root" });
@@ -306,7 +311,13 @@ const Settings = () => {
       <DeleteAccountModal
         isOpen={activeModal === "deleteAccount"}
         onClose={closeModal}
-        onSuccess={() => { window.location.href = "/" }}
+        email={email}
+        onSuccess={openDeleteWarnModal}
+      />
+
+      <DeleteWarnModal
+        isOpen={activeModal === "deleteWarn"}
+        onClose={closeModal}
       />
     </section>
   );

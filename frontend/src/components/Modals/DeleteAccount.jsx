@@ -13,6 +13,7 @@ import InputDashboard from "../InputDashboard/InputDashboard"
 const DeleteAccountModal = ({
   isOpen,
   onClose,
+  email,
   onSuccess,
 }) => {
   // Controls delete button loading state
@@ -42,13 +43,11 @@ const DeleteAccountModal = ({
     try {
       setButtonLoading(true)
 
-      await api.delete("/User/delete-account")
-
-      toast.success(
-        "Conta excluída com sucesso!",
+      await api.post("/User/send-delete-account-email", null, { params: { email }})
+      toast.success("Confirmação para exclusão de conta enviada para o email.",
         {
-          position: "top-right",
           containerId: "toast-root",
+          autoClose: 20000
         }
       )
 
@@ -58,7 +57,7 @@ const DeleteAccountModal = ({
       }
     } catch (error) {
       toast.error(
-        "Falha ao excluir a conta.",
+        "Falha ao solicitar exclusão de conta.",
         {
           position: "top-right",
           containerId: "toast-root",

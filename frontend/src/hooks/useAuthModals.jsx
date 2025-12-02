@@ -36,6 +36,7 @@ export function useAuthModals(selectedProductSetter) {
 
   // Account deletion modal
   const openDeleteAccountModal = () => setActiveModal("deleteAccount");
+  const openDeleteWarnModal = () => setActiveModal("deleteWarn");
 
   // Closes the active modal
   const closeModal = () => setActiveModal(null);
@@ -56,6 +57,7 @@ export function useAuthModals(selectedProductSetter) {
     openDeleteClient,
     openDeleteInventory,
     openDeleteAccountModal,
+    openDeleteWarnModal,
     closeModal,
   };
 }

@@ -9,6 +9,7 @@ import Contact from "../pages/Support/Contact";
 import WhatsApp from "../pages/Support/WhatsApp";
 import Privacy from "../pages/Support/Privacy";
 import VerifyEmail from "../pages/auth/VerifyEmail";
+import DeleteAccount from "../pages/DeleteAccount/DeleteAccount";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Sales from "../pages/Sales/Sales";
 import Clients from "../pages/Clients/Clients";
@@ -30,6 +31,7 @@ const AppRoutes = () => {
       <Route path="/whatsapp" element={<WhatsApp />} /> {/* WhatsApp support page */}
       <Route path="/privacidade" element={<Privacy />} /> {/* Privacy policy page */}
       <Route path="/verificar-email" element={<VerifyEmail />} /> {/* Email verification page */}
+      <Route path="/excluir-conta" element={<DeleteAccount/>} />
       <Route path="*" element={<NotFound />} /> {/* 404 - Page not found */}
 
       {/* Private Routes */}
