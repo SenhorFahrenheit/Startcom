@@ -1,7 +1,7 @@
 # Starcom
 
 > Transformando dados operacionais de PMEs em decisões estratégicas reais.
-> https://startcomtech.com.br/
+> Dê uma olhada! https://startcomtech.com.br/
 
 O **Starcom** nasceu ao observar um problema claro: pequenas e médias empresas operam com dados, mas decidem no escuro.  
 Planilhas manuais, indicadores desatualizados, falta de visão sobre clientes e estoque.
@@ -31,6 +31,38 @@ PMEs enfrentam desafios como:
 O Starcom automatiza análises estratégicas que antes dependiam de tempo, esforço manual e conhecimento técnico.
 
 ---
+
+# Tecnologias Utilizadas
+
+## Backend
+- Python
+- FastAPI
+
+## Frontend
+- React
+
+## Banco de Dados
+- MongoDB
+
+## Infraestrutura e Deploy
+- Docker (containerização da aplicação)
+- Nginx (proxy reverso e servidor web)
+- VPS (deploy em servidor dedicado)
+
+---
+
+## Arquitetura
+
+O Starcom foi estruturado seguindo boas práticas de separação de responsabilidades:
+
+- API REST desenvolvida com FastAPI
+- Backend desacoplado do frontend
+- Processos automatizados para cálculo de KPIs
+- Aplicação containerizada com Docker
+- Nginx configurado como proxy reverso para produção
+- Deploy em VPS para controle total da infraestrutura (backend)
+- Deploy em Vercel (frontend)
+
 
 ## Classificação Automática de Clientes
 
