@@ -1,6 +1,7 @@
 # Starcom
 
 > Transformando dados operacionais de PMEs em decisões estratégicas reais.
+> https://startcomtech.com.br/
 
 O **Starcom** nasceu ao observar um problema claro: pequenas e médias empresas operam com dados, mas decidem no escuro.  
 Planilhas manuais, indicadores desatualizados, falta de visão sobre clientes e estoque.
